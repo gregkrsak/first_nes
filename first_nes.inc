@@ -6,7 +6,7 @@
 ;
 ; Written by Greg M. Krsak <greg.krsak@gmail.com>, Feb. 2017
 ;
-; Based on the the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
+; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
 ;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
 ; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
 ;   http://fms.komkon.org/EMUL8/NES.html
