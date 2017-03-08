@@ -1,0 +1,38 @@
+;
+; controllers.inc
+;
+; Controller (joystick)-related assembler directives for Nintendo Entertainment System assembly language.
+;
+; Written by Greg M. Krsak <greg.krsak@gmail.com>, Feb. 2017
+;
+; Based on the the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
+;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
+; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
+;   http://fms.komkon.org/EMUL8/NES.html
+; Based on "Nintendo Entertainment System Documentation", by an unknown author:
+;   https://emu-docs.org/NES/nestech.txt
+;
+; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
+; Assembler: NESASM 3.1
+;
+; Tested with:
+; nesasm3 "first_nes.asm"
+;
+; Tested on:
+; Nestopia 1.40
+;
+; For more information about NES programming in general, try these references:
+; https://patater.com/nes-asm-tutorials/
+; https://en.wikibooks.org/wiki/NES_Programming/Memory_Map
+;
+; For more information on the NESASM assembler, try these references:
+; http://www.nespowerpak.com/nesasm/usage.txt
+;
+
+
+; Two NES controllers are accessed via memory locations $4016 and $4017, respectively.
+JOY1        = $4016
+JOY2        = $4017
+
+
+; End of controllers.inc
