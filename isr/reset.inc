@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; isr_reset.asm
+; reset.inc
 ;
 ; This is the RESET Interrupt Service Routine for the first_nes project.
 ;
@@ -124,4 +124,4 @@ ISRReset:
 ; --- END "Reset" (Power on) Interrupt Service Routine ---
 
 
-; End of isr_reset.inc
+; End of reset.inc

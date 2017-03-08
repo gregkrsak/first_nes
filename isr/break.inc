@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; isr_break.asm
+; break.inc
 ;
 ; This is the BREAK Interrupt Service Routine for the first_nes project.
 ;
@@ -46,4 +46,4 @@ ISRBreak:
 ; --- End "Break" Interrupt Service Routine ---
 
 
-; End of isr_break.inc
+; End of break.inc

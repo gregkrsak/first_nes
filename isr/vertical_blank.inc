@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; isr_vertical_blank.asm
+; vertical_blank.inc
 ;
 ; This is the NMI Interrupt Service Routine for the first_nes project.
 ;
@@ -73,4 +73,4 @@ ISRVerticalBlank:
 ; --- END "Vertical Blank" (Non-Maskable Interrupt) Interrupt Service Routine ---
 
 
-; End of isr_vertical_blank.inc
+; End of vertical_blank.inc
