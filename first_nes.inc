@@ -39,19 +39,21 @@
 
 
 ; --- BEGIN Color palette ---
-  palette:
+DATAPalette:
   .DB $0f, $31, $32, $33, $34, $35, $36, $37, $38, $39, $3a, $3b, $3c, $3d, $3e, $0f
   .DB $0f, $1c, $15, $14, $31, $02, $38, $3c, $0f, $1c, $15, $14, $31, $02, $38, $3c
+ENDDATAPalette:
 ; --- END Color palette ---
 
 
 ; --- BEGIN Sprite definitions ---
-  sprites:
+DATASprites:
   ;   VERT TILE ATTR HORIZ
   .DB $80, $32, $00, $80            ; Sprite0
   .DB $80, $33, $00, $88            ; Sprite1
   .DB $88, $34, $00, $80            ; Sprite2
   .DB $88, $35, $00, $88            ; Sprite3
+ENDDATASprites:
 ; --- END Sprite definitions ---
 
 
@@ -69,7 +71,7 @@
   .ORG $c000 
 
 
-  jmp     ISREntryPoint
+  jmp     __ISREntryPoint
 
 
 ; --- BEGIN Subroutine to move the Mario sprites right ---
@@ -93,7 +95,7 @@ PROCMoveMarioLeft:
   clc                             ;
   adc     #$01                    ; 
   sta     $020f                   ; Increment the Sprite3 X position
-  procMoveMarioLeftEnd:
+ENDPROCMoveMarioLeft:
   rts                             ; Return from subroutine
 ; --- END Subroutine to move the Mario sprites right ---
 
@@ -119,12 +121,12 @@ PROCMoveMarioRight:
   sec                             ; 
   sbc     #$01                    ; 
   sta     $020f                   ; Decrement Sprite3 X position
-  procMoveMarioRightEnd:
+ENDPROCMoveMarioRight:
   rts                             ; Return from subroutine
 ; --- END Subroutine to move the Mario sprites right ---
 
 
-ISREntryPoint:
+__ISREntryPoint:
 
 
 ; End of first_nes.inc

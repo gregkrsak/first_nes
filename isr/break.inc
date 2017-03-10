@@ -35,13 +35,15 @@
   .CODE
 
   .BANK 0
-  .ORG isrBreakBegin
+  .ORG __ISRBreakBegin
 
 
 ; --- Begin "Break" Interrupt Service Routine ---
 ISRBreak:
 
-  isrBreakEnd:
+	nop 							; Do nothing
+
+ENDISRBreak:
     rti                             ; Return from interrupt
 ; --- End "Break" Interrupt Service Routine ---
 

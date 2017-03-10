@@ -96,7 +96,7 @@
 ;       |   6 | PPU Master/Slave Mode, not used in NES.
 ;       |   7 | VBlank Enable, 1 = generate interrupts on VBlank.
 ; ------+-----+---------------------------------------------------------------
-PPUCTRL     = $2000                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUCTRL
+_PPUCTRL    = $2000                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUCTRL
 
 ; ------+-----+---------------------------------------------------------------
 ; $2001 | RW  | PPU Control Register 2
@@ -108,7 +108,7 @@ PPUCTRL     = $2000                 ; Reference: https://wiki.nesdev.com/w/index
 ;       | 5-7 | Background Color, 0 = black, 1 = blue, 2 = green, 4 = red.
 ;       |     | Do not use any other numbers as you may damage PPU hardware.
 ; ------+-----+---------------------------------------------------------------
-PPUMASK     = $2001                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUMASK
+_PPUMASK    = $2001                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUMASK
 
 ; ------+-----+---------------------------------------------------------------
 ; $2002 | R   | PPU Status Register
@@ -118,7 +118,7 @@ PPUMASK     = $2001                 ; Reference: https://wiki.nesdev.com/w/index
 ;       |   7 | VBlank Flag, 1 = PPU is in VBlank state.
 ;       |     | This flag resets to 0 when VBlank ends or CPU reads $2002.
 ; ------+-----+---------------------------------------------------------------
-PPUSTATUS   = $2002                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUSTATUS
+_PPUSTATUS  = $2002                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUSTATUS
 
 ; ------+-----+---------------------------------------------------------------
 ; $2005 | W   | Screen Scroll Offsets
@@ -139,7 +139,7 @@ PPUSTATUS   = $2002                 ; Reference: https://wiki.nesdev.com/w/index
 ;       |     | Remember that because of the mirroring there are only 2 real
 ;       |     | Name Tables, not 4.
 ; ------+-----+---------------------------------------------------------------
-PPUSCROLL   = $2005                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUSCROLL
+_PPUSCROLL  = $2005                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUSCROLL
 
 ; ------+-----+---------------------------------------------------------------
 ; $2006 | W   | PPU Memory Address
@@ -149,14 +149,14 @@ PPUSCROLL   = $2005                 ; Reference: https://wiki.nesdev.com/w/index
 ;       |     | address will increment either by 1 or by 32 after each
 ;       |     | access to $2007.
 ; ------+-----+---------------------------------------------------------------
-PPUADDR     = $2006                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUADDR
+_PPUADDR    = $2006                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUADDR
 
 ; ------+-----+---------------------------------------------------------------
 ; $2007 | RW  | PPU Memory Data
 ;       |     | Used to read/write the PPU Memory. The address is set via
 ;       |     | $2006 and increments after each access, either by 1 or by 32.
 ; ------+-----+---------------------------------------------------------------
-PPUDATA     = $2007                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUDATA
+_PPUDATA    = $2007                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUDATA
 
 
 ; The OAM (Object Attribute Memory) is internal memory inside the PPU that contains a lookup table 
@@ -170,7 +170,7 @@ PPUDATA     = $2007                 ; Reference: https://wiki.nesdev.com/w/index
 ;       |     | each access to $2004. Sprite Memory contains coordinates,
 ;       |     | colors, and other sprite attributes.
 ; ------+-----+---------------------------------------------------------------
-OAMADDR     = $2003                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMADDR
+_OAMADDR    = $2003                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMADDR
 
 ; ------+-----+---------------------------------------------------------------
 ; $2004 | RW  | Sprite Memory Data
@@ -179,7 +179,7 @@ OAMADDR     = $2003                 ; Reference: https://wiki.nesdev.com/w/index
 ;       |     | contains coordinates, colors, and other sprite attributes
 ;       |     | sprites.
 ; ------+-----+---------------------------------------------------------------
-OAMDATA     = $2004                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMDATA
+_OAMDATA    = $2004                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMDATA
 
 ; ------+-----+---------------------------------------------------------------
 ; $4014 | W   | DMA Access to the Sprite Memory
@@ -187,7 +187,7 @@ OAMDATA     = $2004                 ; Reference: https://wiki.nesdev.com/w/index
 ;       |     | at address $100*N to be transferred into the Sprite Memory.
 ;       |     | The CPU is suspended while the transfer is taking place.
 ; ------+-----+---------------------------------------------------------------
-OAMDMA      = $4014                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMDMA
+_OAMDMA     = $4014                 ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMDMA
 
 
 ; End of ppu.inc

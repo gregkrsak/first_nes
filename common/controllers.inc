@@ -31,8 +31,8 @@
 
 
 ; Two NES controllers are accessed via memory locations $4016 and $4017, respectively.
-JOY1        = $4016
-JOY2        = $4017
+_JOY1       = $4016
+_JOY2       = $4017
 
 
 ; End of controllers.inc

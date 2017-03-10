@@ -35,42 +35,47 @@
   .CODE
 
   .BANK 0
-  .ORG isrVerticalBlankBegin
+  .ORG __ISRVerticalBlankBegin
 
 
 ; --- BEGIN "Vertical Blank" (Non-Maskable Interrupt) Interrupt Service Routine ---
 ISRVerticalBlank:
 
     lda     #$00
-    sta     OAMADDR                 ; set the low byte (00) of the RAM address
+    sta     _OAMADDR                ; set the low byte (00) of the RAM address
     lda     #$02
-    sta     OAMDMA                  ; set the high byte (02) of the RAM address, start the transfer
+    sta     _OAMDMA                 ; set the high byte (02) of the RAM address, start the transfer
 
-  latchController:
+  ; Freeze the button positions
+  .latchControllerBegin:
     lda     #$01
-    sta     JOY1
+    sta     _JOY1
     lda     #$00
-    sta     JOY1                    ; tell both the controllers to latch buttons
+    sta     _JOY1                   ; tell both the controllers to latch buttons
+  .latchControllerEnd:
+  
   ; Button A
-  readButtonABegin: 
-    lda     JOY1                    
+  .readButtonABegin: 
+    lda     _JOY1                    
     and     #%00000001              ; only look at bit 0
-    beq     readButtonAEnd          ; branch to readButtonAEnd if button A is NOT pressed (0)                                    
+    beq     .readButtonAEnd         ; branch to readButtonAEnd if button A is NOT pressed (0)                                    
     jsr     PROCMoveMarioRight      ; Jump to the subroutine that move all of the sprites to the right
-  readButtonAEnd:
+  .readButtonAEnd:
 
   ; Button B
-  readButtonBBegin: 
-    lda     JOY1                    
+  .readButtonBBegin: 
+    lda     _JOY1                    
     and     #%00000001              ; only look at bit 0
-    beq     readButtonBEnd          ; branch to readButtonBEnd if button B is NOT pressed (0)                                    
+    beq     .readButtonBEnd         ; branch to readButtonBEnd if button B is NOT pressed (0)                                    
     jsr     PROCMoveMarioLeft       ; Jump to the subroutine that move all of the sprites to the left
-  readButtonBEnd:
+  .readButtonBEnd:
 
-  isrVerticalBlankEnd:  
+ENDISRVerticalBlank:  
     rti                             ; Return from interrupt
-  isrBreakBegin:
 ; --- END "Vertical Blank" (Non-Maskable Interrupt) Interrupt Service Routine ---
+
+
+__ISRBreakBegin:
 
 
 ; End of vertical_blank.inc

@@ -44,40 +44,40 @@
 ;       |   4 | Channel 5, 1 = enable sound.
 ;       | 5-7 | Unused (???)
 ; ------+-----+---------------------------------------------------------------
-SND_CHN     = $4015                 ; Reference: https://wiki.nesdev.com/w/index.php/APU#Status_.28.244015.29
+_SND_CHN    = $4015                 ; Reference: https://wiki.nesdev.com/w/index.php/APU#Status_.28.244015.29
 
 ; APU Square wave channels 1 and 2
 ; Reference: https://wiki.nesdev.com/w/index.php/APU_Pulse
-SQ1_VOL     = $4000
-SQ1_SWEEP   = $4001
-SQ1_LO      = $4002
-SQ1_HI      = $4003
-SQ2_VOL     = $4004
-SQ2_SWEEP   = $4005
-SQ2_LO      = $4006
-SQ2_HI      = $4007
+_SQ1_VOL    = $4000
+_SQ1_SWEEP  = $4001
+_SQ1_LO     = $4002
+_SQ1_HI     = $4003
+_SQ2_VOL    = $4004
+_SQ2_SWEEP  = $4005
+_SQ2_LO     = $4006
+_SQ2_HI     = $4007
 
 ; APU Triangle wave channel
 ; Reference: https://wiki.nesdev.com/w/index.php/APU_Triangle
-TRI_LINEAR  = $4008
-TRI_LO      = $400a
-TRI_HI      = $400b
+_TRI_LINEAR = $4008
+_TRI_LO     = $400a
+_TRI_HI     = $400b
 
 ; APU Noise generator
 ; Reference: https://wiki.nesdev.com/w/index.php/APU_Noise
-NOISE_VOL   = $400c
-NOISE_LO    = $400e
-NOISE_HI    = $400f
+_NOISE_VOL  = $400c
+_NOISE_LO   = $400e
+_NOISE_HI   = $400f
 
 ; APU Delta Modulation Channel
 ; Reference: https://wiki.nesdev.com/w/index.php/APU_DMC
-DMC_FREQ    = $4010
-DMC_RAW     = $4011
-DMC_START   = $4012
-DMC_LEN     = $4013
+_DMC_FREQ   = $4010
+_DMC_RAW    = $4011
+_DMC_START  = $4012
+_DMC_LEN    = $4013
 
 ; APU Frame counter
-FR_COUNTER 	= $4017                 ; Reference: https://wiki.nesdev.com/w/index.php/APU_Frame_Counter
+_FR_COUNTER	= $4017                 ; Reference: https://wiki.nesdev.com/w/index.php/APU_Frame_Counter
 
 
 ; End of apu.inc
