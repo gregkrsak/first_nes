@@ -59,7 +59,7 @@
 ; Main Program subroutines and data. These will be called by the ISRs.
 ; =================================================================================================
 
-  .INCLUDE "first_nes.inc"
+  .INCLUDE "library.asm"
 
 
 ; =================================================================================================
@@ -68,13 +68,13 @@
 ; =================================================================================================
 
   ; Called at system power-on or reset
-  .INCLUDE "isr/reset.inc"
+  .INCLUDE "isr/reset.asm"
 
   ; Called when the current graphics frame has finished drawing
-  .INCLUDE "isr/vertical_blank.inc"
+  .INCLUDE "isr/vertical_blank.asm"
 
   ; Called when a "break" opcode is executed
-  .INCLUDE "isr/break.inc"
+  .INCLUDE "isr/break.asm"
 
 
 ; End of first_nes.asm
