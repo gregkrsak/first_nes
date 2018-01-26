@@ -1,7 +1,7 @@
 ;
 ; controllers.inc
 ;
-; Controller (joystick)-related assembler directives for Nintendo Entertainment System assembly language.
+; Joystick-related assembler directives for Nintendo Entertainment System assembly language.
 ;
 ; Written by Greg M. Krsak <greg.krsak@gmail.com>, Feb. 2017
 ;

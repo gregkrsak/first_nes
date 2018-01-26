@@ -87,10 +87,16 @@
 
   .BANK 1
   .ORG $fffa     					; First of the three vectors starts here
+  
 
-  .DW ISRVerticalBlank				; When a vertical blanking NMI happens (once per frame if enabled) the processor will jump to the label ISRVerticalBlank
-  .DW ISRReset     					; When the processor first turns on or is reset, it will jump to the label ISRReset
-  .DW ISRBreak      				; When the processor executes a BRK opcode, it will jump to the label ISRBreak
+  .DW ISRVerticalBlank				; When a vertical blanking NMI happens (once per frame if 
+  									; enabled) the processor will jump to the label ISRVerticalBlank
+
+  .DW ISRReset     					; When the processor first turns on or is reset, it will jump to
+  									; the label ISRReset
+
+  .DW ISRBreak      				; When the processor executes a BRK opcode, it will jump to the
+  									; label ISRBreak
 ;
 ; --- END Interrupt vector table ---
 ;

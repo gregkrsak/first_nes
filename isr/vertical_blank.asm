@@ -59,7 +59,7 @@ ISRVerticalBlank:
     lda     _JOY1                    
     and     #%00000001              ; only look at bit 0
     beq     .readButtonAEnd         ; branch to readButtonAEnd if button A is NOT pressed (0)                                    
-    jsr     PROCMoveMarioRight      ; Jump to the subroutine that move all of the sprites to the right
+    jsr     PROCMoveMarioRight      ; Jump to the subroutine that moves the Mario sprites right
   .readButtonAEnd:
 
   ; Button B
@@ -67,7 +67,7 @@ ISRVerticalBlank:
     lda     _JOY1                    
     and     #%00000001              ; only look at bit 0
     beq     .readButtonBEnd         ; branch to readButtonBEnd if button B is NOT pressed (0)                                    
-    jsr     PROCMoveMarioLeft       ; Jump to the subroutine that move all of the sprites to the left
+    jsr     PROCMoveMarioLeft       ; Jump to the subroutine that moves the Mario sprites left
   .readButtonBEnd:
 
 ENDISRVerticalBlank:  

@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; first_nes.inc
+; library.asm
 ;
 ; This is the data and subroutine library used by the ISRs of the first_nes project.
 ;

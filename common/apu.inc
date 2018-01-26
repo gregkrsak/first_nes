@@ -30,7 +30,7 @@
 ;
 
 
-; The APU (Audio Processing Unit) is the sound hardware the NES console which generates sound for games.
+; The APU (Audio Processing Unit) is the sound hardware the NES console which generates sound.
 ; It is implemented in the RP2A03 (NTSC) and RP2A07 (PAL) chips.
 ; Its registers are mapped in the range $4000-$4013, $4015 and $4017.
 
@@ -44,7 +44,7 @@
 ;       |   4 | Channel 5, 1 = enable sound.
 ;       | 5-7 | Unused (???)
 ; ------+-----+---------------------------------------------------------------
-_SND_CHN    = $4015                 ; Reference: https://wiki.nesdev.com/w/index.php/APU#Status_.28.244015.29
+_SND_CHN    = $4015        ; Reference: https://wiki.nesdev.com/w/index.php/APU#Status_.28.244015.29
 
 ; APU Square wave channels 1 and 2
 ; Reference: https://wiki.nesdev.com/w/index.php/APU_Pulse
@@ -77,7 +77,7 @@ _DMC_START  = $4012
 _DMC_LEN    = $4013
 
 ; APU Frame counter
-_FR_COUNTER	= $4017                 ; Reference: https://wiki.nesdev.com/w/index.php/APU_Frame_Counter
+_FR_COUNTER	= $4017               ; Reference: https://wiki.nesdev.com/w/index.php/APU_Frame_Counter
 
 
 ; End of apu.inc

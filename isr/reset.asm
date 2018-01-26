@@ -60,9 +60,9 @@ ISRReset:
   .initEnd:
 
   ;
-  ; Note: When the system is first turned on or reset, the PPU may not be in a usable state right away.
-  ; You should wait at least 30,000 (thirty thousand) CPU cycles for the PPU to initialize, which may be
-  ; accomplished by waiting for 2 (two) vertical blank intervals.
+  ; Note: When the system is first turned on or reset, the PPU may not be in a usable state right
+  ; away. You should wait at least 30,000 (thirty thousand) CPU cycles for the PPU to initialize, 
+  ; which may be accomplished by waiting for 2 (two) vertical blank intervals.
   ;
 
   ; Wait for a Vertical Blank
@@ -116,7 +116,7 @@ ISRReset:
     lda     DATAPalette, x              
     sta     _PPUDATA                ; write to PPU
     inx                             ; X = X + 1
-    cpx     #$10                    ; Compare X to hex $10, decimal 16 - copying 16 bytes = 4 sprites
+    cpx     #$10                    ; Compare X to hex $10, decimal 16 (copying 4 sprites)
     bne     ..loadPalettesLoop      ; Branch to loadPalettesLoop if compare was Not Equal to zero
                                     ; if compare was equal to 32, keep going down
   .loadPaletteEnd:
