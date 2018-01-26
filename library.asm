@@ -75,7 +75,7 @@ ENDDATASprites:
 
 
 ; --- BEGIN Subroutine to move the Mario sprites right ---
-PROCMoveMarioLeft:
+PROCMoveMarioRight:
   lda     $0203                   ; 
   clc                             ;
   adc     #$01                    ; 
@@ -95,13 +95,13 @@ PROCMoveMarioLeft:
   clc                             ;
   adc     #$01                    ; 
   sta     $020f                   ; Increment the Sprite3 X position
-ENDPROCMoveMarioLeft:
+ENDPROCMoveMarioRight:
   rts                             ; Return from subroutine
 ; --- END Subroutine to move the Mario sprites right ---
 
 
-; --- BEGIN Subroutine to move the Mario sprites right ---
-PROCMoveMarioRight:
+; --- BEGIN Subroutine to move the Mario sprites left ---
+PROCMoveMarioLeft:
   lda     $0203                   ; 
   sec                             ; 
   sbc     #$01                    ; 
@@ -121,9 +121,9 @@ PROCMoveMarioRight:
   sec                             ; 
   sbc     #$01                    ; 
   sta     $020f                   ; Decrement Sprite3 X position
-ENDPROCMoveMarioRight:
+ENDPROCMoveMarioLeft:
   rts                             ; Return from subroutine
-; --- END Subroutine to move the Mario sprites right ---
+; --- END Subroutine to move the Mario sprites left ---
 
 
 __ISREntryPoint:
