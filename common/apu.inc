@@ -22,8 +22,7 @@
 ; Nestopia 1.40
 ;
 ; For more information about NES programming in general, try these references:
-; https://patater.com/nes-asm-tutorials/
-; https://en.wikibooks.org/wiki/NES_Programming/Memory_Map
+; https://en.wikibooks.org/wiki/NES_Programming
 ;
 ; For more information on the NESASM assembler, try these references:
 ; http://www.nespowerpak.com/nesasm/usage.txt
