@@ -61,8 +61,7 @@
 ; onto the stack with the 'b' CPU bit set. On an IRQ or NMI, the CPU
 ; pushes the status flag onto the stack with the 'b' bit clear. This is
 ; done because of the fact that a hardware IRQ (IRQ) and a software
-; IRQ (BRK) both share the same vector. For example, one could use the
-; following code to distinguish the difference between the two:
+; IRQ (BRK) both share the same vector.
 ; 
 ; The aforementioned interrupts have the following vector addresses,
 ; mapped to areas of ROM:
