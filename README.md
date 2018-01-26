@@ -16,7 +16,7 @@ Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NE
 
 **Processor:** 8-bit, [Ricoh RP2A03](https://en.wikipedia.org/wiki/Ricoh_2A03) (6502), 1.789773 MHz (NTSC)
 
-**Assembler:** NESASM 3.1 ([download](http://www.nespowerpak.com/nesasm/NESASM3.zip))
+**Assembler:** NESASM 3.1 ([download](http://www.nespowerpak.com/nesasm/NESASM3.zip)) ([GitHub fork with Unix-like Makefile](https://github.com/camsaul/nesasm))
 
 **Tested with:**
 
@@ -27,11 +27,7 @@ Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NE
 For more information about NES programming in general, try these references:
 -----------------------------------------------------------------------------------------------------------------
 
-http://nixw0rm.altervista.org/files/nesasm.pdf
-
-https://patater.com/nes-asm-tutorials/
-
-https://en.wikibooks.org/wiki/NES_Programming/Memory_Map
+https://en.wikibooks.org/wiki/NES_Programming
 
 For more information on the NESASM assembler, try these references:
 ------------------------------------------------------------------------------------------------------

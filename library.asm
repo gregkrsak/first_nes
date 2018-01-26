@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; first_nes.inc
+; library.asm
 ;
 ; This is the data and subroutine library used by the ISRs of the first_nes project.
 ;
@@ -23,9 +23,7 @@
 ; Nestopia 1.40
 ;
 ; For more information about NES programming in general, try these references:
-; http://nixw0rm.altervista.org/files/nesasm.pdf
-; https://patater.com/nes-asm-tutorials/
-; https://en.wikibooks.org/wiki/NES_Programming/Memory_Map
+; https://en.wikibooks.org/wiki/NES_Programming
 ;
 ; For more information on the NESASM assembler, try these references:
 ; http://www.nespowerpak.com/nesasm/usage.txt

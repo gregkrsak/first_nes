@@ -22,8 +22,7 @@
 ; Nestopia 1.40
 ;
 ; For more information about NES programming in general, try these references:
-; https://patater.com/nes-asm-tutorials/
-; https://en.wikibooks.org/wiki/NES_Programming/Memory_Map
+; https://en.wikibooks.org/wiki/NES_Programming
 ;
 ; For more information on the NESASM assembler, try these references:
 ; http://www.nespowerpak.com/nesasm/usage.txt
@@ -87,10 +86,16 @@
 
   .BANK 1
   .ORG $fffa     					; First of the three vectors starts here
+  
 
-  .DW ISRVerticalBlank				; When a vertical blanking NMI happens (once per frame if enabled) the processor will jump to the label ISRVerticalBlank
-  .DW ISRReset     					; When the processor first turns on or is reset, it will jump to the label ISRReset
-  .DW ISRBreak      				; When the processor executes a BRK opcode, it will jump to the label ISRBreak
+  .DW ISRVerticalBlank				; When a vertical blanking NMI happens (once per frame if 
+  									; enabled) the processor will jump to the label ISRVerticalBlank
+
+  .DW ISRReset     					; When the processor first turns on or is reset, it will jump to
+  									; the label ISRReset
+
+  .DW ISRBreak      				; When the processor executes a BRK opcode, it will jump to the
+  									; label ISRBreak
 ;
 ; --- END Interrupt vector table ---
 ;
