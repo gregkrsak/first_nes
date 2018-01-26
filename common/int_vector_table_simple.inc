@@ -35,7 +35,7 @@
 ; Each interrupt has a vector. A vector is a 16-bit address which spec-
 ; ifies a location to "jump to" when the interrupt is triggered.
 ; 
-; IRQ/BRK is triggered under two circumstances, hence it's split name:
+; IRQ/BRK is triggered under two circumstances, hence its split name:
 ; when a software IRQ is executed (the BRK instruction), or when a
 ; hardware IRQ is executed (via the IRQ line).
 ; 
