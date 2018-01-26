@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; reset.inc
+; reset.asm
 ;
 ; This is the RESET Interrupt Service Routine for the first_nes project.
 ;
