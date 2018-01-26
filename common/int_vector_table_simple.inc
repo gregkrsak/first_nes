@@ -35,7 +35,7 @@
 ; Each interrupt has a vector. A vector is a 16-bit address which spec-
 ; ifies a location to "jump to" when the interrupt is triggered.
 ; 
-; IRQ/BRK is triggered under two circumstances, hence it's split name:
+; IRQ/BRK is triggered under two circumstances, hence its split name:
 ; when a software IRQ is executed (the BRK instruction), or when a
 ; hardware IRQ is executed (via the IRQ line).
 ; 
@@ -61,8 +61,7 @@
 ; onto the stack with the 'b' CPU bit set. On an IRQ or NMI, the CPU
 ; pushes the status flag onto the stack with the 'b' bit clear. This is
 ; done because of the fact that a hardware IRQ (IRQ) and a software
-; IRQ (BRK) both share the same vector. For example, one could use the
-; following code to distinguish the difference between the two:
+; IRQ (BRK) both share the same vector.
 ; 
 ; The aforementioned interrupts have the following vector addresses,
 ; mapped to areas of ROM:

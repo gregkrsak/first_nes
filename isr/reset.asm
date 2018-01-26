@@ -116,7 +116,7 @@ ISRReset:
     lda     DATAPalette, x              
     sta     _PPUDATA                ; write to PPU
     inx                             ; X = X + 1
-    cpx     #$20                    ; Compare X to hex $10, decimal 16 - copying 16 bytes = 4 sprites
+    cpx     #$10                    ; Compare X to hex $10, decimal 16 - copying 16 bytes = 4 sprites
     bne     ..loadPalettesLoop      ; Branch to loadPalettesLoop if compare was Not Equal to zero
                                     ; if compare was equal to 32, keep going down
   .loadPaletteEnd:
