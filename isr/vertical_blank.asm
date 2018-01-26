@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; vertical_blank.inc
+; vertical_blank.asm
 ;
 ; This is the NMI Interrupt Service Routine for the first_nes project.
 ;

@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; break.inc
+; break.asm
 ;
 ; This is the BREAK Interrupt Service Routine for the first_nes project.
 ;
