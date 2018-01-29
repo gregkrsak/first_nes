@@ -52,7 +52,7 @@ ISRVerticalBlank:
     sta     _JOY1                   ; tell both the controllers to latch buttons
   .latchControllerEnd:
   
-  ; Button A
+  ; Check button A
   .readButtonABegin: 
     lda     _JOY1                    
     and     #%00000001              ; only look at bit 0
@@ -60,7 +60,7 @@ ISRVerticalBlank:
     jsr     PROCMoveMarioRight      ; Jump to the subroutine that moves the Mario sprites right
   .readButtonAEnd:
 
-  ; Button B
+  ; Check button B
   .readButtonBBegin: 
     lda     _JOY1                    
     and     #%00000001              ; only look at bit 0
