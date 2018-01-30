@@ -76,18 +76,18 @@
 
 ; --- BEGIN Color palette ---
 Palette:
-  .BYTE $0f, $31, $32, $33, $34, $35, $36, $37, $38, $39, $3a, $3b, $3c, $3d, $3e, $0f
-  .BYTE $0f, $1c, $15, $14, $31, $02, $38, $3c, $0f, $1c, $15, $14, $31, $02, $38, $3c
+.BYTE $0f, $31, $32, $33, $34, $35, $36, $37, $38, $39, $3a, $3b, $3c, $3d, $3e, $0f
+.BYTE $0f, $1c, $15, $14, $31, $02, $38, $3c, $0f, $1c, $15, $14, $31, $02, $38, $3c
 ; --- END Color palette ---
 
 
 ; --- BEGIN Sprite definitions ---
 Sprites:
-  ;     VERT TILE ATTR HORIZ
-  .BYTE $80, $32, $00, $80            ; Sprite0
-  .BYTE $80, $33, $00, $88            ; Sprite1
-  .BYTE $88, $34, $00, $80            ; Sprite2
-  .BYTE $88, $35, $00, $88            ; Sprite3
+;     VERT TILE ATTR HORIZ
+.BYTE $80, $32, $00, $80            ; Sprite0
+.BYTE $80, $33, $00, $88            ; Sprite1
+.BYTE $88, $34, $00, $80            ; Sprite2
+.BYTE $88, $35, $00, $88            ; Sprite3
 ; --- END Sprite definitions ---
 
 
@@ -106,59 +106,59 @@ Sprites:
 .SEGMENT "CODE"
 
 
-  jmp     __ISREntryPoint
+    jmp     __ISREntryPoint
 
 
 ; --- BEGIN Subroutine to move the Mario sprites right ---
 .PROC     MoveMarioRight
-  lda     $0203                   ; 
-  clc                             ;
-  adc     #$01                    ; 
-  sta     $0203                   ; Increment the Sprite0 X position
+    lda     $0203                   ; 
+    clc                             ;
+    adc     #$01                    ; 
+    sta     $0203                   ; Increment the Sprite0 X position
 
-  lda     $0207                   ; 
-  clc                             ;
-  adc     #$01                    ; 
-  sta     $0207                   ; Increment the Sprite1 X position
+    lda     $0207                   ; 
+    clc                             ;
+    adc     #$01                    ; 
+    sta     $0207                   ; Increment the Sprite1 X position
 
-  lda     $020b                   ; 
-  clc                             ;
-  adc     #$01                    ; 
-  sta     $020b                   ; Increment the Sprite2 X position
-  
-  lda     $020f                   ; 
-  clc                             ;
-  adc     #$01                    ; 
-  sta     $020f                   ; Increment the Sprite3 X position
+    lda     $020b                   ; 
+    clc                             ;
+    adc     #$01                    ; 
+    sta     $020b                   ; Increment the Sprite2 X position
+    
+    lda     $020f                   ; 
+    clc                             ;
+    adc     #$01                    ; 
+    sta     $020f                   ; Increment the Sprite3 X position
 
-  rts
+    rts
 .ENDPROC
 ; --- END Subroutine to move the Mario sprites right ---
 
 
 ; --- BEGIN Subroutine to move the Mario sprites left ---
 .PROC     MoveMarioLeft
-  lda     $0203                   ; 
-  sec                             ; 
-  sbc     #$01                    ; 
-  sta     $0203                   ; Decrement Sprite0 X position
+    lda     $0203                   ; 
+    sec                             ; 
+    sbc     #$01                    ; 
+    sta     $0203                   ; Decrement Sprite0 X position
 
-  lda     $0207                   ; 
-  sec                             ; 
-  sbc     #$01                    ; 
-  sta     $0207                   ; Decrement Sprite1 X position
+    lda     $0207                   ; 
+    sec                             ; 
+    sbc     #$01                    ; 
+    sta     $0207                   ; Decrement Sprite1 X position
 
-  lda     $020b                   ; 
-  sec                             ; 
-  sbc     #$01                    ; 
-  sta     $020b                   ; Decrement Sprite2 X position
+    lda     $020b                   ; 
+    sec                             ; 
+    sbc     #$01                    ; 
+    sta     $020b                   ; Decrement Sprite2 X position
 
-  lda     $020f                   ; 
-  sec                             ; 
-  sbc     #$01                    ; 
-  sta     $020f                   ; Decrement Sprite3 X position
+    lda     $020f                   ; 
+    sec                             ; 
+    sbc     #$01                    ; 
+    sta     $020f                   ; Decrement Sprite3 X position
 
-  rts
+    rts
 .ENDPROC
 ; --- END Subroutine to move the Mario sprites left ---
 
@@ -186,7 +186,6 @@ __ISREntryPoint:
 
     bit     _PPUSTATUS              ; Clear the vblank flag in case the user reset during vblank
 
-
   ;
   ; Note: When the system is first turned on or reset, the PPU may not be in a usable state right
   ; away. You should wait at least 30,000 (thirty thousand) CPU cycles for the PPU to initialize, 
@@ -198,7 +197,6 @@ __ISREntryPoint:
     vBlankWait1Loop:       
     bit     _PPUSTATUS
     bpl     vBlankWait1Loop
-
 
   ; Clear internal RAM
   clearMemoryBegin:
@@ -216,7 +214,6 @@ __ISREntryPoint:
     sta     $0300, x
     inx
     bne     clearMemoryLoop
-
 
   ; Wait for another vertical blank
   vBlankWait2Begin:
@@ -247,7 +244,6 @@ __ISREntryPoint:
     bne     loadPalettesLoop        ; Branch to loadPalettesLoop if compare was Not Equal to zero
                                     ; If compare was equal to 32, keep going down
 
-
   loadSpritesBegin:
     ldx     #$00                    ; Start at 0
     loadSpritesLoop:
@@ -257,7 +253,6 @@ __ISREntryPoint:
     cpx     #$20                    ; Compare X to hex $20, decimal 32
     bne     loadSpritesLoop         ; Branch to loadSpritesLoop if compare was Not Equal to zero
                                     ; If compare was equal to 32, keep going down
- 
 
   enableGraphicsBegin:
     lda     #%10000000              ; Enable vertical blank interrupt
@@ -266,11 +261,9 @@ __ISREntryPoint:
     lda     #%00010000              ; Enable sprite rendering
     sta     _PPUMASK                ;
 
-
   doNothingBegin:
     endlessLoop:
     jmp     endlessLoop             ; THIS IS AN INFINITE LOOP
-
 
     rti                             ; Return from interrupt
 
@@ -292,7 +285,6 @@ __ISREntryPoint:
     sta     _JOY1
     lda     #$00
     sta     _JOY1                   ; Tell both the controllers to latch buttons
-  latchControllerEnd:
   
   ; Check button A
   readButtonABegin: 
@@ -319,7 +311,7 @@ __ISREntryPoint:
 ; --- Begin "Break" Interrupt Service Routine ---
 .PROC ISRBreak
 
-  nop               ; Do nothing
+    nop                             ; Do nothing
 
     rti                             ; Return from interrupt
 
