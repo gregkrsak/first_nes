@@ -1,4 +1,4 @@
-first_nes project
+first_nes project (WIP)
 =================
 
 
@@ -20,11 +20,18 @@ Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NE
 
 **Tested with:**
 
-```(untested)```
+```bash
+ca65 first_nes.s
+ld65 first_nes.o -C ld65.cfg
+cat first_nes_hdr.bin first_nes_prg.bin first_nes_chr.bin > first_nes.nes
+rm a.out
+nestopia first_nes.nes
+```
 
 **Tested on:**
 
-```(untested)```
+Nestopia UE 1.47
+
 
 For more information about NES programming in general, try these references:
 -----------------------------------------------------------------------------------------------------------------
