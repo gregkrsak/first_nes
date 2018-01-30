@@ -4,6 +4,10 @@
 *.nes
 *.fns
 *.o
+*.bin
+
+# Development
+make
 
 # Mac
 .DS_Store
