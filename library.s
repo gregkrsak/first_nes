@@ -33,31 +33,31 @@
 
   .DATA
 
-  .BANK 1
+  .SEGMENT "BANK1"
   .ORG $e000
 
 
 ; --- BEGIN Color palette ---
 DATAPalette:
-  .DB $0f, $31, $32, $33, $34, $35, $36, $37, $38, $39, $3a, $3b, $3c, $3d, $3e, $0f
-  .DB $0f, $1c, $15, $14, $31, $02, $38, $3c, $0f, $1c, $15, $14, $31, $02, $38, $3c
+  .BYTE $0f, $31, $32, $33, $34, $35, $36, $37, $38, $39, $3a, $3b, $3c, $3d, $3e, $0f
+  .BYTE $0f, $1c, $15, $14, $31, $02, $38, $3c, $0f, $1c, $15, $14, $31, $02, $38, $3c
 ENDDATAPalette:
 ; --- END Color palette ---
 
 
 ; --- BEGIN Sprite definitions ---
 DATASprites:
-  ;   VERT TILE ATTR HORIZ
-  .DB $80, $32, $00, $80            ; Sprite0
-  .DB $80, $33, $00, $88            ; Sprite1
-  .DB $88, $34, $00, $80            ; Sprite2
-  .DB $88, $35, $00, $88            ; Sprite3
+  ;     VERT TILE ATTR HORIZ
+  .BYTE $80, $32, $00, $80            ; Sprite0
+  .BYTE $80, $33, $00, $88            ; Sprite1
+  .BYTE $88, $34, $00, $80            ; Sprite2
+  .BYTE $88, $35, $00, $88            ; Sprite3
 ENDDATASprites:
 ; --- END Sprite definitions ---
 
 
 ; --- BEGIN Raw graphics data ---
-  .BANK 2
+  .SEGMENT "BANK2"
   .ORG $0000
 
   .INCBIN "sprite/mario.chr"     ; 8KB Graphics file from SMB1
@@ -66,7 +66,7 @@ ENDDATASprites:
 
   .CODE
 
-  .BANK 0
+  .SEGMENT "BANK0"
   .ORG $c000 
 
 
@@ -74,7 +74,7 @@ ENDDATASprites:
 
 
 ; --- BEGIN Subroutine to move the Mario sprites right ---
-PROCMoveMarioRight:
+.PROC     MoveMarioRight
   lda     $0203                   ; 
   clc                             ;
   adc     #$01                    ; 
@@ -94,13 +94,12 @@ PROCMoveMarioRight:
   clc                             ;
   adc     #$01                    ; 
   sta     $020f                   ; Increment the Sprite3 X position
-ENDPROCMoveMarioRight:
-  rts                             ; Return from subroutine
+.ENDPROC
 ; --- END Subroutine to move the Mario sprites right ---
 
 
 ; --- BEGIN Subroutine to move the Mario sprites left ---
-PROCMoveMarioLeft:
+.PROC     MoveMarioLeft
   lda     $0203                   ; 
   sec                             ; 
   sbc     #$01                    ; 
@@ -120,8 +119,7 @@ PROCMoveMarioLeft:
   sec                             ; 
   sbc     #$01                    ; 
   sta     $020f                   ; Decrement Sprite3 X position
-ENDPROCMoveMarioLeft:
-  rts                             ; Return from subroutine
+.ENDPROC
 ; --- END Subroutine to move the Mario sprites left ---
 
 

@@ -35,17 +35,15 @@
 ; Extended iNES file header
 ;
 
-  ; 'N', 'E', 'S', $1a
+  .BYTE 	"NES", $1a
 
-  .INESCHR $01                      ; 1x 8KB VROM (CHR)
+  .BYTE 	$01						; 1x 8KB VROM (CHR)
+  .BYTE 	$01                     ; 1x 16KB ROM (PRG)
   
-  .INESPRG $01                      ; 1x 16KB ROM (PRG)
+  .BYTE 	%00000001             	; Mapper 0 == No mapping (a simple 16KB PRG + 8KB CHR game) 
+  									; Mirroring 1 == Vertical mirroring only
   
-  .INESMAP %0000                    ; Mapper 0 == No mapping (a simple 16KB PRG + 8KB CHR game)
-  
-  .INESMIR %0001                    ; Mirroring 1 == Vertical mirroring only
-  
-  ; $00, $00, $00, $00, $00, $00, $00, $00, $00
+  .BYTE 	$00, $00, $00, $00, $00, $00, $00, $00, $00
 
 
 ; End of rom_header_ines_simple.inc

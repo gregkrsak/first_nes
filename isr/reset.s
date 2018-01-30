@@ -33,7 +33,7 @@
 
   .CODE
 
-  .BANK 0
+  .SEGMENT "BANK0"
   .ORG __ISREntryPoint 
 
 
@@ -41,7 +41,7 @@
 ISRReset:
 
   ; Initialization sequence for the NES
-  .initBegin:
+  initBegin:
     cld                             ; Disable decimal mode in case someone is using a 6502 debugger
 
     ldx     #$00                    ; Set X register to $00
@@ -56,7 +56,7 @@ ISRReset:
     stx     _DMC_FREQ               ; Disable DMC IRQs
 
     bit     _PPUSTATUS              ; Clear the vblank flag in case the user reset during vblank
-  .initEnd:
+  initEnd:
 
   ;
   ; Note: When the system is first turned on or reset, the PPU may not be in a usable state right
@@ -65,16 +65,16 @@ ISRReset:
   ;
 
   ; Wait for a Vertical Blank
-  .vBlankWait1Begin:
-    ..vBlankWait1Loop:       
+  vBlankWait1Begin:
+    vBlankWait1Loop:       
     bit     _PPUSTATUS
-    bpl     ..vBlankWait1Loop
-  .vBlankWait1End:
+    bpl     vBlankWait1Loop
+  vBlankWait1End:
 
   ; Clear internal RAM
-  .clearMemoryBegin:
+  clearMemoryBegin:
     ldx     #$00
-    ..clearMemoryLoop:
+    clearMemoryLoop:
     lda     _RAM_CLEAR_PATTERN_1
     sta     $0000, x
     sta     $0100, x
@@ -86,21 +86,21 @@ ISRReset:
     lda     _RAM_CLEAR_PATTERN_2
     sta     $0300, x
     inx
-    bne     ..clearMemoryLoop
-  .clearMemoryEnd:
+    bne     clearMemoryLoop
+  clearMemoryEnd:
 
   ; Wait for another vertical blank
-  .vBlankWait2Begin:
-    ..vBlankWait2Loop:
+  vBlankWait2Begin:
+    vBlankWait2Loop:
     bit     _PPUSTATUS
-    bpl     ..vBlankWait2Loop
-  .vBlankWait2End:
+    bpl     vBlankWait2Loop
+  vBlankWait2End:
 
   ;
   ; Now the PPU is ready.
   ;
 
-  .loadPalettesBegin:
+  loadPalettesBegin:
     lda     _PPUSTATUS              ; Read PPU status to reset the high/low latch
     lda     #$3F
     sta     _PPUADDR                ; Write the high byte of $3F00 address
@@ -111,38 +111,38 @@ ISRReset:
     ; 1st time through loop it will load palette+0
     ; 2nd time through loop it will load palette+1
     ; etc.
-    ..loadPalettesLoop:
+    loadPalettesLoop:
     lda     DATAPalette, x              
     sta     _PPUDATA                ; Write to PPU
     inx                             ; X = X + 1
     cpx     #$10                    ; Compare X to hex $10, decimal 16 (copying 4 sprites)
-    bne     ..loadPalettesLoop      ; Branch to loadPalettesLoop if compare was Not Equal to zero
+    bne     loadPalettesLoop      ; Branch to loadPalettesLoop if compare was Not Equal to zero
                                     ; If compare was equal to 32, keep going down
-  .loadPaletteEnd:
+  loadPaletteEnd:
 
-  .loadSpritesBegin:
+  loadSpritesBegin:
     ldx     #$00                    ; Start at 0
-    ..loadSpritesLoop:
+    loadSpritesLoop:
     lda     DATASprites, x          ; Set register A to (DATASprites + x)
     sta     $0200, x                ; Store the value of register A into RAM address ($0200 + x)
     inx                             ; X = X + 1
     cpx     #$20                    ; Compare X to hex $20, decimal 32
-    bne     ..loadSpritesLoop       ; Branch to loadSpritesLoop if compare was Not Equal to zero
+    bne     loadSpritesLoop       ; Branch to loadSpritesLoop if compare was Not Equal to zero
                                     ; If compare was equal to 32, keep going down
-  .loadSpritesEnd:
+  loadSpritesEnd:
 
-  .enableGraphicsBegin:
+  enableGraphicsBegin:
     lda     #%10000000              ; Enable vertical blank interrupt
     sta     _PPUCTRL                ;
 
     lda     #%00010000              ; Enable sprite rendering
     sta     _PPUMASK                ;
-  .enableGraphicsEnd:
+  enableGraphicsEnd:
 
-  .doNothingBegin:
-    ..endlessLoop:
-    jmp     ..endlessLoop           ; THIS IS AN INFINITE LOOP
-  .doNothingEnd:
+  doNothingBegin:
+    endlessLoop:
+    jmp     endlessLoop           ; THIS IS AN INFINITE LOOP
+  doNothingEnd:
 
 ENDISRReset:
     rti                             ; Return from interrupt

@@ -33,7 +33,7 @@
 
   .CODE
 
-  .BANK 0
+  .SEGMENT "BANK0"
   .ORG __ISRBreakBegin
 
 
