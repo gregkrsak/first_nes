@@ -16,20 +16,24 @@ Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NE
 
 **Processor:** 8-bit, [Ricoh RP2A03](https://en.wikipedia.org/wiki/Ricoh_2A03) (6502), 1.789773 MHz (NTSC)
 
-**Assembler:** NESASM 3.1 ([download](http://www.nespowerpak.com/nesasm/NESASM3.zip)) ([GitHub fork with Unix-like Makefile](https://github.com/camsaul/nesasm))
+**Assembler:** ca65 ([cc65 binutils](https://github.com/cc65/cc65))
 
 **Tested with:**
 
-```nesasm3 "first_nes.asm"```
+```(untested)```
 
-**Tested on:** [Nestopia 1.40](http://nestopia.sourceforge.net/)
+**Tested on:**
+
+```(untested)```
 
 For more information about NES programming in general, try these references:
 -----------------------------------------------------------------------------------------------------------------
 
 https://en.wikibooks.org/wiki/NES_Programming
 
-For more information on the NESASM assembler, try these references:
+For more information on the ca65 assembler, try these references:
 ------------------------------------------------------------------------------------------------------
 
-http://www.nespowerpak.com/nesasm/usage.txt
+https://github.com/cc65/cc65
+
+http://cc65.github.io/doc/ca65.html
