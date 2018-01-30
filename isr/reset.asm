@@ -100,34 +100,34 @@ ISRReset:
   ;
 
   .loadPalettesBegin:
-    lda     _PPUSTATUS              ; read PPU status to reset the high/low latch
+    lda     _PPUSTATUS              ; Read PPU status to reset the high/low latch
     lda     #$3F
-    sta     _PPUADDR                ; write the high byte of $3F00 address
+    sta     _PPUADDR                ; Write the high byte of $3F00 address
     lda     #$00
-    sta     _PPUADDR                ; write the low byte of $3F00 address
-    ldx     #$00                    ; start out at 0
+    sta     _PPUADDR                ; Write the low byte of $3F00 address
+    ldx     #$00                    ; Start out at 0
     ; Load data from address (palette + the value in x)
     ; 1st time through loop it will load palette+0
     ; 2nd time through loop it will load palette+1
     ; etc.
     ..loadPalettesLoop:
     lda     DATAPalette, x              
-    sta     _PPUDATA                ; write to PPU
+    sta     _PPUDATA                ; Write to PPU
     inx                             ; X = X + 1
     cpx     #$10                    ; Compare X to hex $10, decimal 16 (copying 4 sprites)
     bne     ..loadPalettesLoop      ; Branch to loadPalettesLoop if compare was Not Equal to zero
-                                    ; if compare was equal to 32, keep going down
+                                    ; If compare was equal to 32, keep going down
   .loadPaletteEnd:
 
   .loadSpritesBegin:
-    ldx     #$00                    ; start at 0
+    ldx     #$00                    ; Start at 0
     ..loadSpritesLoop:
     lda     DATASprites, x          ; Set register A to (DATASprites + x)
     sta     $0200, x                ; Store the value of register A into RAM address ($0200 + x)
     inx                             ; X = X + 1
     cpx     #$20                    ; Compare X to hex $20, decimal 32
     bne     ..loadSpritesLoop       ; Branch to loadSpritesLoop if compare was Not Equal to zero
-                                    ; if compare was equal to 32, keep going down
+                                    ; If compare was equal to 32, keep going down
   .loadSpritesEnd:
 
   .enableGraphicsBegin:

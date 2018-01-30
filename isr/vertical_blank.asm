@@ -40,31 +40,31 @@
 ISRVerticalBlank:
 
     lda     #$00
-    sta     _OAMADDR                ; set the low byte (00) of the RAM address
+    sta     _OAMADDR                ; Set the low byte (00) of the RAM address
     lda     #$02
-    sta     _OAMDMA                 ; set the high byte (02) of the RAM address, start the transfer
+    sta     _OAMDMA                 ; Set the high byte (02) of the RAM address, start the transfer
 
   ; Freeze the button positions
   .latchControllerBegin:
     lda     #$01
     sta     _JOY1
     lda     #$00
-    sta     _JOY1                   ; tell both the controllers to latch buttons
+    sta     _JOY1                   ; Tell both the controllers to latch buttons
   .latchControllerEnd:
   
-  ; Button A
+  ; Check button A
   .readButtonABegin: 
     lda     _JOY1                    
-    and     #%00000001              ; only look at bit 0
-    beq     .readButtonAEnd         ; branch to readButtonAEnd if button A is NOT pressed (0)                                    
+    and     #%00000001              ; Only look at bit 0
+    beq     .readButtonAEnd         ; Branch to readButtonAEnd if button A is NOT pressed (0)                                    
     jsr     PROCMoveMarioRight      ; Jump to the subroutine that moves the Mario sprites right
   .readButtonAEnd:
 
-  ; Button B
+  ; Check button B
   .readButtonBBegin: 
     lda     _JOY1                    
-    and     #%00000001              ; only look at bit 0
-    beq     .readButtonBEnd         ; branch to readButtonBEnd if button B is NOT pressed (0)                                    
+    and     #%00000001              ; Only look at bit 0
+    beq     .readButtonBEnd         ; Branch to readButtonBEnd if button B is NOT pressed (0)                                    
     jsr     PROCMoveMarioLeft       ; Jump to the subroutine that moves the Mario sprites left
   .readButtonBEnd:
 

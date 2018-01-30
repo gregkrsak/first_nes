@@ -34,16 +34,16 @@
 ; Non-project-specific helper files. You should study each of these, individually.
 ; =================================================================================================
 
-  ; CPU-Specific directives and routines
+  ; CPU-Specific directives
   .INCLUDE "common/cpu.inc"
 
-  ; Audio-specific directives and routines
+  ; Audio-specific directives
   .INCLUDE "common/apu.inc"
 
-  ; Graphics-specific directives and routines
+  ; Graphics-specific directives
   .INCLUDE "common/ppu.inc"
 
-  ; Joystick-specific directives and routines
+  ; Joystick-specific directives
   .INCLUDE "common/controllers.inc"
 
   ; The ROM header
