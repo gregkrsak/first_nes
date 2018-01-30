@@ -17,10 +17,14 @@
 ; Assembler: ca65 (cc65 binutils)
 ;
 ; Tested with:
-; (untested)
+;  ca65 first_nes.s
+;  ld65 first_nes.o -C ld65.cfg
+;  cat first_nes_hdr.bin first_nes_prg.bin first_nes_chr.bin > first_nes.nes
+;  rm a.out
+;  nestopia first_nes.nes
 ;
 ; Tested on:
-; (untested)
+;  Nestopia UE 1.47
 ;
 ; For more information about NES programming in general, try these references:
 ; https://en.wikibooks.org/wiki/NES_Programming
