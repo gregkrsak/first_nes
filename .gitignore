@@ -3,6 +3,7 @@
 *.bat
 *.nes
 *.fns
+*.o
 
 # Mac
 .DS_Store
