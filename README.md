@@ -6,7 +6,7 @@ A "starter" assembly language game for the Nintendo Entertainment System.
 -------------------------------------------------------------------------
 
 
-Written by Greg M. Krsak ([email](mailto:greg.krsak@gmail.com)), Feb. 2017
+Written by Greg M. Krsak ([email](mailto:greg.krsak@gmail.com)), 2018
 
 Based on the [NintendoAge "Nerdy Nights" tutorials](http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155), by bunnyboy
 
@@ -22,9 +22,9 @@ Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NE
 
 ```bash
 ca65 first_nes.s
-ld65 first_nes.o -C ld65.cfg
-cat first_nes_hdr.bin first_nes_prg.bin first_nes_chr.bin > first_nes.nes
-rm a.out
+ld65 first_nes.o -C config/ines.cfg
+cat bin/first_nes_hdr.bin bin/first_nes_prg.bin bin/first_nes_chr.bin > first_nes.nes
+rm a.out && rm first_nes.o
 nestopia first_nes.nes
 ```
 
