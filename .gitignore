@@ -1,10 +1,15 @@
-# Project
+# General
 *.bak
 *.bat
 *.nes
 *.fns
 *.o
-*.bin
+*.out
+
+# Project specific
+bin/first_nes_hdr.bin
+bin/first_nes_prg.bin
+bin/first_nes_chr.bin
 
 # Development
 make
