@@ -30,7 +30,7 @@ nestopia first_nes.nes
 
 **Tested on:**
 
-Nestopia UE 1.47
+[Nestopia UE](http://0ldsk00l.ca/nestopia/) 1.47
 
 
 For more information about NES programming in general, try these references:
