@@ -54,7 +54,6 @@
   ; Freeze the button positions.
   ; ----------------------------
 
-  latchControllerBegin:
     lda     #$01                    ;
     sta     _JOY1                   ;
     lda     #$00                    ;
@@ -65,7 +64,6 @@
   ; Read button A.
   ; --------------
 
-  readButtonABegin: 
     lda     _JOY1                   ; 
     and     #%00000001              ; Only look at bit 0
     beq     readButtonAEnd          ; Branch to readButtonAEnd if button A is NOT pressed (0)                                    
@@ -75,8 +73,7 @@
   ; ---------------
   ; Read button B.
   ; ---------------
-
-  readButtonBBegin: 
+ 
     lda     _JOY1                    
     and     #%00000001              ; Only look at bit 0
     beq     readButtonBEnd          ; Branch to readButtonBEnd if button B is NOT pressed (0)                                    

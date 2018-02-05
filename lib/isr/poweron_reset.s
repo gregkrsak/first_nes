@@ -150,7 +150,6 @@
   ; ENDLESS LOOP.
   ; -------------
 
-  doNothingBegin:
     endlessLoop:
     jmp     endlessLoop
 
