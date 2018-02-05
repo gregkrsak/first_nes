@@ -38,35 +38,53 @@
 
 
 .PROC ISR_Vertical_Blank
-    lda     #$00
-    sta     _OAMADDR                ; Set the low byte (00) of the RAM address
-    lda     #$02
-    sta     _OAMDMA                 ; Set the high byte (02) of the RAM address, start the transfer
-
-  ; Freeze the button positions
-  latchControllerBegin:
-    lda     #$01
-    sta     _JOY1
-    lda     #$00
-    sta     _JOY1                   ; Tell both the controllers to latch buttons
   
-  ; Check button A
+  ; -------------------------------------------------
+  ; Refresh DRAM-stored sprite data before it decays.
+  ; -------------------------------------------------
+
+    lda     #$00                    ;
+    sta     _OAMADDR                ; Set the low byte (00) of the RAM address
+
+    lda     #$02                    ;
+    sta     _OAMDMA                 ; Set the high byte (02) of the RAM address and start the
+                                    ; DMA transfer
+
+  ; ----------------------------
+  ; Freeze the button positions.
+  ; ----------------------------
+
+  latchControllerBegin:
+    lda     #$01                    ;
+    sta     _JOY1                   ;
+    lda     #$00                    ;
+    sta     _JOY1                   ; Controllers for first and second player are now latched
+                                    ; and will not change
+  
+  ; --------------
+  ; Read button A.
+  ; --------------
+
   readButtonABegin: 
-    lda     _JOY1                    
+    lda     _JOY1                   ; 
     and     #%00000001              ; Only look at bit 0
     beq     readButtonAEnd          ; Branch to readButtonAEnd if button A is NOT pressed (0)                                    
-    jsr     MoveMarioRight          ; Jump to the subroutine that moves the Mario sprites right
-  readButtonAEnd:
+    jsr     MoveMarioRight          ; Call the procedure that moves the Mario sprites right
+  readButtonAEnd:                   ;
 
-  ; Check button B
+  ; ---------------
+  ; Read button B.
+  ; ---------------
+
   readButtonBBegin: 
     lda     _JOY1                    
     and     #%00000001              ; Only look at bit 0
     beq     readButtonBEnd          ; Branch to readButtonBEnd if button B is NOT pressed (0)                                    
-    jsr     MoveMarioLeft           ; Jump to the subroutine that moves the Mario sprites left
-  readButtonBEnd:
+    jsr     MoveMarioLeft           ; Call the procedure that moves the Mario sprites left
+  readButtonBEnd:                   ;
   
     rti                             ; Return from interrupt 
+
 .ENDPROC
 
 

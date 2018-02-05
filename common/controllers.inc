@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; controllers.inc
+; common/controllers.inc
 ;
 ; Joystick-related assembler directives for Nintendo Entertainment System assembly language.
 ;
@@ -40,4 +40,4 @@ _JOY1       = $4016
 _JOY2       = $4017
 
 
-; End of controllers.inc
+; End of common/controllers.inc

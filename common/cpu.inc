@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; cpu.inc
+; common/cpu.inc
 ;
 ; CPU-Related assembler directives for Nintendo Entertainment System assembly language.
 ;
@@ -71,4 +71,4 @@ _RAM_CLEAR_PATTERN_1	= $00
 _RAM_CLEAR_PATTERN_2	= $FE
 
 
-; End of cpu.inc
+; End of common/cpu.inc

@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; ppu.inc
+; common/ppu.inc
 ;
 ; PPU-Related assembler directives for Nintendo Entertainment System assembly language.
 ;
@@ -195,4 +195,4 @@ _OAMDATA    = $2004           ; Reference: https://wiki.nesdev.com/w/index.php/P
 _OAMDMA     = $4014            ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMDMA
 
 
-; End of ppu.inc
+; End of common/ppu.inc
