@@ -44,14 +44,15 @@
 
     cld                             ; Disable decimal mode in case someone is using a 6502 debugger
 
-    ldx     #$00                    ; 
+    ldx     #%00000000              ; 
     stx     _PPUCTRL                ; Disable vertical blank interrupt
     stx     _PPUMASK                ; Disable sprite rendering
 
-    ldx     #$FF                    ; 
-    txs                             ; Set the value of the stack pointer to $FF
+    ldx     #255                    ; 
+    txs                             ; Set the value of the stack pointer to 256 (two hundred and 
+                                    ; fifty-five)
 
-    ldx     #$40                    ; 
+    ldx     #%01000000              ; 
     stx     _FR_COUNTER             ; Disable APU frame IRQ
     stx     _DMC_FREQ               ; Disable DMC IRQs
 
@@ -120,7 +121,7 @@
     lda     _PALETTE, x             ; 
     sta     _PPUDATA                ; Write to PPU
     inx                             ;
-    cpx     #$10                    ;
+    cpx     #16                     ;
     bne     loadPalettesLoop        ;
 
   ; ------------------------------
@@ -132,7 +133,7 @@
     lda     _SPRITES, x             ;
     sta     $0200, x                ; Write to PPU
     inx                             ;
-    cpx     #$20                    ;
+    cpx     #32                     ;
     bne     loadSpritesLoop         ;
                                     
 
