@@ -38,8 +38,10 @@
 
 
 .PROC ISR_Custom
+
     nop                             ; Do nothing
     rti                             ; Return from interrupt
+    
 .ENDPROC
 
 

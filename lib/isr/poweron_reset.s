@@ -36,10 +36,12 @@
 
 
 .PROC ISR_PowerOn_Reset
+
   ; ---------------------------------------------------------------------------------------------
   ; Initialization sequence for the NES. These tasks should generally be performed every time the
   ; system is reset.
   ; ---------------------------------------------------------------------------------------------
+
     cld                             ; Disable decimal mode in case someone is using a 6502 debugger
 
     ldx     #$00                    ; 
@@ -53,7 +55,8 @@
     stx     _FR_COUNTER             ; Disable APU frame IRQ
     stx     _DMC_FREQ               ; Disable DMC IRQs
 
-    bit     _PPUSTATUS              ; Clear the vblank flag in case the user reset during vblank
+    bit     _PPUSTATUS              ; Clear the vblank flag in case the NES was reset during vblank
+                                    ; (the vblank flag won't be used much after this)
 
   ; ---------------------------------------------------------------------------------------------
   ; Note: When the system is first turned on or reset, the PPU may not be in a usable state right
@@ -64,6 +67,7 @@
   ; --------------------------
   ; Wait for a Vertical Blank.
   ; --------------------------
+
   vBlankWait1Loop:       
     bit     _PPUSTATUS
     bpl     vBlankWait1Loop
@@ -71,6 +75,7 @@
   ; -------------------
   ; Clear internal RAM.
   ; -------------------
+
     ldx     #$00
     clearMemoryLoop:
     lda     _RAM_CLEAR_PATTERN_1
@@ -89,6 +94,7 @@
   ; --------------------------
   ; Wait for a Vertical Blank.
   ; --------------------------
+
   vBlankWait2Loop:
     bit     _PPUSTATUS
     bpl     vBlankWait2Loop
@@ -100,53 +106,56 @@
   ; -------------------------------
   ; Load palette data into the PPU.
   ; -------------------------------
-    lda     _PPUSTATUS              ; Read PPU status to reset the high/low latch
-    lda     #$3F
+
+    lda     _PPUSTATUS              ; Reset the high/low latch to "high"
+
+    lda     #$3F                    ;
     sta     _PPUADDR                ; Write the high byte of $3F00 address
-    lda     #$00
+
+    lda     #$00                    ;
     sta     _PPUADDR                ; Write the low byte of $3F00 address
-    ldx     #$00                    ; Start out at 0
-    ; Load data from address (palette + the value in x)
-    ; 1st time through loop it will load palette+0
-    ; 2nd time through loop it will load palette+1
-    ; etc.
-  loadPalettesLoop:
-    lda     _PALETTE, x              
+
+    ldx     #$00                    ;
+  loadPalettesLoop:                 ;
+    lda     _PALETTE, x             ; 
     sta     _PPUDATA                ; Write to PPU
-    inx                             ; X = X + 1
-    cpx     #$10                    ; Compare X to hex $10, decimal 16 (copying 4 sprites)
-    bne     loadPalettesLoop        ; Branch to loadPalettesLoop if compare was Not Equal to zero
-                                    ; If compare was equal to 32, keep going down
+    inx                             ;
+    cpx     #$10                    ;
+    bne     loadPalettesLoop        ;
 
   ; ------------------------------
   ; Load sprite data into the PPU.
   ; ------------------------------
-    ldx     #$00                    ; Start at 0
-  loadSpritesLoop:
-    lda     _SPRITES, x             ; Set register A to (Sprites + x)
-    sta     $0200, x                ; Store the value of register A into RAM address ($0200 + x)
-    inx                             ; X = X + 1
-    cpx     #$20                    ; Compare X to hex $20, decimal 32
-    bne     loadSpritesLoop         ; Branch to loadSpritesLoop if compare was Not Equal to zero
-                                    ; If compare was equal to 32, keep going down
+
+    ldx     #$00                    ;
+  loadSpritesLoop:                  ;
+    lda     _SPRITES, x             ;
+    sta     $0200, x                ; Write to PPU
+    inx                             ;
+    cpx     #$20                    ;
+    bne     loadSpritesLoop         ;
+                                    
 
   ; --------------------
   ; Enable video output.
   ; --------------------
-    lda     #%10000000              ; Enable vertical blank interrupt
-    sta     _PPUCTRL                ;
 
-    lda     #%00010000              ; Enable sprite rendering
-    sta     _PPUMASK                ;
+    lda     #%10000000              ; 
+    sta     _PPUCTRL                ; Enable vertical blank interrupt
+
+    lda     #%00010000              ; 
+    sta     _PPUMASK                ; Enable sprite rendering
 
   ; -------------
   ; ENDLESS LOOP.
   ; -------------
+
   doNothingBegin:
     endlessLoop:
     jmp     endlessLoop
 
-    rti                             ; Return from interrupt
+    rti                             ; This should never be called
+
 .ENDPROC
 
 

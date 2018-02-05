@@ -40,7 +40,6 @@
 ;  should study each of them, individually.
 ; =================================================================================================
 
-
 ; CPU-Specific directives
 .INCLUDE "shared_code/cpu.inc"
 
@@ -54,16 +53,18 @@
 .INCLUDE "shared_code/controllers.inc"
 
 
-
 ; =================================================================================================
-;  ROM (PRG) DATA
+;  Environment-specific metadata
 ; =================================================================================================
-
 
 ; iNES File header, used by NES emulators
 .SEGMENT "HEADER"
 .INCLUDE "data/header/ines_simple.inc"
 
+
+; =================================================================================================
+;  ROM (PRG) Data
+; =================================================================================================
 
 ; Palette data
 .SEGMENT "PALETTE"
@@ -76,9 +77,8 @@
 
 
 ; =================================================================================================
-;  VROM (CHR) DATA
+;  VROM (CHR) Data
 ; =================================================================================================
-
 
 ; Graphics tile data, used by the sprites
 .SEGMENT "TILES"
@@ -86,7 +86,8 @@
 
 
 ; =================================================================================================
-;  ROM CODE
+;  ROM Code. Your NES game will be driven by three interrupt service routines, from which you will
+;  call other procedures that are stored in seperate libraries (see the /lib project directory).
 ; =================================================================================================
 
 .SEGMENT "CODE"
@@ -96,12 +97,15 @@
 .INCLUDE "lib/isr/vertical_blank.s"
 .INCLUDE "lib/isr/custom.s"
 
-; Your library files get included here
+; YOUR LIBRARY FILES GET INCLUDED HERE
+; <libraries>
 .INCLUDE "lib/sprite/basic_movement.s"
+; </libraries>
 
 
 ; =================================================================================================
-;  INTERRUPT VECTOR TABLE
+;  Interrupt Vector Table. Each of these three 16 (sixteen) bit addresses points to a procedure
+;  that is called automatically by the NES hardware.
 ; =================================================================================================
 
 .SEGMENT "VECTORS"
