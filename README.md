@@ -3,6 +3,7 @@ first_nes project (WIP)
 
 
 A "starter" assembly language game for the Nintendo Entertainment System.
+Please leave issues or submit pull requests!
 -------------------------------------------------------------------------
 
 
