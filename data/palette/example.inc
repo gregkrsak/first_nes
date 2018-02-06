@@ -47,6 +47,6 @@ _PALETTE:
 .BYTE $0f, $1c, $15, $14
 .BYTE $0f, $02, $38, $3c
 .BYTE $0f, $1c, $15, $14
-.BYTE $0f, $02, $38, $3c
+.BYTE $0f, $0f, $0f, $0f
 
 ; End of data/palette/example.inc
