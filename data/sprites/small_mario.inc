@@ -42,10 +42,10 @@ _SPRITES:
 
 
 ; --- BEGIN Small Mario ---
-.BYTE $80,	$32,	$00,	$80		; Sprite 0
-.BYTE $80,	$33,	$00,	$88		; Sprite 1
-.BYTE $88,	$34,	$00,	$80		; Sprite 2
-.BYTE $88,	$35,	$00,	$88		; Sprite 3
+.BYTE 128,	$32,	%00000000,	128		; Sprite 0
+.BYTE 128,	$33,	%00000000,	136		; Sprite 1
+.BYTE 136,	$34,	%00000000,	128		; Sprite 2
+.BYTE 136,	$35,	%00000000,	136		; Sprite 3
 ; --- END Small Mario ---
 
 
