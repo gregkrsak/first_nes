@@ -36,9 +36,11 @@
 
 
 ; ==========================================
-; Subroutine to move the Mario sprites right
+; Subroutine to move the Luigi sprites right
 ; ==========================================
-.PROC     MoveMarioRight
+
+.PROC     MoveLuigiRight
+
     lda     $0203                   ; 
     clc                             ;
     adc     #$01                    ; 
@@ -60,13 +62,16 @@
     sta     $020f                   ; Increment the Sprite3 X position
 
     rts
+
 .ENDPROC
 
 
 ; =========================================
-; Subroutine to move the Mario sprites left
+; Subroutine to move the Luigi sprites left
 ; =========================================
-.PROC     MoveMarioLeft
+
+.PROC     MoveLuigiLeft
+
     lda     $0203                   ; 
     sec                             ; 
     sbc     #$01                    ; 
@@ -88,6 +93,7 @@
     sta     $020f                   ; Decrement Sprite3 X position
 
     rts
+    
 .ENDPROC
 
 

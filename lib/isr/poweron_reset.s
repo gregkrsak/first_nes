@@ -36,25 +36,18 @@
 
 
 .PROC ISR_PowerOn_Reset
-
   ; ---------------------------------------------------------------------------------------------
   ; Initialization sequence for the NES. These tasks should generally be performed every time the
   ; system is reset.
   ; ---------------------------------------------------------------------------------------------
-
-    cld                             ; Disable decimal mode in case someone is using a 6502 debugger
-
-    ldx     #%00000000              ; 
-    stx     _PPUCTRL                ; Disable vertical blank interrupt
-    stx     _PPUMASK                ; Disable sprite rendering
+    cld                             ; Disable unsupported BCD mode (in case someone is using a 6502
+                                    ; debugger)
 
     ldx     #255                    ; 
     txs                             ; Set the value of the stack pointer to 255 (two hundred and 
                                     ; fifty-five)
-
-    ldx     #%01000000              ; 
-    stx     _FR_COUNTER             ; Disable APU frame IRQ
-    stx     _DMC_FREQ               ; Disable DMC IRQs
+    jsr     DisableVideoOutput
+    jsr     DisableAudioOutput
 
     bit     _PPUSTATUS              ; Clear the vblank flag in case the NES was reset during vblank
                                     ; (the vblank flag won't be used much after this)
@@ -65,20 +58,33 @@
   ; which may be accomplished by waiting for 2 (two) vertical blank intervals.
   ; ---------------------------------------------------------------------------------------------
 
-  ; --------------------------
-  ; Wait for a Vertical Blank.
-  ; --------------------------
+    jsr     WaitForVBlank
 
-  vBlankWait1Loop:       
-    bit     _PPUSTATUS
-    bpl     vBlankWait1Loop
+    jmp     __clearCPUMemory
+__CPUMemoryCleared:
 
-  ; -------------------
-  ; Clear internal RAM.
-  ; -------------------
+    jsr     WaitForVBlank
 
+  ; ---------------------
+  ; Now the PPU is ready.
+  ; ---------------------
+
+    jsr     LoadPaletteData
+    jsr     LoadSpriteData                                
+    jsr     EnableVideoOutput
+
+  ; -------------
+  ; ENDLESS LOOP.
+  ; -------------
+
+    jsr     EndlessLoop
+
+    rti                             ; This should never be called
+
+
+__clearCPUMemory:
     ldx     #$00
-    clearMemoryLoop:
+   clearMemoryLoop:
     lda     _RAM_CLEAR_PATTERN_1
     sta     $0000, x
     sta     $0100, x
@@ -91,71 +97,9 @@
     sta     $0300, x
     inx
     bne     clearMemoryLoop
+    jmp     __CPUMemoryCleared
 
-  ; --------------------------
-  ; Wait for a Vertical Blank.
-  ; --------------------------
-
-  vBlankWait2Loop:
-    bit     _PPUSTATUS
-    bpl     vBlankWait2Loop
-
-  ; ---------------------
-  ; Now the PPU is ready.
-  ; ---------------------
-
-  ; -------------------------------
-  ; Load palette data into the PPU.
-  ; -------------------------------
-
-    lda     _PPUSTATUS              ; Reset the high/low latch to "high"
-
-    lda     #$3F                    ;
-    sta     _PPUADDR                ; Write the high byte of $3F00 address
-
-    lda     #$00                    ;
-    sta     _PPUADDR                ; Write the low byte of $3F00 address
-
-    ldx     #$00                    ;
-  loadPalettesLoop:                 ;
-    lda     _PALETTE, x             ; 
-    sta     _PPUDATA                ; Write to PPU
-    inx                             ;
-    cpx     #32                     ;
-    bne     loadPalettesLoop        ;
-
-  ; ------------------------------
-  ; Load sprite data into the PPU.
-  ; ------------------------------
-
-    ldx     #$00                    ;
-  loadSpritesLoop:                  ;
-    lda     _SPRITES, x             ;
-    sta     $0200, x                ; Write to PPU
-    inx                             ;
-    cpx     #16                     ;
-    bne     loadSpritesLoop         ;
-                                    
-  ; --------------------
-  ; Enable video output.
-  ; --------------------
-
-    lda     #%10000000              ; 
-    sta     _PPUCTRL                ; Enable vertical blank interrupt
-
-    lda     #%00010000              ; 
-    sta     _PPUMASK                ; Enable sprite rendering
-
-  ; -------------
-  ; ENDLESS LOOP.
-  ; -------------
-
-    endlessLoop:
-    jmp     endlessLoop
-
-    rti                             ; This should never be called
-
-.ENDPROC
+.ENDPROC 
 
 
 ; End of lib/isr/poweron_reset.s
