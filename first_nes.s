@@ -73,7 +73,7 @@
 
 ; Sprite data
 .SEGMENT "SPRITES"
-.INCLUDE "data/sprites/small_mario.inc"
+.INCLUDE "data/sprites/small_luigi.inc"
 
 
 ; =================================================================================================
