@@ -49,7 +49,7 @@
     stx     _PPUMASK                ; Disable sprite rendering
 
     ldx     #255                    ; 
-    txs                             ; Set the value of the stack pointer to 256 (two hundred and 
+    txs                             ; Set the value of the stack pointer to 255 (two hundred and 
                                     ; fifty-five)
 
     ldx     #%01000000              ; 
