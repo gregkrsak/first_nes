@@ -97,6 +97,11 @@
 .INCLUDE "lib/isr/vertical_blank.s"
 .INCLUDE "lib/isr/custom.s"
 
+; Non-project-specific libraries. These may be shared across projects.
+.INCLUDE "shared_code/cpu.s"
+.INCLUDE "shared_code/apu.s"
+.INCLUDE "shared_code/ppu.s"
+
 ; YOUR LIBRARY FILES GET INCLUDED HERE
 ; <libraries>
 .INCLUDE "lib/sprite/basic_movement.s"

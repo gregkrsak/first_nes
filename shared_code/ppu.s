@@ -39,11 +39,11 @@
 ; Subroutine to disable video output. This will cause a black screen and disable vblank.
 ; ======================================================================================
 
-.PROC     DisableVideoOutput
+.PROC DisableVideoOutput
 
-    ldx     #%00000000              ;
-    stx     _PPUCTRL                ; Disable vertical blank interrupt   
-    stx     _PPUMASK                ; Disable sprite rendering
+    lda     #%00000000              ;
+    sta     _PPUCTRL                ; Disable vertical blank interrupt   
+    sta     _PPUMASK                ; Disable sprite rendering
 
     rts
     
@@ -54,7 +54,7 @@
 ; Subroutine to enable video output. This will enable vblank.
 ; ===========================================================
 
-.PROC     EnableVideoOutput
+.PROC EnableVideoOutput
 
     lda     #%10000000              ;
     sta     _PPUCTRL                ; Enable vertical blank interrupt
@@ -71,11 +71,24 @@
 ; Subroutine to wait for vblank.
 ; ==============================
 
-.PROC     WaitForVBlank
+.PROC WaitForVBlank
 
    vBlankWaitLoop:
     bit     _PPUSTATUS
     bpl     vBlankWaitLoop
+
+    rts
+
+.ENDPROC
+
+
+; ====================================
+; Subroutine to clear the vblank flag.
+; ====================================
+
+.PROC ClearVBlankFlag
+
+    bit     _PPUSTATUS
 
     rts
 

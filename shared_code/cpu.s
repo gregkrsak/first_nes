@@ -35,69 +35,17 @@
 ;
 
 
-; ==============================
-; Subroutine to disable BCD mode
-; ==============================
-
-.PROC     DisableDecimalMode
-
-    cld
-    rts
-
-.ENDPROC
-
-
-; ======================================
-; Subroutine to reset the stack pointer.
-; ======================================
-
-.PROC     ResetStackPointer
-
-    ldx     #255                    ; Set the value of the stack pointer to 255 (two hundred and 
-    txs                             ; fifty-five)
-
-    rts
-
-.ENDPROC
-
-
-; =================================
-; Subroutine to clear internal RAM.
-; =================================
-
-.PROC     ClearCPUMemory
-
-    ldx     #$00
-   clearMemoryLoop:
-    lda     _RAM_CLEAR_PATTERN_1
-    sta     $0000, x
-    sta     $0100, x
-    sta     $0200, x
-    sta     $0400, x
-    sta     $0500, x
-    sta     $0600, x
-    sta     $0700, x
-    lda     _RAM_CLEAR_PATTERN_2
-    sta     $0300, x
-    inx
-    bne     clearMemoryLoop
-
-    rts
-
-.ENDPROC
-
-
 ; =======================================
 ; Subroutine to initiate an endless loop.
 ; =======================================
 
-.PROC     EndlessLoop
+.PROC EndlessLoop
 
    endlessLoop:
     jmp endlessLoop
 
     rts
-    
+
 .ENDPROC 
 
 ; End of shared_code/cpu.s

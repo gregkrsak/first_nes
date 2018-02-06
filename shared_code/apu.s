@@ -39,11 +39,11 @@
 ; Subroutine to disable audio output.
 ; ===================================
 
-.PROC     DisableAudioOutput
+.PROC DisableAudioOutput
 
-    ldx     #%01000000
-    stx     _FR_COUNTER             ; Disable APU frame IRQ
-    stx     _DMC_FREQ               ; Disable digital sound IRQs
+    lda     #%01000000
+    sta     _FR_COUNTER             ; Disable APU frame IRQ
+    sta     _DMC_FREQ               ; Disable digital sound IRQs
 
     rts
 
