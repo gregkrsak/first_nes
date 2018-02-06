@@ -67,7 +67,7 @@
     lda     _JOY1                   ; 
     and     #%00000001              ; Only look at bit 0
     beq     readButtonAEnd          ; Branch to readButtonAEnd if button A is NOT pressed (0)                                    
-    jsr     MoveMarioRight          ; Call the procedure that moves the Mario sprites right
+    jsr     MoveLuigiRight          ; Call the procedure that moves the Luigi sprites right
   readButtonAEnd:                   ;
 
   ; ---------------
@@ -77,7 +77,7 @@
     lda     _JOY1                    
     and     #%00000001              ; Only look at bit 0
     beq     readButtonBEnd          ; Branch to readButtonBEnd if button B is NOT pressed (0)                                    
-    jsr     MoveMarioLeft           ; Call the procedure that moves the Mario sprites left
+    jsr     MoveLuigiLeft           ; Call the procedure that moves the Luigi sprites left
   readButtonBEnd:                   ;
   
     rti                             ; Return from interrupt 
