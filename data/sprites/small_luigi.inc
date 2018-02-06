@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; data/sprites/small_mario.inc
+; data/sprites/small_luigi.inc
 ;
 ; Sample sprite data for an NES ROM. References the tile data in the data/tiles directory.
 ;
@@ -36,17 +36,17 @@
 
 
 _SPRITES:
-; ===============================
-;     X		TILE	ATTR 	Y
-; ===============================
+; =================================
+;     X     TILE  ATTR        Y
+; =================================
 
 
-; --- BEGIN Small Mario ---
-.BYTE $80,	$32,	$00,	$80		; Sprite 0
-.BYTE $80,	$33,	$00,	$88		; Sprite 1
-.BYTE $88,	$34,	$00,	$80		; Sprite 2
-.BYTE $88,	$35,	$00,	$88		; Sprite 3
-; --- END Small Mario ---
+; --- BEGIN Small Luigi ---
+.BYTE 128,	$36,	%00000010,	128		; Sprite 0
+.BYTE 128,	$37,	%00000010,	136		; Sprite 1
+.BYTE 136,	$38,	%00000010,	128		; Sprite 2
+.BYTE 136,	$39,	%00000010,	136		; Sprite 3
+; --- END Small Luigi ---
 
 
-; End of data/sprites/small_mario.inc
+; End of data/sprites/small_luigi.inc
