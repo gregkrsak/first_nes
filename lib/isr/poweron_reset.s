@@ -133,7 +133,7 @@
     lda     _SPRITES, x             ;
     sta     $0200, x                ; Write to PPU
     inx                             ;
-    cpx     #32                     ;
+    cpx     #16                     ;
     bne     loadSpritesLoop         ;
                                     
 
