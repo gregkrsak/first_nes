@@ -121,7 +121,7 @@
     lda     _PALETTE, x             ; 
     sta     _PPUDATA                ; Write to PPU
     inx                             ;
-    cpx     #16                     ;
+    cpx     #32                     ;
     bne     loadPalettesLoop        ;
 
   ; ------------------------------
@@ -136,7 +136,6 @@
     cpx     #16                     ;
     bne     loadSpritesLoop         ;
                                     
-
   ; --------------------
   ; Enable video output.
   ; --------------------
