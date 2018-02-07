@@ -51,7 +51,6 @@
     lda     #$02                    ;
     sta     _OAMDMA                 ; Set the high byte (02) of the RAM address and start the
                                     ; DMA transfer
-
   ; ----------------------------
   ; Freeze the button positions.
   ; ----------------------------
@@ -61,7 +60,6 @@
     lda     #$00                    ;
     sta     _JOY1                   ; Controllers for first and second player are now latched
                                     ; and will not change
-  
   ; --------------
   ; Read button A.
   ; --------------
@@ -85,6 +83,5 @@
     rti                             ; Return from interrupt 
 
 .ENDPROC
-
 
 ; End of lib/isr/vertical_blank.s

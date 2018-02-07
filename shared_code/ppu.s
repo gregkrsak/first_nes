@@ -119,6 +119,8 @@
     cpx     #32                     ;
     bne     loadPalettesLoop        ;
 
+    rts
+
 .ENDPROC 
 
 
@@ -135,6 +137,8 @@
     inx                             ;
     cpx     #16                     ;
     bne     loadSpritesLoop         ;
+
+    rts
 
 .ENDPROC 
 

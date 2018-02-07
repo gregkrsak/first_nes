@@ -42,9 +42,9 @@
 .PROC ISR_Custom
 
     nop                             ; Do nothing
+
     rti                             ; Return from interrupt
     
 .ENDPROC
-
 
 ; End of lib/isr/custom.s

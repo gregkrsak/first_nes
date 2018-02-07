@@ -122,5 +122,4 @@
 .WORD ISR_PowerOn_Reset
 .WORD ISR_Custom
 
-
 ; End of first_nes.s

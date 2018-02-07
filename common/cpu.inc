@@ -70,5 +70,4 @@ _RAM_CLEAR_PATTERN_1	= $00
 
 _RAM_CLEAR_PATTERN_2	= $FE
 
-
 ; End of common/cpu.inc
