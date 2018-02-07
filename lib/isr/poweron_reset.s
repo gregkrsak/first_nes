@@ -38,10 +38,12 @@
 
 
 .PROC ISR_PowerOn_Reset
+
   ; ---------------------------------------------------------------------------------------------
   ; Initialization sequence for the NES. These tasks should generally be performed every time the
   ; system is reset.
   ; ---------------------------------------------------------------------------------------------
+  
     cld                             ; Disable unsupported BCD mode (in case someone is using a 6502
                                     ; debugger)
 
