@@ -12,7 +12,7 @@ Quick Start
 
 First, assuming you have Git installed, get the cc65 binutils:
 
-```bash
+```
 git clone https://github.com/cc65/cc65.git
 cd cc65
 make
@@ -34,7 +34,7 @@ on how to do that aren't covered here, but the following distros *should* be sup
 
 Now grab the first_nes project:
 
-```bash
+```
 git clone https://github.com/gregkrsak/first_nes
 cd first_nes
 make
@@ -43,7 +43,7 @@ make
 
 Finally, run the game. You can move the Luigi-like character back and forth with the A and B buttons:
 
-```bash
+```
 nestopia first_nes.nes
 ```
 
@@ -61,7 +61,7 @@ If you need help installing the .dmg file, try [this guide](http://techapple.net
 
 Now, assuming you have Git installed, grab the first_nes project using the Terminal:
 
-```bash
+```
 git clone https://github.com/gregkrsak/first_nes
 cd first_nes
 make
@@ -81,7 +81,7 @@ Next, if you don't already have an NES emulator, click [this link](http://source
 
 Now, assuming you have Git installed, grab the first_nes project:
 
-```bash
+```
 git clone https://github.com/gregkrsak/first_nes
 cd first_nes
 make
@@ -116,7 +116,7 @@ About my Development Environment
 
 **Tested with:**
 
-```bash
+```
 make
 nestopia first_nes.nes
 ```
