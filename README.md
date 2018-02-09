@@ -4,7 +4,7 @@ first_nes project (WIP)
 **A "starter" assembly language game for the Nintendo Entertainment System.**
 
 
-**If you'd like to contribute, please (1) fork this repo, (2) submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues), then (3) [reference the issues](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding commits and (4) a pull request.**
+**If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes#contributing) so we can synchronize our expectations!**
 
 
 Quick Start
@@ -130,6 +130,22 @@ nestopia first_nes.nes
 - Nestopia UE 1.47
 
 
+Contributing
+------------
+
+I'd absolutely love it if you made first_nes better! Let's do it according to these guidelines:
+
+1. Submit an issue to the [issues page](https://github.com/gregkrsak/first_nes/issues), describing your bug (or suggestion) in detail.
+
+2. If you see an existing issue that sounds interesting, feel free to jump in and work on it.
+
+3. [Fork](https://help.github.com/articles/fork-a-repo/) the first_nes repository.
+
+4. In your fork, [reference the issue](https://help.github.com/articles/autolinked-references-and-urls/) you're working on with targeted, clear commits. Please keep commits relevant to a single issue, if possible.
+
+5. Finally, reference any issues when you submit a [pull request](https://help.github.com/articles/about-pull-requests/). Feel free to submit a pull request that fixes more than one issue.
+
+
 Additional Resources
 --------------------
 
@@ -158,4 +174,4 @@ Additional Resources
 - [Makefiles: A Tutorial by Example](http://mrbook.org/blog/tutorials/make/)
 
 
-first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. You may send me email using [this address](mailto:greg.krsak@gmail.com). If you'd like to contribute, please (1) fork this repo, (2) submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues), then (3) [reference the issues](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding commits and (4) a pull request.
+first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. You may send me email using [this address](mailto:greg.krsak@gmail.com). If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes#contributing) so we can synchronize our expectations!
