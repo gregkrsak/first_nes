@@ -4,7 +4,7 @@ first_nes project (WIP)
 **A "starter" assembly language game for the Nintendo Entertainment System.**
 
 
-**If you'd like to contribute, please (1) fork this repo, (2) submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues), (3) [reference the issues](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding commits and (4) submit a pull request.**
+**If you'd like to contribute, please (1) fork this repo, (2) submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues), (3) [reference the issues](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding commits and (4) a pull request.**
 
 
 Quick Start
@@ -158,4 +158,4 @@ Additional Resources
 - [Makefiles: A Tutorial by Example](http://mrbook.org/blog/tutorials/make/)
 
 
-first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. You may send me email using [this address](mailto:greg.krsak@gmail.com). If you'd like to contribute, please (1) fork this repo, (2) submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues), (3) [reference the issues](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding commits and (4) submit a pull request.
+first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. You may send me email using [this address](mailto:greg.krsak@gmail.com). If you'd like to contribute, please (1) fork this repo, (2) submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues), (3) [reference the issues](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding commits and (4) a pull request.
