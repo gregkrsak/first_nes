@@ -158,4 +158,4 @@ Additional Resources
 - [Makefiles: A Tutorial by Example](http://mrbook.org/blog/tutorials/make/)
 
 
-first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. If you'd like to contribute, please submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues) and [reference them](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding pull requests.
+first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. You may send me email using [this address](mailto:greg.krsak@gmail.com). If you'd like to contribute, please submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues) and [reference them](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding pull requests.
