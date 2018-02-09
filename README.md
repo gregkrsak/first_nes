@@ -3,7 +3,7 @@ first_nes project (WIP)
 
 
 A "starter" assembly language game for the Nintendo Entertainment System.
-Please leave issues or submit pull requests!
+Please feel free to leave issues or submit pull requests.
 -------------------------------------------------------------------------
 
 
@@ -22,18 +22,15 @@ Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NE
 **Tested with:**
 
 ```bash
-rm bin/*.bin
-rm first_nes.nes
-ca65 first_nes.s
-ld65 first_nes.o -C config/ines.cfg
-cat bin/first_nes_hdr.bin bin/first_nes_prg.bin bin/first_nes_chr.bin > first_nes.nes
-rm a.out && rm first_nes.o
+make
 nestopia first_nes.nes
 ```
 
 **Tested on:**
 
-[Nestopia UE](http://0ldsk00l.ca/nestopia/) 1.47
+- Linux
+
+- [Nestopia UE](http://0ldsk00l.ca/nestopia/) 1.47
 
 
 For more information about NES programming in general, try these references:
