@@ -49,7 +49,7 @@
     jsr     DisableVideoOutput
     jsr     DisableAudioOutput
 
-    bit     _PPUSTATUS              ; Clear the vblank flag in case the NES was reset during vblank
+    jsr     ClearVBlankFlag         ; Clear the vblank flag in case the NES was reset during vblank
                                     ; (the vblank flag won't be used much after this)
 
   ; ---------------------------------------------------------------------------------------------

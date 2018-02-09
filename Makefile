@@ -48,8 +48,8 @@ ASMFLAGS = --cpu 6502
 # Makefile variable for linker flags
 LINKFLAGS = --config config/ines.cfg
 
-# Simply typing "make" will invoke all targets required to build an emulator-ready ROM
-default: clean assemble link emulator emulator-post-clean
+# Simply typing "make" will invoke all suggested targets to build an emulator-ready ROM
+default: universal-pre-clean assemble link emulator emulator-post-clean
 
 # To start over from scratch, type "make clean"
 clean: universal-pre-clean emulator-post-clean
@@ -66,11 +66,16 @@ link: first_nes.o
 emulator: bin/first_nes_hdr.bin bin/first_nes_prg.bin bin/first_nes_chr.bin
 	cat bin/first_nes_hdr.bin bin/first_nes_prg.bin bin/first_nes_chr.bin > first_nes.nes
 
+# TODO: Implement this target for making physical NES cartridges
+cart:
+	echo "'cart' target is not currently implemented"
+
 # This target entry removes any build files (.bin, .nes) associated with an NES ROM 
 universal-pre-clean:
-	$(RM) bin/*.bin && $(RM) first_nes.nes
+	$(RM) bin/*.bin && $(RM) first_nes.nes && $(RM) first_nes.o
 
 # This target entry removes the files (.o, .out) not required by emulators
 emulator-post-clean:
 	$(RM) first_nes.o && $(RM) a.out
 
+# End of Makefile
