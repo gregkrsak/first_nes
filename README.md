@@ -2,7 +2,9 @@ first_nes project (WIP)
 =================
 
 **A "starter" assembly language game for the Nintendo Entertainment System.**
-**Please feel free to leave issues or submit pull requests.**
+
+
+**If you'd like to contribute, please submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues) and [reference them](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding pull requests.**
 
 
 Quick Start
@@ -156,4 +158,4 @@ Additional Resources
 - [Makefiles: A Tutorial by Example](http://mrbook.org/blog/tutorials/make/)
 
 
-first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. Feel free to submit [issues](https://github.com/gregkrsak/first_nes/issues) or pull requests.
+first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. If you'd like to contribute, please submit issues to the [issues page](https://github.com/gregkrsak/first_nes/issues) and [reference them](https://help.github.com/articles/autolinked-references-and-urls/) with corresponding pull requests.
