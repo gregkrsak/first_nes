@@ -59,7 +59,7 @@ Next, if you don't already have an NES emulator, install the [Nestopia .dmg](htt
 If you need help installing the .dmg file, try [this guide](http://techapple.net/2015/12/how-to-install-apps-from-dmg-files-in-mac-os-x-imac-macbook/).
 
 
-Now, assuming you have Git installed, grab the first_nes project using the Terminal:
+Now, assuming you have Git installed, and the ability to ```make```, grab the first_nes project using the Terminal:
 
 ```
 git clone https://github.com/gregkrsak/first_nes
@@ -84,9 +84,9 @@ Now, assuming you have Git installed, grab the first_nes project:
 ```
 git clone https://github.com/gregkrsak/first_nes
 cd first_nes
-make
 ```
 
+Then, browse [this Q&A](https://stackoverflow.com/questions/2532234/how-to-run-a-makefile-in-windows) for information on how to run a Makefile in Windows.
 
 Finally, start Nestopia and load the ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B buttons.
 
