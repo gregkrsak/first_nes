@@ -4,7 +4,7 @@ first_nes project (WIP)
 **A "starter" assembly language game for the Nintendo Entertainment System.**
 
 
-**If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes#contributing) so we can synchronize our expectations!**
+**If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes/blob/master/README.md#contributing) so we can synchronize our expectations!**
 
 
 Quick Start
@@ -112,7 +112,9 @@ Credits
 About my Development Environment
 --------------------------------
 
-**Processor:** 8-bit, [Ricoh RP2A03](https://en.wikipedia.org/wiki/Ricoh_2A03) (6502), 1.789773 MHz (NTSC)
+**Editor:** [Sublime Text 3](https://www.sublimetext.com/3), 2-space tabs, tabs-to-spaces, 100-column ruler
+
+**Target CPU:** 8-bit, [Ricoh RP2A03](https://en.wikipedia.org/wiki/Ricoh_2A03) (6502), 1.789773 MHz (NTSC)
 
 **Assembler:** ca65 (cc65 binutils)
 
@@ -174,4 +176,4 @@ Additional Resources
 - [Makefiles: A Tutorial by Example](http://mrbook.org/blog/tutorials/make/)
 
 
-first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. You may send me email using [this address](mailto:greg.krsak@gmail.com). If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes#contributing) so we can synchronize our expectations!
+first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. You may send me email using [this address](mailto:greg.krsak@gmail.com). If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes/blob/master/README.md#contributing) so we can synchronize our expectations!
