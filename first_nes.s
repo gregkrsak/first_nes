@@ -39,16 +39,16 @@
 ; =================================================================================================
 
 ; CPU-Specific directives
-.INCLUDE "shared_code/cpu.inc"
+.INCLUDE "lib/shared_code/cpu.inc"
 
 ; Audio-specific directives
-.INCLUDE "shared_code/apu.inc"
+.INCLUDE "lib/shared_code/apu.inc"
 
 ; Video-specific directives
-.INCLUDE "shared_code/ppu.inc"
+.INCLUDE "lib/shared_code/ppu.inc"
 
 ; Joystick-specific directives
-.INCLUDE "shared_code/controllers.inc"
+.INCLUDE "lib/shared_code/controllers.inc"
 
 
 ; =================================================================================================
@@ -96,9 +96,9 @@
 .INCLUDE "lib/isr/custom.s"
 
 ; Non-project-specific libraries. These may be shared across projects.
-.INCLUDE "shared_code/cpu.s"
-.INCLUDE "shared_code/apu.s"
-.INCLUDE "shared_code/ppu.s"
+.INCLUDE "lib/shared_code/cpu.s"
+.INCLUDE "lib/shared_code/apu.s"
+.INCLUDE "lib/shared_code/ppu.s"
 
 ; YOUR LIBRARY FILES GET INCLUDED HERE
 ; <libraries>

@@ -67,4 +67,4 @@
 _RAM_CLEAR_PATTERN_1	= $00
 _RAM_CLEAR_PATTERN_2	= $FE
 
-; End of cpu.inc
+; End of lib/shared_code/cpu.inc
