@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; shared_code/apu.s
+; lib/shared_code/apu.s
 ;
 ; Common Audio-related routines.
 ;
@@ -47,4 +47,4 @@
 
 .ENDPROC
 
-; End of shared_code/apu.s
+; End of lib/shared_code/apu.s

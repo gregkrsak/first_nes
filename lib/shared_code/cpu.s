@@ -68,4 +68,4 @@ __ClearCPUMemory:
     bne     __clearMemoryLoop
     jmp     ISR_PowerOn_Reset::__CPUMemoryCleared
 
-; End of shared_code/cpu.s
+; End of lib/shared_code/cpu.s

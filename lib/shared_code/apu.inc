@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; shared_code/apu.inc
+; lib/shared_code/apu.inc
 ;
 ; APU-Related assembler directives for Nintendo Entertainment System assembly language.
 ;
@@ -82,5 +82,4 @@ _DMC_LEN    = $4013
 ; APU Frame counter
 _FR_COUNTER	= $4017               ; Reference: https://wiki.nesdev.com/w/index.php/APU_Frame_Counter
 
-
-; End of apu.inc
+; End of lib/shared_code/apu.inc

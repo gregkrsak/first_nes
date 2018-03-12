@@ -37,5 +37,4 @@
 _JOY1       = $4016
 _JOY2       = $4017
 
-
-; End of controllers.inc
+; End of lib/shared_code/controllers.inc
