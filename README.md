@@ -50,7 +50,7 @@ nestopia first_nes.nes
 ```
 
 
-**Mac OS (untested):**
+**Mac OS:**
 
 First, get the cc65 binutils by following [these instructions](http://macappstore.org/cc65/).
 
@@ -107,6 +107,10 @@ Credits
 - Based on ["Nintendo Entertainment System Architecture"](http://fms.komkon.org/EMUL8/NES.html), by Marat Fayzullin
  
 - Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NES/nestech.txt), by an unknown author
+
+**Additional thanks to:**
+
+- @elennick for testing the Mac OS quick start instructions (Issue #22).
 
 
 About my Development Environment
