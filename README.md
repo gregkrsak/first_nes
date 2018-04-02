@@ -112,6 +112,8 @@ Credits
 
 - [@elennick](https://github.com/elennick) for testing the Mac OS quick start instructions (Issue [#22](https://github.com/gregkrsak/first_nes/issues/22)).
 
+- [@hxlnt](https://github.com/hxlnt) for expanding the credits (PR [#33](https://github.com/gregkrsak/first_nes/pull/33)).
+
 
 About my Development Environment
 --------------------------------
