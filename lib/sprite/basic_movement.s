@@ -10,7 +10,7 @@
 ;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
 ; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
 ;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by an unknown author:
+; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
 ;   https://emu-docs.org/NES/nestech.txt
 ;
 ; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
