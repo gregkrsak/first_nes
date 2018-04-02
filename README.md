@@ -106,7 +106,7 @@ Credits
 
 - Based on ["Nintendo Entertainment System Architecture"](http://fms.komkon.org/EMUL8/NES.html), by Marat Fayzullin
  
-- Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NES/nestech.txt), by an unknown author
+- Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NES/nestech.txt), by Jeremy Chadwick
 
 **Additional thanks to:**
 
