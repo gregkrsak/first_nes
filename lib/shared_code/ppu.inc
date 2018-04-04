@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; shared_code/ppu.inc
+; lib/shared_code/ppu.inc
 ;
 ; PPU-Related assembler directives for Nintendo Entertainment System assembly language.
 ;

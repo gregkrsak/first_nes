@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; shared_code/controllers.inc
+; lib/shared_code/controllers.inc
 ;
 ; Joystick-related assembler directives for Nintendo Entertainment System assembly language.
 ;
