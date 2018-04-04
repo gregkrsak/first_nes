@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; shared_code/ppu.s
+; lib/shared_code/ppu.s
 ;
 ; Common PPU-related routines.
 ;

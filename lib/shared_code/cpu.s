@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; shared_code/cpu.s
+; lib/shared_code/cpu.s
 ;
 ; Common CPU-related routines.
 ;

@@ -1,6 +1,6 @@
 ;
 ; first_nes
-; shared_code/cpu.inc
+; lib/shared_code/cpu.inc
 ;
 ; CPU-Related assembler directives for Nintendo Entertainment System assembly language.
 ;
