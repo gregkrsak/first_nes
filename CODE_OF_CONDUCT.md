@@ -1,0 +1,17 @@
+This is a stub project. It is meant for you to take it and make it your own.
+----------------------------------------------------------------------------
+
+
+You are free to modify or remove code and/or files, in any way, without violating the original software license.
+
+
+**This incldes the following files:**
+
+
+1. README.md
+
+2. LICENSE.md
+
+3. CONTRIBUTING.md
+
+4. CODE_OF_CONDUCT.md
