@@ -13,7 +13,7 @@ You are free to modify or remove code and/or files, in any way, without violatin
 
 1. README.md
 
-2. LICENSE.md
+2. LICENSE
 
 3. CONTRIBUTING.md
 
