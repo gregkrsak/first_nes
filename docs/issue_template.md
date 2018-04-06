@@ -1,4 +1,3 @@
-Commit message
+Currently, X happens.
 
-Co-authored-by: John Doe <602352+johndoe@users.noreply.github.com>
-Co-authored-by: Jane Doe <44023+janedoe@users.noreply.github.com>
+Y should be happening all the time, but does not unless Z.
