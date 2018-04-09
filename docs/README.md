@@ -1,6 +1,12 @@
 first_nes project (WIP)
 =================
 
+
+[![GitHub issues](https://img.shields.io/github/issues/badges/shields.svg)](https://github.com/gregkrsak/first_nes)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/gregkrsak/first_nes)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/badges/shields.svg)](https://github.com/gregkrsak/first_nes)
+
+
 **A "starter" assembly language game for the Nintendo Entertainment System.**
 
 
