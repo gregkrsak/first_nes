@@ -3,6 +3,7 @@ first_nes project (WIP)
 
 
 [![GitHub issues](https://img.shields.io/github/issues/gregkrsak/first_nes.svg)](https://github.com/gregkrsak/first_nes/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/gregkrsak/first_nes.svg)](https://github.com/gregkrsak/first_nes/commits/)
 
 
 **A "starter" assembly language game for the Nintendo Entertainment System.**
