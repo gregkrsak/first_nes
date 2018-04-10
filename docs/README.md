@@ -4,6 +4,7 @@ first_nes project (WIP)
 
 [![GitHub issues](https://img.shields.io/github/issues/gregkrsak/first_nes.svg)](https://github.com/gregkrsak/first_nes/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/gregkrsak/first_nes.svg)](https://github.com/gregkrsak/first_nes/commits/)
+[![Custom language](https://img.shields.io/badge/language-assembly%20language-blue.svg)](https://github.com/gregkrsak/first_nes/blob/master/first_nes.s)
 
 
 Create your own games for the Nintendo Entertainment System with this "starter" project!
