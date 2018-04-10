@@ -11,6 +11,9 @@ first_nes project (WIP)
 
 **If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes/blob/master/docs/CONTRIBUTING.md) so we can synchronize our expectations!**
 
+![Image: Editing](https://i.imgur.com/EabWh01.png "Boilerplate code is provided! Just add custom libraries, and graphics if you'd like.")
+![Image: Running](https://i.imgur.com/GcwC0tR.png "Instantly get up and running!")
+
 
 Quick Start
 -----------
