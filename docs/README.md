@@ -6,9 +6,9 @@ first_nes project (WIP)
 [![GitHub last commit](https://img.shields.io/github/last-commit/gregkrsak/first_nes.svg)](https://github.com/gregkrsak/first_nes/commits/)
 
 
-**Create your own games for the Nintendo Entertainment System with this "starter" project!**
+Create your own games for the Nintendo Entertainment System with this "starter" project!
 
-**If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes/blob/master/docs/CONTRIBUTING.md) so we can synchronize our expectations!**
+If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes/blob/master/docs/CONTRIBUTING.md) so we can synchronize our expectations!
 
 
 Boilerplate code is provided!       |  Instantly get up and playing!
