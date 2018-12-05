@@ -93,7 +93,7 @@ First, make sure you have Git and Git Bash. If you don't, click [this link](http
 After Git is installed, open Git Bash and type:
 
 ```
-clone https://github.com/gregkrsak/first_nes.git
+git clone https://github.com/gregkrsak/first_nes.git
 ```
 
 
