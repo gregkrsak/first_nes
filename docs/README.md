@@ -112,7 +112,7 @@ Next, if you don't already have an NES emulator, click [this link](http://source
 To make sure Nestopia installs correctly, create a "nestopia" folder and extract the .ZIP file to it; make sure you add this "nestopia" folder to your system path.
 
 
-Nestopia needs the Microsoft Direct X End User Runtime, which you can install using [this link](https://www.microsoft.com/en-us/download/confirmation.aspx?id=35.).
+Nestopia needs the Microsoft Direct X End User Runtime, which you can install using [this link](https://www.microsoft.com/en-us/download/details.aspx?id=35).
 
 
 Now, install the Make utility using [this link](https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81.exe/download?use_mirror=iweb&download=).
