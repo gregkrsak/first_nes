@@ -85,24 +85,46 @@ make
 Finally, start Nestopia and load the ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B buttons:
 
 
-**Windows (untested):**
+**Windows:**
 
-First, get the cc65 binutils. Follow the Windows guide at [this link](http://cc65.github.io/cc65/getting-started.html#Windows).
+First, make sure you have Git and Git Bash. If you don't, click [this link](https://git-scm.com/download/win) to download the latest .EXE installer; make sure you install the Git Bash terminal.
+
+
+After Git is installed, open Git Bash and type:
+
+```
+clone https://github.com/gregkrsak/first_nes.git
+```
+
+
+Next download the cc65 binutils. Click [this link](https://sourceforge.net/projects/cc65/files/latest/download) to download the .ZIP file.
+
+
+Create a folder named "cc65" and extract the .ZIP file into it.
+
+
+A "bin" subfolder will be created; add it to your system path.
 
 
 Next, if you don't already have an NES emulator, click [this link](http://sourceforge.net/projects/nestopiaue/files/1.48/nestopia_1.48-win32.zip/download) to download the .ZIP archive of Nestopia.
 
 
-Now, assuming you have Git installed, grab the first_nes project:
+To make sure Nestopia installs correctly, create a "nestopia" folder and extract the .ZIP file to it; make sure you add this "nestopia" folder to your system path.
 
-```
-git clone https://github.com/gregkrsak/first_nes
-cd first_nes
-```
 
-Then, browse [this Q&A](https://stackoverflow.com/questions/2532234/how-to-run-a-makefile-in-windows) for information on how to run a Makefile in Windows.
+Nestopia needs the Microsoft Direct X End User Runtime, which you can install using [this link](https://www.microsoft.com/en-us/download/confirmation.aspx?id=35.).
 
-Finally, start Nestopia and load the ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B buttons.
+
+Now, install the Make utility using [this link](https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81.exe/download?use_mirror=iweb&download=).
+
+
+Following the installation of Make, add its "bin" subfolder to your system path.
+
+
+Navigate to the "first_nes" folder using Git Bash and type ```make```.
+
+
+Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B controller buttons, which may be mapped to the ```.``` and ```,``` keys initially.
 
 
 Credits
@@ -125,6 +147,8 @@ Credits
 - [@elennick](https://github.com/elennick) for testing the Mac OS quick start instructions (Issue [#22](https://github.com/gregkrsak/first_nes/issues/22)).
 
 - [@hxlnt](https://github.com/hxlnt) for expanding the credits (PR [#33](https://github.com/gregkrsak/first_nes/pull/33)).
+
+- Reddit user u/Rocky99433 for prompting me to fix the Windows quick start instructions (Issue [#21](https://github.com/gregkrsak/first_nes/issues/21)).
 
 
 About my Development Environment
