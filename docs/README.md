@@ -169,9 +169,9 @@ nestopia first_nes.nes
 
 **Tested on:**
 
-- Linux (Ubuntu Desktop 16.04 LTS)
+- Linux with Nestopia UE 1.47
 
-- Nestopia UE 1.47
+- Windows with Nestopia UE 1.48
 
 
 Additional Resources

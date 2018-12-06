@@ -24,8 +24,8 @@
 ;  nestopia first_nes.nes
 ;
 ; Tested on:
-;  - Linux
-;  - Nestopia UE 1.47
+;  - Linux with Nestopia UE 1.47
+;  - Windows with Nestopia UE 1.48
 ;
 ; For more information about NES programming in general, try these references:
 ; https://en.wikibooks.org/wiki/NES_Programming
