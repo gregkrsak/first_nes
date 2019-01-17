@@ -150,6 +150,8 @@ Credits
 
 - Reddit user u/Rocky99433 for prompting me to fix the Windows quick start instructions (Issue [#21](https://github.com/gregkrsak/first_nes/issues/21)).
 
+- [@ericandrewlewis](https://github.com/ericandrewlewis) for correcting some bad comments (PR [#53](https://github.com/gregkrsak/first_nes/pull/53)).
+
 
 About my Development Environment
 --------------------------------
