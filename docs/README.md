@@ -55,11 +55,7 @@ make
 ```
 
 
-Finally, run the game. You can move the Luigi-like character back and forth with the A and B buttons:
-
-```
-nestopia first_nes.nes
-```
+Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B controller buttons, which may be mapped to the ```.``` and ```,``` keys initially.
 
 
 **Mac OS:**
@@ -82,7 +78,7 @@ make
 ```
 
 
-Finally, start Nestopia and load the ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B buttons:
+Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B controller buttons, which may be mapped to the ```.``` and ```,``` keys initially.
 
 
 **Windows:**
