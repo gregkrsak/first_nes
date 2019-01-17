@@ -20,9 +20,10 @@ Boilerplate code is provided!       |  Instantly get up and playing!
 
 
 Quick Start
------------
+===========
 
-**Linux:**
+Linux:
+------
 
 First, assuming you have Git installed, get the cc65 binutils:
 
@@ -58,7 +59,8 @@ make
 Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B controller buttons, which may be mapped to the ```.``` and ```,``` keys initially.
 
 
-**Mac OS:**
+Mac OS:
+-------
 
 First, get the cc65 binutils by following [these instructions](http://macappstore.org/cc65/).
 
@@ -81,7 +83,8 @@ make
 Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B controller buttons, which may be mapped to the ```.``` and ```,``` keys initially.
 
 
-**Windows:**
+Windows:
+--------
 
 First, make sure you have Git and Git Bash. If you don't, click [this link](https://git-scm.com/download/win) to download the latest .EXE installer; make sure you install the Git Bash terminal.
 
@@ -124,13 +127,15 @@ Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can
 
 
 Credits
--------
+=======
 
-**Authors:**
+Authors:
+--------
 
 - Written by Greg M. Krsak ([email](mailto:greg.krsak@gmail.com)), 2018
 
-**Standing on the shoulders of giants:**
+Standing on the shoulders of giants:
+------------------------------------
 
 - Based on the [NintendoAge "Nerdy Nights" tutorials](http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155), by bunnyboy
 
@@ -138,7 +143,8 @@ Credits
  
 - Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NES/nestech.txt), by Jeremy Chadwick
 
-**Additional thanks to:**
+Additional thanks to:
+---------------------
 
 - [@elennick](https://github.com/elennick) for testing the Mac OS quick start instructions (Issue [#22](https://github.com/gregkrsak/first_nes/issues/22)).
 
@@ -150,7 +156,7 @@ Credits
 
 
 About my Development Environment
---------------------------------
+================================
 
 **Editor:** [Sublime Text 3](https://www.sublimetext.com/3), 2-space tabs, tabs-to-spaces, 100-column ruler
 
@@ -165,7 +171,8 @@ make
 nestopia first_nes.nes
 ```
 
-**Tested on:**
+Tested on:
+----------
 
 - Linux with Nestopia UE 1.47
 
@@ -173,27 +180,31 @@ nestopia first_nes.nes
 
 
 Additional Resources
---------------------
+====================
 
-**Git and GitHub:**
+Git and GitHub:
+---------------
 
 - [What is Git](https://en.wikipedia.org/wiki/Git) and [how do I use it?](https://git-scm.com/doc)
 
 - Download [GitHub Desktop for Windows and Mac OS](https://desktop.github.com/) or [Git for Linux](https://git-scm.com/download/linux)
 
-**NES programming in general:**
+NES programming in general:
+---------------------------
 
 - [Wikibooks: NES Programming](https://en.wikibooks.org/wiki/NES_Programming)
 
 - [NesDev](http://nesdev.com/)
 
-**The ca65 assembler:**
+The ca65 assembler:
+-------------------
 
 - [ca65 Documentation](http://cc65.github.io/doc/ca65.html)
 
 - [cc65 GitHub repository](https://github.com/cc65/cc65)
 
-**Building this project:**
+Building this project:
+----------------------
 
 - This project's [Makefile](https://github.com/gregkrsak/first_nes/blob/master/Makefile)
 
