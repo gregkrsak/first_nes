@@ -1,4 +1,4 @@
-first_nes project
+first_nes project - Your first NES game!
 =================
 
 
