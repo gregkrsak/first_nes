@@ -166,11 +166,11 @@ make
 nestopia first_nes.nes
 ```
 
-**Editor:** [Sublime Text 3](https://www.sublimetext.com/3), 2-space tabs, tabs-to-spaces, 100-column ruler
+- **Editor:** [Sublime Text 3](https://www.sublimetext.com/3), 2-space tabs, tabs-to-spaces, 100-column ruler
 
-**Target CPU:** 8-bit, [Ricoh RP2A03](https://en.wikipedia.org/wiki/Ricoh_2A03) (6502), 1.789773 MHz (NTSC)
+- **Target CPU:** 8-bit, [Ricoh RP2A03](https://en.wikipedia.org/wiki/Ricoh_2A03) (6502), 1.789773 MHz (NTSC)
 
-**Assembler:** ca65 (cc65 binutils)
+- **Assembler:** ca65 (cc65 binutils)
 
 
 Tested on:
