@@ -11,4 +11,4 @@ I'd absolutely love it if you made first_nes better! Let's do it according to th
 
 4. In your fork, [reference the issue](https://help.github.com/articles/autolinked-references-and-urls/) you're working on with targeted, clear commits. Please keep commits relevant to a single issue, if possible.
 
-5. Finally, reference any issues when you submit a [pull request](https://help.github.com/articles/about-pull-requests/). Feel free to submit a pull request that fixes more than one issue.
+5. Finally, reference any issues when you submit a [pull request](https://help.github.com/articles/about-pull-requests/) to the ```staging``` branch. Feel free to submit a pull request that fixes more than one issue.
