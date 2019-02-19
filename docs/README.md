@@ -154,6 +154,8 @@ Additional thanks to:
 
 - [@ericandrewlewis](https://github.com/ericandrewlewis) for correcting some bad comments (PR [#53](https://github.com/gregkrsak/first_nes/pull/53)).
 
+- [@nortti](https://github.com/nortti) for correcting my iNES header (PR [#55](https://github.com/gregkrsak/first_nes/pull/55)).
+
 
 About my Development Environment
 ================================
