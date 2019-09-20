@@ -10,10 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install cc65
-      run: |
-        git clone https://github.com/cc65/cc65.git
-        cd cc65
-        make
-        make avail
+      run: sudo apt-get install cc65
     - name: Run make
       run: make
