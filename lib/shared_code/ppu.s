@@ -54,11 +54,11 @@
 
 .PROC EnableVideoOutput
 
-    lda     #%10000000              ;
+    lda     #%10010000              ; Background pattern $0000
     sta     _PPUCTRL                ; Enable vertical blank interrupt
 
-    lda     #%00010000              ;
-    sta     _PPUMASK                ; Enable sprite rendering
+    lda     #%00011110              ;
+    sta     _PPUMASK                ; Enable sprite and background rendering
 
     rts
     
@@ -112,8 +112,8 @@
     lda     _PALETTE, x             ; 
     sta     _PPUDATA                ; Write to PPU
     inx                             ;
-    cpx     #32                     ;
-    bne     loadPalettesLoop        ;
+    cpx     #32                     ; 16 background bytes and 16 sprite
+    bne     loadPalettesLoop        ; bytes containing palette
 
     rts
 
@@ -137,5 +137,71 @@
     rts
 
 .ENDPROC 
+
+
+; ==================================
+; Subroutine to load attribute data.
+; ==================================
+
+.PROC LoadBackgroundAttribute
+ 
+    lda     _PPUSTATUS
+    lda     #$23
+    sta     _PPUADDR
+    lda     #$c0
+    sta     _PPUADDR
+    ldx     #$00
+  loadBackgroundAttributeLoop:
+    lda     _ATTRIBUTE, x
+    sta     _PPUDATA
+    inx
+    cpx     #16
+    bne     loadBackgroundAttributeLoop  
+
+    rts
+
+.ENDPROC
+
+
+; ========================================
+; Subroutine to copy background tile data.
+; ========================================
+
+.PROC LoadBackgroundNametable
+    ;first clear nametable ram
+    lda _PPUSTATUS
+    lda #$20
+    sta _PPUADDR
+    lda #$00
+    sta _PPUADDR
+    ldy #$00
+  loadBackgroundNametableClearRAMLoopY:
+    ldx #$00
+  loadBackgroundNametableClearRAMLoopX:
+    lda #$24
+    sta _PPUDATA
+    inx
+    cpx #30
+    bne loadBackgroundNametableClearRAMLoopX
+    iny
+    cpy #32
+    bne loadBackgroundNametableClearRAMLoopY
+    ; begin copying nametable bytes
+    lda _PPUSTATUS
+    lda #$20
+    sta _PPUADDR
+    lda #$00
+    sta _PPUADDR
+    ldx #$00
+  loadBackgroundNametableLoop:
+    lda _NAMETABLE, x
+    sta _PPUDATA
+    inx
+    cpx #32    ; copy 32 bytes 
+    bne loadBackgroundNametableLoop
+
+    rts
+
+.ENDPROC
 
 ; End of lib/shared_code/ppu.s

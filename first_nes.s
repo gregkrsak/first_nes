@@ -73,6 +73,9 @@
 .SEGMENT "SPRITES"
 .INCLUDE "data/sprites/small_luigi.inc"
 
+; Background nametable and attribute data
+.INCLUDE "data/background/scene.inc"
+
 
 ; =================================================================================================
 ;  VROM (CHR) Data

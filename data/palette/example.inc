@@ -36,8 +36,8 @@
 _PALETTE:
 
 ; Background palettes
-.BYTE $0f, $31, $32, $33
-.BYTE $0f, $35, $36, $37
+.BYTE $0f, $13, $23, $33
+.BYTE $0f, $06, $15, $36
 .BYTE $0f, $39, $3a, $3b
 .BYTE $0f, $3d, $3e, $0f
 
