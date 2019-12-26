@@ -71,6 +71,8 @@
 
     jsr     LoadPaletteData
     jsr     LoadSpriteData                                
+    jsr     LoadBackgroundNametable
+    jsr     LoadBackgroundAttribute
     jsr     EnableVideoOutput
 
   ; -------------
