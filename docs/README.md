@@ -62,7 +62,7 @@ Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can
 Mac OS:
 -------
 
-First, get the cc65 binutils by following [these instructions](http://macappstore.org/cc65/).
+First, get the cc65 binutils by following [these instructions](http://macappstore.org/cc65/) (alternatively, if you have ```brew``` installed, type ```brew install cc65```).
 
 
 Next, if you don't already have an NES emulator, install the [Nestopia .dmg](http://www.bannister.org/cgi-bin/download.cgi?nestopia) file.
