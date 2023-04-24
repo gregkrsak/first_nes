@@ -48,15 +48,6 @@ ASMFLAGS = --cpu 6502
 # Makefile variable for linker flags
 LINKFLAGS = --config config/ines.cfg
 
-# (To install dependencies, use "make dependencies", which may require administrator/superuser permissions)
-dependencies:
-	if [ ! -d "cc65" ]; then
-		git clone https://github.com/cc65/cc65.git
-	fi
-	cd cc65
-	make
-	make avail
-
 # Simply typing "make" will invoke all suggested targets to build an emulator-ready ROM
 default: universal-pre-clean assemble link emulator emulator-post-clean
 
