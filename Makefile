@@ -50,7 +50,9 @@ LINKFLAGS = --config config/ines.cfg
 
 # (To install dependencies, use "make dependencies", which may require administrator/superuser permissions)
 dependencies:
-	git clone https://github.com/cc65/cc65.git
+	if [ ! -d "cc65" ]; then
+		git clone https://github.com/cc65/cc65.git
+	fi
 	cd cc65
 	make
 	make avail
