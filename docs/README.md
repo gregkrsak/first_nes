@@ -7,6 +7,7 @@ first_nes project - Your first NES game!
 [![GitHub last commit](https://img.shields.io/github/last-commit/gregkrsak/first_nes.svg)](https://github.com/gregkrsak/first_nes/commits/)
 -->
 [![Assembly language](https://img.shields.io/badge/language-assembly%20language-blue.svg)](https://github.com/gregkrsak/first_nes/blob/master/first_nes.s)
+[![Makefile CI](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml/badge.svg)](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml)
 
 
 Create your own games for the Nintendo Entertainment System with this "starter" project!
