@@ -2,9 +2,9 @@ name: Makefile CI
 
 on:
   push:
-    branches: [ "master", "make_workflow" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "master", "make_workflow" ]
+    branches: [ "master" ]
 
 jobs:
   makefile-build:
