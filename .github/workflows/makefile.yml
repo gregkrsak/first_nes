@@ -21,7 +21,7 @@ jobs:
         files: "cc65"
 
     - name: Install CC65
-      if: steps.check_files.outputs.files_exists == 'false'
+      if: steps.check_cc65.outputs.files_exists == 'false'
       run: |
         rm -rf cc65
         git clone https://github.com/cc65/cc65.git
