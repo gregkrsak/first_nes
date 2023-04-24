@@ -1,0 +1,21 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "master", "make_workflow" ]
+  pull_request:
+    branches: [ "master", "make_workflow" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: make dependencies
+
+    - name: Make
+      run: make
