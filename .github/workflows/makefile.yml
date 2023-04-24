@@ -1,0 +1,34 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  makefile-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Is CC65 Installed
+      id: check_cc65
+      uses: andstor/file-existence-action@v1
+      with:
+        files: "cc65"
+
+    - name: Install CC65
+      if: steps.check_cc65.outputs.files_exists == 'false'
+      run: |
+        rm -rf cc65
+        git clone https://github.com/cc65/cc65.git
+        cd cc65
+        make
+        make avail
+      shell: bash
+
+    - name: Build first_nes ROM
+      run: make
