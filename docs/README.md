@@ -31,9 +31,8 @@ First, assuming you have Git installed, get the cc65 binutils:
 git clone https://github.com/cc65/cc65.git
 cd cc65
 make
-make avail
+sudo make avail
 ```
-(Note that you may need to use ```sudo make avail```)
 
 
 Next, if you don't already have an NES emulator, install Nestopia using your package manager. Instructions
