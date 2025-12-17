@@ -34,10 +34,10 @@
 
 
 ; ==========================================
-; Subroutine to move the Luigi sprites right
+; Subroutine to move the Luigi sprites left
 ; ==========================================
 
-.PROC     MoveLuigiRight
+.PROC     MoveLuigiLeft
 
     lda     $0203                   ; 
     clc                             ;
@@ -65,10 +65,10 @@
 
 
 ; =========================================
-; Subroutine to move the Luigi sprites left
+; Subroutine to move the Luigi sprites right
 ; =========================================
 
-.PROC     MoveLuigiLeft
+.PROC     MoveLuigiRight
 
     lda     $0203                   ; 
     sec                             ; 
