@@ -2,7 +2,7 @@
 ; first_nes
 ; lib/sprite/basic_movement.s
 ;
-; Veryt simple sprite movement routines, for demonstration purposes only.
+; Very simple sprite movement routines, for demonstration purposes only.
 ;
 ; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
 ;
