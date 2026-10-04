@@ -42,12 +42,15 @@ LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
     jsr     MoveHeroLeft
   mainLeftDone:
 
-    ; Horizontal motion may carry a grounded hero beyond an edge. Check support before accepting a
-    ; new jump, then integrate vertical physics and resolve any downward platform crossing.
+    ; Horizontal motion may carry a grounded hero beyond an edge. Capture jump input before testing
+    ; the grace window so a press on the edge frame can still launch cleanly.
     jsr     CheckHeroGroundSupport
+    jsr     CaptureHeroJumpInput
     jsr     TryStartHeroJump
+    jsr     ApplyHeroJumpCut
     jsr     UpdateHeroVerticalPhysics
     jsr     ResolveHeroPlatformLanding
+    jsr     TickHeroJumpAssist
 
     jsr     UpdateHeroAnimation
     jsr     RenderHeroToOAM
