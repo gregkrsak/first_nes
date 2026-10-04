@@ -16,35 +16,20 @@
 ; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
 ; Assembler: ca65 (cc65 binutils)
 ;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
-;
 
 
 _PALETTE:
 
 ; Background palettes
 .BYTE $0f, $31, $32, $33
-.BYTE $0f, $35, $36, $37
+.BYTE $0f, $21, $2c, $24            ; neon blue / cyan / magenta scene accents
 .BYTE $0f, $39, $3a, $3b
 .BYTE $0f, $3d, $3e, $0f
 
- ; Sprite palettes (selected by the attribute bits 0-1 of the sprites)
+; Sprite palettes (selected by sprite attribute bits 0-1)
 .BYTE $0f, $1c, $15, $14
 .BYTE $0f, $02, $38, $3c
-.BYTE $0f, $30, $37, $1a  ; Luigi-like colors
-.BYTE $0f, $0f, $0f, $0f  ; All black
+.BYTE $0f, $21, $2c, $24            ; Neon Ranger: blue / cyan / magenta
+.BYTE $0f, $0f, $0f, $0f
 
 ; End of data/palette/example.inc
