@@ -1,216 +1,153 @@
-first_nes project - Your first NES game!
-=================
+<div align="center">
 
+# 🎮 first_nes
 
-<!---
-[![GitHub issues](https://img.shields.io/github/issues/gregkrsak/first_nes.svg)](https://github.com/gregkrsak/first_nes/issues)
-[![GitHub last commit](https://img.shields.io/github/last-commit/gregkrsak/first_nes.svg)](https://github.com/gregkrsak/first_nes/commits/)
--->
-[![Assembly language](https://img.shields.io/badge/language-assembly%20language-blue.svg)](https://github.com/gregkrsak/first_nes/blob/master/first_nes.s)
+### A tiny, readable NES assembly starter kit
+
+[![Assembly](https://img.shields.io/badge/language-6502%20assembly-5b5bd6)](../first_nes.s)
+[![Toolchain](https://img.shields.io/badge/toolchain-ca65%20%2B%20ld65-22c7c7)](https://github.com/cc65/cc65)
 [![Makefile CI](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml/badge.svg)](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml)
 
+<img src="neon_ranger.svg" alt="Two pixel-art animation frames of the original Neon Ranger demo character" width="620">
 
-Create your own games for the Nintendo Entertainment System with this "starter" project!
+**Build a ROM. Move a four-sprite character. Read every byte that makes it happen.**
 
-If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes/blob/master/docs/CONTRIBUTING.md) so we can synchronize our expectations!
+</div>
 
+---
 
-Boilerplate code is provided!       |  Instantly get up and playing!
-------------------------------------|-----------------------------------
-![Image: Editing](https://i.imgur.com/EabWh01.png "Boilerplate code is provided! Just add custom libraries, and graphics if you'd like.")  |  ![Image: Running](https://i.imgur.com/GcwC0tR.png "Instantly get up and playing!")
+## ✨ What is this?
 
+`first_nes` is a deliberately small Nintendo Entertainment System project for learning how a real NES ROM fits together. It uses the **ca65/ld65** toolchain and targets a simple mapper-0 / NROM-style cartridge layout.
 
-Quick Start
-===========
+The goal is not to hide the hardware behind an engine. The goal is to make the hardware understandable: reset, PPU startup, palettes, CHR tiles, OAM DMA, controller polling, interrupts, linker layout, and a frame-synchronized foreground loop are all visible in the source.
 
-Linux:
-------
+The demo character is **Neon Ranger**, an original 16×16 sprite built from four NES hardware sprites. Its blue/cyan/magenta CHR art lives in readable assembly source, including a second walking frame and a few tiny sci-fi background tiles for future demo expansion.
 
-First, assuming you have Git installed, get the cc65 binutils:
+> **Current demo:** build `first_nes.nes`, launch it in an NES emulator, and move Neon Ranger horizontally with the A/B controls. The controller layer already captures all eight standard NES buttons for later game logic.
 
-```
-git clone https://github.com/cc65/cc65.git
-cd cc65
-make
-sudo make avail
-```
+## 🧠 What you can learn here
 
+- how a 16-byte iNES header, PRG ROM, and CHR ROM become one `.nes` file;
+- how the 6502 reset, NMI, and IRQ/BRK vectors are wired;
+- why the PPU needs startup time before normal access;
+- how palette data and 2-bit CHR tiles reach the screen;
+- how a 256-byte CPU OAM shadow page becomes 64 hardware sprites through DMA;
+- how the NES controller's serial A/B/Select/Start/D-pad report becomes one reusable state byte;
+- how foreground game logic can synchronize safely to NMI without living inside the interrupt handler;
+- how ca65 source and an ld65 linker configuration cooperate to place bytes at the exact addresses the NES expects.
 
-Next, if you don't already have an NES emulator, install Nestopia using your package manager. Instructions
-on how to do that aren't covered here, but the following distros *should* be supported:
+## 🚀 Quick start
 
-- Arch Linux
-- Debian
-- OpenBSD
-- Rosa Desktop Fresh
-- Slackware (Slackbuilds)
-- Ubuntu
-- Void Linux
+You need **Git**, **GNU Make**, the **cc65** toolchain, and an NES emulator such as Nestopia UE, Mesen, or another emulator that supports mapper 0 ROMs.
 
+### Linux / BSD
 
-Now grab the first_nes project:
+Install or build cc65 so `ca65` and `ld65` are on your `PATH`, then:
 
-```
-git clone https://github.com/gregkrsak/first_nes
-cd first_nes
-make
-```
-
-
-Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B controller buttons, which may be mapped to the ```.``` and ```,``` keys initially.
-
-
-Mac OS:
--------
-
-First, get the cc65 binutils by following [these instructions](http://macappstore.org/cc65/) (alternatively, if you have ```brew``` installed, type ```brew install cc65```).
-
-
-Next, if you don't already have an NES emulator, install the [Nestopia .app](http://www.bannister.org/cgi-bin/download.cgi?nestopia) on your system.
-
-
-Now, assuming you have Git installed, and the ability to ```make```, grab the first_nes project using the Terminal:
-
-```
-git clone https://github.com/gregkrsak/first_nes
-cd first_nes
-make
-```
-
-
-Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B controller buttons, which may be mapped to the ```.``` and ```,``` keys initially.
-
-
-Windows:
---------
-
-First, make sure you have Git and Git Bash. If you don't, click [this link](https://git-scm.com/download/win) to download the latest .EXE installer; make sure you install the Git Bash terminal.
-
-
-After Git is installed, open Git Bash and type:
-
-```
+```bash
 git clone https://github.com/gregkrsak/first_nes.git
-```
-
-
-Next download the cc65 binutils. Click [this link](https://sourceforge.net/projects/cc65/files/latest/download) to download the .ZIP file.
-
-
-Create a folder named "cc65" and extract the .ZIP file into it.
-
-
-A "bin" subfolder will be created; add it to your system path.
-
-
-Next, if you don't already have an NES emulator, click [this link](http://sourceforge.net/projects/nestopiaue/files/1.48/nestopia_1.48-win32.zip/download) to download the .ZIP archive of Nestopia.
-
-
-To make sure Nestopia installs correctly, create a "nestopia" folder and extract the .ZIP file to it; make sure you add this "nestopia" folder to your system path.
-
-
-Nestopia needs the Microsoft Direct X End User Runtime, which you can install using [this link](https://www.microsoft.com/en-us/download/details.aspx?id=35).
-
-
-Now, install the Make utility using [this link](https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81.exe/download?use_mirror=iweb&download=).
-
-
-Following the installation of Make, add its "bin" subfolder to your system path.
-
-
-Navigate to the "first_nes" folder using Git Bash and type ```make```.
-
-
-Finally, start Nestopia and load the generated ```first_nes.nes``` file. You can move the Luigi-like character back and forth with the A and B controller buttons, which may be mapped to the ```.``` and ```,``` keys initially.
-
-
-Credits
-=======
-
-Authors:
---------
-
-- Written by Greg M. Krsak ([email](mailto:greg.krsak@gmail.com)), 2018
-
-Standing on the shoulders of giants:
-------------------------------------
-
-- Based on the [NintendoAge "Nerdy Nights" tutorials](http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155), by bunnyboy
-
-- Based on ["Nintendo Entertainment System Architecture"](http://fms.komkon.org/EMUL8/NES.html), by Marat Fayzullin
- 
-- Based on ["Nintendo Entertainment System Documentation"](https://emu-docs.org/NES/nestech.txt), by Jeremy Chadwick
-
-Additional thanks to:
----------------------
-
-- [@elennick](https://github.com/elennick) for testing the Mac OS quick start instructions (Issue [#22](https://github.com/gregkrsak/first_nes/issues/22)).
-
-- [@hxlnt](https://github.com/hxlnt) for expanding the credits (PR [#33](https://github.com/gregkrsak/first_nes/pull/33)).
-
-- Reddit user u/Rocky99433 for prompting me to fix the Windows quick start instructions (Issue [#21](https://github.com/gregkrsak/first_nes/issues/21)).
-
-- [@ericandrewlewis](https://github.com/ericandrewlewis) for correcting some bad comments (PR [#53](https://github.com/gregkrsak/first_nes/pull/53)).
-
-- [@nortti](https://github.com/nortti) for correcting my iNES header (PR [#55](https://github.com/gregkrsak/first_nes/pull/55)).
-
-
-About my Development Environment
-================================
-
-Tested with:
-------------
-
-```
+cd first_nes
 make
-nestopia first_nes.nes
 ```
 
-- **Editor:** [Sublime Text 3](https://www.sublimetext.com/3), 2-space tabs, tabs-to-spaces, 100-column ruler
+### macOS
 
-- **Target CPU:** 8-bit, [Ricoh RP2A03](https://en.wikipedia.org/wiki/Ricoh_2A03) (6502), 1.789773 MHz (NTSC)
+With Homebrew:
 
-- **Assembler:** ca65 (cc65 binutils)
+```bash
+brew install cc65
+git clone https://github.com/gregkrsak/first_nes.git
+cd first_nes
+make
+```
 
+### Windows
 
-Tested on:
-----------
+Install a cc65 distribution plus a `make` implementation, or use a Unix-like development shell such as MSYS2. Once `ca65`, `ld65`, and `make` are on your `PATH`:
 
-- Linux with Nestopia UE 1.47
+```bash
+git clone https://github.com/gregkrsak/first_nes.git
+cd first_nes
+make
+```
 
-- Windows with Nestopia UE 1.48
+The build creates:
 
+```text
+first_nes.nes
+```
 
-Additional Resources
-====================
+Load that file in your emulator.
 
-Git and GitHub:
----------------
+## 🗺️ Project map
 
-- [What is Git](https://en.wikipedia.org/wiki/Git) and [how do I use it?](https://git-scm.com/doc)
+```text
+first_nes.s                 composition root: assets, libraries, vectors
+config/ines.cfg             ld65 memory map and ROM layout
+data/header/                iNES metadata
+data/palette/               NES palette bytes
+data/sprites/               initial OAM shadow data
+data/tiles/                 original CHR tile source
+lib/isr/                    reset, NMI, IRQ/BRK handlers
+lib/shared_code/            CPU/APU/PPU/controller primitives
+lib/game/                   frame-synchronized foreground logic
+lib/sprite/                 demo sprite movement routines
+```
 
-- Download [GitHub Desktop for Windows and Mac OS](https://desktop.github.com/) or [Git for Linux](https://git-scm.com/download/linux)
+## 🎨 Original demo art
 
-NES programming in general:
----------------------------
+The **Neon Ranger** character, its second animation frame, and the small sci-fi background tiles in `data/tiles/neon_ranger.inc` were created specifically for `first_nes` in 2026. They are distributed under the same project license.
 
-- [Wikibooks: NES Programming](https://en.wikibooks.org/wiki/NES_Programming)
+Keeping the CHR graphics as assembly source is intentional: a learner can open the file, see the two NES bit planes, and trace those bytes all the way to the four on-screen sprites.
 
-- [NesDev](http://nesdev.com/)
+## 🧩 Build pipeline
 
-The ca65 assembler:
--------------------
+The project keeps the ROM build intentionally transparent:
 
-- [ca65 Documentation](http://cc65.github.io/doc/ca65.html)
+```text
+first_nes.s
+    │
+    ▼
+   ca65
+    │
+    ▼
+first_nes.o
+    │
+    ▼
+   ld65 + config/ines.cfg
+    │
+    ├── iNES header
+    ├── 16 KiB PRG ROM
+    └── 8 KiB CHR ROM
+            │
+            ▼
+       first_nes.nes
+```
 
-- [cc65 GitHub repository](https://github.com/cc65/cc65)
+No game engine. No mystery ROM packer. Just the pieces the machine actually needs.
 
-Building this project:
-----------------------
+## 🤝 Contributing
 
-- This project's [Makefile](https://github.com/gregkrsak/first_nes/blob/master/Makefile)
+See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request so expectations stay synchronized.
 
-- [Makefiles: A Tutorial by Example](http://mrbook.org/blog/tutorials/make/)
+## 🕹️ History & acknowledgements
 
+`first_nes` was written by **Greg M. Krsak** in 2018 and grew out of hands-on study of classic NES development material, including:
 
-first_nes was written by [Greg M. Krsak](https://github.com/gregkrsak/), 2018. You may send me email using [this address](mailto:greg.krsak@gmail.com). If you'd like to contribute, [click here](https://github.com/gregkrsak/first_nes/blob/master/docs/CONTRIBUTING.md) so we can synchronize our expectations!
+- the NintendoAge **Nerdy Nights** tutorials by bunnyboy;
+- Marat Fayzullin's *Nintendo Entertainment System Architecture*;
+- Jeremy Chadwick's *Nintendo Entertainment System Documentation*;
+- the NESdev community and its evolving hardware documentation.
+
+Additional thanks to earlier contributors and testers, including **@elennick**, **@hxlnt**, **@ericandrewlewis**, **@nortti**, and community members who reported setup/documentation issues over the project's history.
+
+For current low-level NES reference material, start with [NESdev](https://www.nesdev.org/).
+
+---
+
+<div align="center">
+
+**Small ROM. Real hardware concepts. Lots of room to experiment.** 👾
+
+</div>
