@@ -71,16 +71,16 @@
 
 ; Sprite data
 .SEGMENT "SPRITES"
-.INCLUDE "data/sprites/small_luigi.inc"
+.INCLUDE "data/sprites/neon_ranger.inc"
 
 
 ; =================================================================================================
 ;  VROM (CHR) Data
 ; =================================================================================================
 
-; Graphics tile data, used by the sprites
+; Original graphics tiles used by the sprite and demo background.
 .SEGMENT "TILES"
-.INCBIN "data/tiles/smb1_chr.bin"
+.INCLUDE "data/tiles/neon_ranger.inc"
 
 
 ; =================================================================================================
