@@ -11,7 +11,7 @@ You do **not** need prior NES-development or assembly-language experience to wor
 <table>
   <tr>
     <td width="36%" valign="top" align="center">
-      <img src="first_nes_box_art.svg" alt="Retro black-box-style artwork for first_nes featuring Neon Ranger" width="230">
+      <img src="first_nes_box_art.jpg" alt="Retro black-box-style artwork for first_nes featuring Neon Ranger" width="230">
     </td>
     <td width="64%" valign="top">
       <strong>What is it?</strong>
