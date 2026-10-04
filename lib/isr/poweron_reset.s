@@ -66,6 +66,7 @@
   ; ---------------------
 
     jsr     LoadPaletteData
+    jsr     LoadDemoBackground
     jsr     LoadSpriteData
     jsr     EnableVideoOutput
 

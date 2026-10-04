@@ -39,26 +39,27 @@
 
 .PROC DisableVideoOutput
 
-    lda     #%00000000              ;
-    sta     _PPUCTRL                ; Disable vertical blank interrupt   
-    sta     _PPUMASK                ; Disable sprite rendering
+    lda     #%00000000
+    sta     _PPUCTRL                ; Disable NMI
+    sta     _PPUMASK                ; Disable background/sprite rendering
 
     rts
     
 .ENDPROC
 
 
-; ===========================================================
-; Subroutine to enable video output. This will enable vblank.
-; ===========================================================
+; =================================================================================================
+; Enable NMI plus both background and sprite rendering. Bits 1/2 keep the leftmost eight pixels
+; visible so the demo background is continuous all the way to the edge of the screen.
+; =================================================================================================
 
 .PROC EnableVideoOutput
 
-    lda     #%10000000              ;
-    sta     _PPUCTRL                ; Enable vertical blank interrupt
+    lda     #%10000000
+    sta     _PPUCTRL                ; NMI on vblank; pattern tables remain at $0000
 
-    lda     #%00010000              ;
-    sta     _PPUMASK                ; Enable sprite rendering
+    lda     #%00011110              ; show background + sprites, including leftmost 8 pixels
+    sta     _PPUMASK
 
     rts
     
@@ -101,19 +102,19 @@
 
     lda     _PPUSTATUS              ; Reset the high/low latch to "high"
 
-    lda     #$3F                    ;
-    sta     _PPUADDR                ; Write the high byte of $3F00 address
+    lda     #$3F
+    sta     _PPUADDR                ; High byte of $3F00
 
-    lda     #$00                    ;
-    sta     _PPUADDR                ; Write the low byte of $3F00 address
+    lda     #$00
+    sta     _PPUADDR                ; Low byte of $3F00
 
-    ldx     #$00                    ; 
-   loadPalettesLoop:                ;
-    lda     _PALETTE, x             ; 
-    sta     _PPUDATA                ; Write to PPU
-    inx                             ;
-    cpx     #32                     ;
-    bne     loadPalettesLoop        ;
+    ldx     #$00
+   loadPalettesLoop:
+    lda     _PALETTE, x
+    sta     _PPUDATA
+    inx
+    cpx     #32
+    bne     loadPalettesLoop
 
     rts
 
@@ -126,13 +127,13 @@
 
 .PROC LoadSpriteData
 
-    ldx     #$00                    ;
-  loadSpritesLoop:                  ;
-    lda     _SPRITES, x             ;
-    sta     $0200, x                ; Write to PPU
-    inx                             ;
-    cpx     #16                     ;
-    bne     loadSpritesLoop         ;
+    ldx     #$00
+  loadSpritesLoop:
+    lda     _SPRITES, x
+    sta     $0200, x                ; CPU-side OAM shadow
+    inx
+    cpx     #16
+    bne     loadSpritesLoop
 
     rts
 

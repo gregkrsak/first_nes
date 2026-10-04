@@ -103,7 +103,12 @@
 
 ; Project/game libraries.
 .INCLUDE "lib/sprite/basic_movement.s"
+.INCLUDE "lib/sprite/animation.s"
+.INCLUDE "lib/game/demo_scene.s"
 .INCLUDE "lib/game/main_loop.s"
+
+; Read-only demo scene data lives in PRG ROM alongside the code.
+.INCLUDE "data/background/neon_grid.inc"
 
 
 ; =================================================================================================

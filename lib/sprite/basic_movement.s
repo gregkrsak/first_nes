@@ -2,73 +2,88 @@
 ; first_nes
 ; lib/sprite/basic_movement.s
 ;
-; Very simple four-sprite movement routines for the 16x16 demo character.
+; Bounded movement routines for the four-sprite 16x16 Neon Ranger demo character.
 ;
 ; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-; Generalized from the original Luigi-like demo naming, 2026.
+; Expanded with four-direction bounds for the Neon Ranger demo, 2026.
+;
+; The character stays inside an 8-pixel horizontal margin and above the lowest neon-floor rows.
 ;
 
 
-; =========================================
-; Move the four-sprite demo character right
-; =========================================
+HERO_X_MIN = $08
+HERO_X_MAX = $E8                    ; 232 + 16px character width = 248
+HERO_Y_MIN = $10
+HERO_Y_MAX = $C8                    ; keep the character above the lowest floor band
+
 
 .PROC MoveHeroRight
 
-    lda     $0203
-    clc
-    adc     #$01
-    sta     $0203                   ; upper-left X
+    lda     $0203                   ; upper-left X is our canonical horizontal position
+    cmp     #HERO_X_MAX
+    bcs     moveHeroRightDone
 
-    lda     $0207
-    clc
-    adc     #$01
-    sta     $0207                   ; upper-right X
+    inc     $0203
+    inc     $0207
+    inc     $020B
+    inc     $020F
 
-    lda     $020b
-    clc
-    adc     #$01
-    sta     $020b                   ; lower-left X
-    
-    lda     $020f
-    clc
-    adc     #$01
-    sta     $020f                   ; lower-right X
-
+  moveHeroRightDone:
     rts
 
 .ENDPROC
 
-
-; ========================================
-; Move the four-sprite demo character left
-; ========================================
 
 .PROC MoveHeroLeft
 
     lda     $0203
-    sec
-    sbc     #$01
-    sta     $0203                   ; upper-left X
+    cmp     #HERO_X_MIN
+    bcc     moveHeroLeftDone
+    beq     moveHeroLeftDone
 
-    lda     $0207
-    sec
-    sbc     #$01
-    sta     $0207                   ; upper-right X
+    dec     $0203
+    dec     $0207
+    dec     $020B
+    dec     $020F
 
-    lda     $020b
-    sec
-    sbc     #$01
-    sta     $020b                   ; lower-left X
-
-    lda     $020f
-    sec
-    sbc     #$01
-    sta     $020f                   ; lower-right X
-
+  moveHeroLeftDone:
     rts
-    
+
 .ENDPROC
 
+
+.PROC MoveHeroUp
+
+    lda     $0200                   ; upper-left Y is our canonical vertical position
+    cmp     #HERO_Y_MIN
+    bcc     moveHeroUpDone
+    beq     moveHeroUpDone
+
+    dec     $0200
+    dec     $0204
+    dec     $0208
+    dec     $020C
+
+  moveHeroUpDone:
+    rts
+
+.ENDPROC
+
+
+.PROC MoveHeroDown
+
+    lda     $0200
+    cmp     #HERO_Y_MAX
+    bcs     moveHeroDownDone
+
+    inc     $0200
+    inc     $0204
+    inc     $0208
+    inc     $020C
+
+  moveHeroDownDone:
+    rts
+
+.ENDPROC
 
 ; End of lib/sprite/basic_movement.s

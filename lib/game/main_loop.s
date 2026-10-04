@@ -30,18 +30,32 @@ LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
     ; Controller polling and game-state changes happen in foreground time, not inside NMI.
     jsr     ReadController1
 
-    ; Preserve the original starter controls until the gameplay-modernization pass switches to D-pad.
+    ; Independent D-pad tests intentionally permit diagonal movement.
     lda     Controller1Current
-    and     #BUTTON_A
-    beq     mainButtonAEnd
+    and     #BUTTON_RIGHT
+    beq     mainRightDone
     jsr     MoveHeroRight
-  mainButtonAEnd:
+  mainRightDone:
 
     lda     Controller1Current
-    and     #BUTTON_B
-    beq     mainButtonBEnd
+    and     #BUTTON_LEFT
+    beq     mainLeftDone
     jsr     MoveHeroLeft
-  mainButtonBEnd:
+  mainLeftDone:
+
+    lda     Controller1Current
+    and     #BUTTON_UP
+    beq     mainUpDone
+    jsr     MoveHeroUp
+  mainUpDone:
+
+    lda     Controller1Current
+    and     #BUTTON_DOWN
+    beq     mainDownDone
+    jsr     MoveHeroDown
+  mainDownDone:
+
+    jsr     UpdateHeroAnimation
 
     jmp     waitForNextFrame
 
