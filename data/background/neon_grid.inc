@@ -2,9 +2,15 @@
 ; first_nes
 ; data/background/neon_grid.inc
 ;
-; Original 32x30 nametable + 64-byte attribute table for the Neon Ranger platformer chamber.
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Define the complete 32x30 nametable and 64-byte attribute table for the single-screen
+;          Neon Ranger platformer chamber.
 ;
-; Collision geometry in lib/game/platform_collision.s intentionally matches these platform rows:
+; Beginner note: each nametable row below contains exactly 32 tile numbers, one for each 8x8 tile
+; across the 256-pixel-wide NES screen. Thirty rows x 32 bytes = 960 tile bytes. The 64 attribute
+; bytes at the end bring the complete nametable block to 1024 bytes.
+;
+; Collision geometry in lib/game/platform_collision.s intentionally matches these visible surfaces:
 ;   center ledge: X 96..159,  Y 128 (tile row 16)
 ;   side ledges:  X 24..87 and 168..231, Y 160 (tile row 20)
 ;   floor:        Y 192 (tile row 24)
@@ -75,8 +81,8 @@ DemoNametable:
 .BYTE $49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49,$49
 
 
-; 64 attribute bytes. $55 selects background palette 1 for every quadrant, keeping the room in the
-; same blue/cyan/magenta vocabulary as Neon Ranger.
+; Attribute table: $55 selects background palette 1 for every 16x16 quadrant of every attribute area.
+; That keeps the entire room in the same blue/cyan/magenta visual vocabulary as Neon Ranger.
 .REPEAT 64
 .BYTE $55
 .ENDREPEAT
