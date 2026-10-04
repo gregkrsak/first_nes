@@ -145,14 +145,14 @@ CollisionNewFeetY:  .res 1
 ;   floor:   X 0..247,   Y 192
 ;   left:    X 24..87,   Y 160
 ;   center:  X 96..159,  Y 128
-;   right:   X 176..239, Y 160
+;   right:   X 168..231, Y 160
 ; -------------------------------------------------------------------------------------------------
 
 PlatformXMin:
-.BYTE $00, $18, $60, $B0
+.BYTE $00, $18, $60, $A8
 
 PlatformXMax:
-.BYTE $F8, $58, $A0, $F0
+.BYTE $F8, $58, $A0, $E8
 
 PlatformY:
 .BYTE $C0, $A0, $80, $A0
