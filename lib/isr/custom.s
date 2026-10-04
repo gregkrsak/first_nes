@@ -2,9 +2,9 @@
 ; first_nes
 ; lib/isr/custom.s
 ;
-; This Interrupt Service Routine is called when a BRK instruction is executed. This is a good
-; location to place custom code, which will then trigger with every BRK instruction. Note that
-; this interrupt is maskable (IRQ).
+; IRQ/BRK interrupt service routine. On the 6502, maskable hardware IRQs and the BRK instruction
+; share the same vector at $FFFE-$FFFF. The starter project does not currently use a mapper IRQ or
+; APU IRQ, but this handler is kept safe and ready for future expansion.
 ;
 ; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
 ;
@@ -18,28 +18,26 @@
 ; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
 ; Assembler: ca65 (cc65 binutils)
 ;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
-;
 
 
-.PROC ISR_Custom
+.PROC ISR_IRQ_BRK
 
-    nop                             ; Do nothing
+    pha
+    txa
+    pha
+    tya
+    pha
 
-    rti                             ; Return from interrupt
+    ; No IRQ/BRK-specific work is required yet.
+    nop
+
+    pla
+    tay
+    pla
+    tax
+    pla
+
+    rti
     
 .ENDPROC
 
