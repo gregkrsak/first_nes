@@ -84,8 +84,8 @@
 
 
 ; =================================================================================================
-;  ROM Code. Your NES game is coordinated by the reset, NMI, and IRQ/BRK interrupt handlers, which
-;  call reusable procedures stored in the /lib project directory.
+;  ROM Code. Your NES game is coordinated by reset + interrupts, with foreground game logic living
+;  in a frame-synchronized main loop.
 ; =================================================================================================
 
 .SEGMENT "CODE"
@@ -101,10 +101,9 @@
 .INCLUDE "lib/shared_code/ppu.s"
 .INCLUDE "lib/shared_code/controllers.s"
 
-; YOUR LIBRARY FILES GET INCLUDED HERE
-; <libraries>
+; Project/game libraries.
 .INCLUDE "lib/sprite/basic_movement.s"
-; </libraries>
+.INCLUDE "lib/game/main_loop.s"
 
 
 ; =================================================================================================
