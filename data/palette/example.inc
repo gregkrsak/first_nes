@@ -2,49 +2,40 @@
 ; first_nes
 ; data/palette/example.inc
 ;
-; Palette data for an NES ROM.
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Define the 32 palette bytes copied to NES PPU palette RAM at $3F00 during reset.
 ;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-;
-; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
-;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
-; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
-;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
-;   https://emu-docs.org/NES/nestech.txt
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; Assembler: ca65 (cc65 binutils)
-;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
+; Beginner note: the first 16 bytes are four background palettes; the second 16 bytes are four
+; sprite palettes. Each palette contains four NES color indices. Sprite attribute bits 0-1 select
+; which sprite palette a hardware sprite uses.
 ;
 
 
 _PALETTE:
 
-; Background palettes
+; Background palette 0
 .BYTE $0f, $31, $32, $33
-.BYTE $0f, $35, $36, $37
+
+; Background palette 1 - used by the Neon Ranger chamber: blue / cyan / magenta
+.BYTE $0f, $21, $2c, $24
+
+; Background palette 2
 .BYTE $0f, $39, $3a, $3b
+
+; Background palette 3
 .BYTE $0f, $3d, $3e, $0f
 
- ; Sprite palettes (selected by the attribute bits 0-1 of the sprites)
+
+; Sprite palette 0
 .BYTE $0f, $1c, $15, $14
+
+; Sprite palette 1
 .BYTE $0f, $02, $38, $3c
-.BYTE $0f, $30, $37, $1a  ; Luigi-like colors
-.BYTE $0f, $0f, $0f, $0f  ; All black
+
+; Sprite palette 2 - selected by Neon Ranger: blue / cyan / magenta
+.BYTE $0f, $21, $2c, $24
+
+; Sprite palette 3 - currently unused/black
+.BYTE $0f, $0f, $0f, $0f
 
 ; End of data/palette/example.inc

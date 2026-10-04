@@ -2,97 +2,93 @@
 ; first_nes
 ; lib/sprite/basic_movement.s
 ;
-; Veryt simple sprite movement routines, for demonstration purposes only.
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Move Neon Ranger left or right by one pixel while keeping the complete 16x16 character
+;          inside the intended horizontal play area.
 ;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-;
-; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
-;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
-; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
-;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
-;   https://emu-docs.org/NES/nestech.txt
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; Assembler: ca65 (cc65 binutils)
-;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
+; This file intentionally changes logical game state only. RenderHeroToOAM later copies HeroX into
+; the four hardware-sprite X coordinates.
 ;
 
 
-; ==========================================
-; Subroutine to move the Luigi sprites right
-; ==========================================
+HERO_X_MIN = $08                    ; Left-most allowed logical X coordinate
+HERO_X_MAX = $E8                    ; 232 + 16px character width = 248 at the right edge
 
-.PROC     MoveLuigiRight
 
-    lda     $0203                   ; 
-    clc                             ;
-    adc     #$01                    ; 
-    sta     $0203                   ; Increment the Sprite0 X position
+; =================================================================================================
+; MoveHeroRight
+;
+; Purpose:
+;   Move the logical player position one pixel to the right, unless the player has already reached
+;   HERO_X_MAX. Successful rightward movement also records that the hero is facing right.
+;
+; Inputs:
+;   HeroX contains the current logical horizontal position.
+;
+; Outputs / side effects:
+;   HeroX may increase by one.
+;   HeroFacing becomes HERO_FACING_RIGHT when movement actually occurs.
+;
+; Registers:
+;   A is modified. X and Y are preserved.
+;
+; Returns:
+;   RTS to the caller.
+; =================================================================================================
 
-    lda     $0207                   ; 
-    clc                             ;
-    adc     #$01                    ; 
-    sta     $0207                   ; Increment the Sprite1 X position
+.PROC MoveHeroRight
 
-    lda     $020b                   ; 
-    clc                             ;
-    adc     #$01                    ; 
-    sta     $020b                   ; Increment the Sprite2 X position
-    
-    lda     $020f                   ; 
-    clc                             ;
-    adc     #$01                    ; 
-    sta     $020f                   ; Increment the Sprite3 X position
+    lda     HeroX                   ; Read the current left edge of the 16x16 hero.
+    cmp     #HERO_X_MAX            ; Has the hero already reached the right-most allowed position?
+    bcs     moveHeroRightDone       ; Yes: do not move farther right.
 
-    rts
+    inc     HeroX                   ; No: advance exactly one pixel to the right.
+
+    lda     #HERO_FACING_RIGHT      ; A successful rightward step also changes facing direction.
+    sta     HeroFacing
+
+  moveHeroRightDone:
+    rts                             ; Return whether or not movement occurred.
 
 .ENDPROC
 
 
-; =========================================
-; Subroutine to move the Luigi sprites left
-; =========================================
+; =================================================================================================
+; MoveHeroLeft
+;
+; Purpose:
+;   Move the logical player position one pixel to the left, unless the player has already reached
+;   HERO_X_MIN. Successful leftward movement also records that the hero is facing left.
+;
+; Inputs:
+;   HeroX contains the current logical horizontal position.
+;
+; Outputs / side effects:
+;   HeroX may decrease by one.
+;   HeroFacing becomes HERO_FACING_LEFT when movement actually occurs.
+;
+; Registers:
+;   A is modified. X and Y are preserved.
+;
+; Returns:
+;   RTS to the caller.
+; =================================================================================================
 
-.PROC     MoveLuigiLeft
+.PROC MoveHeroLeft
 
-    lda     $0203                   ; 
-    sec                             ; 
-    sbc     #$01                    ; 
-    sta     $0203                   ; Decrement Sprite0 X position
+    lda     HeroX                   ; Read the current left edge of the 16x16 hero.
+    cmp     #HERO_X_MIN            ; Compare it with the left-most allowed position.
+    bcc     moveHeroLeftDone        ; Below the limit should never happen, but treat it as blocked.
+    beq     moveHeroLeftDone        ; Exactly at the limit: do not move farther left.
 
-    lda     $0207                   ; 
-    sec                             ; 
-    sbc     #$01                    ; 
-    sta     $0207                   ; Decrement Sprite1 X position
+    dec     HeroX                   ; Move exactly one pixel to the left.
 
-    lda     $020b                   ; 
-    sec                             ; 
-    sbc     #$01                    ; 
-    sta     $020b                   ; Decrement Sprite2 X position
+    lda     #HERO_FACING_LEFT       ; A successful leftward step also changes facing direction.
+    sta     HeroFacing
 
-    lda     $020f                   ; 
-    sec                             ; 
-    sbc     #$01                    ; 
-    sta     $020f                   ; Decrement Sprite3 X position
+  moveHeroLeftDone:
+    rts                             ; Return whether or not movement occurred.
 
-    rts
-    
 .ENDPROC
-
 
 ; End of lib/sprite/basic_movement.s

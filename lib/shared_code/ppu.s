@@ -2,140 +2,216 @@
 ; first_nes
 ; lib/shared_code/ppu.s
 ;
-; Common PPU-related routines.
-;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-;
-; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
-;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
-; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
-;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
-;   https://emu-docs.org/NES/nestech.txt
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; Assembler: ca65 (cc65 binutils)
-;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Provide reusable Picture Processing Unit (PPU) helper routines for enabling/disabling
+;          rendering, waiting for vertical blank, and copying palette/sprite data into NES video state.
 ;
 
 
-; ======================================================================================
-; Subroutine to disable video output. This will cause a black screen and disable vblank.
-; ======================================================================================
+; =================================================================================================
+; DisableVideoOutput
+;
+; Purpose:
+;   Turn off NMI generation and both background/sprite rendering before reset-time video memory work.
+;
+; Inputs:
+;   None.
+;
+; Outputs / side effects:
+;   PPUCTRL ($2000) becomes $00.
+;   PPUMASK ($2001) becomes $00.
+;
+; Registers:
+;   A is modified. X and Y are preserved.
+;
+; Returns:
+;   RTS to the reset routine.
+; =================================================================================================
 
 .PROC DisableVideoOutput
 
-    lda     #%00000000              ;
-    sta     _PPUCTRL                ; Disable vertical blank interrupt   
-    sta     _PPUMASK                ; Disable sprite rendering
+    lda     #%00000000              ; One zero value can safely clear both video-control registers.
+    sta     _PPUCTRL                ; Disable vblank NMI and select the default PPU control settings.
+    sta     _PPUMASK                ; Disable background and sprite rendering.
 
-    rts
-    
+    rts                             ; Return with the screen disabled for safe initialization work.
+
 .ENDPROC
 
 
-; ===========================================================
-; Subroutine to enable video output. This will enable vblank.
-; ===========================================================
+; =================================================================================================
+; EnableVideoOutput
+;
+; Purpose:
+;   Enable vblank NMI plus normal background and sprite rendering after the reset routine has loaded
+;   all initial graphics data.
+;
+; Inputs:
+;   PPU palette, nametable, and initial OAM shadow should already be prepared.
+;
+; Outputs / side effects:
+;   PPUCTRL enables NMI while keeping pattern tables at $0000.
+;   PPUMASK enables background and sprites, including the left-most eight screen pixels.
+;
+; Registers:
+;   A is modified. X and Y are preserved.
+;
+; Returns:
+;   RTS to the reset routine.
+; =================================================================================================
 
 .PROC EnableVideoOutput
 
-    lda     #%10000000              ;
-    sta     _PPUCTRL                ; Enable vertical blank interrupt
+    lda     #%10000000              ; Bit 7 = generate NMI at the beginning of vertical blank.
+    sta     _PPUCTRL                ; Other bits remain zero: pattern tables at $0000, +1 VRAM writes.
 
-    lda     #%00010000              ;
-    sta     _PPUMASK                ; Enable sprite rendering
+    lda     #%00011110              ; Bits 1/2 show left edge; bits 3/4 show background and sprites.
+    sta     _PPUMASK
 
-    rts
-    
+    rts                             ; Video output and once-per-frame NMI are now active.
+
 .ENDPROC
 
 
-; ==============================
-; Subroutine to wait for vblank.
-; ==============================
+; =================================================================================================
+; WaitForVBlank
+;
+; Purpose:
+;   Busy-wait until PPUSTATUS bit 7 reports that vertical blank has begun. Reset initialization uses
+;   this simple polling loop before NMI has been enabled.
+;
+; Inputs:
+;   None.
+;
+; Outputs / side effects:
+;   Repeatedly reads PPUSTATUS. Reading $2002 also clears the vblank flag and resets the PPU's shared
+;   $2005/$2006 write toggle.
+;
+; Registers:
+;   Processor flags change because BIT is used. A, X, and Y are preserved.
+;
+; Returns:
+;   RTS after BIT observes PPUSTATUS bit 7 set.
+; =================================================================================================
 
 .PROC WaitForVBlank
 
    vBlankWaitLoop:
-    bit     _PPUSTATUS
-    bpl     vBlankWaitLoop
+    bit     _PPUSTATUS              ; Copy PPUSTATUS bit 7 into the 6502 negative flag.
+    bpl     vBlankWaitLoop          ; BPL repeats while bit 7 is clear (negative flag = 0).
 
-    rts
+    rts                             ; Bit 7 was set: a vertical blank has begun.
 
 .ENDPROC
 
 
-; ====================================
-; Subroutine to clear the vblank flag.
-; ====================================
+; =================================================================================================
+; ClearVBlankFlag
+;
+; Purpose:
+;   Read PPUSTATUS once during reset to acknowledge/clear any vblank flag that may already be set and
+;   to reset the internal two-write latch shared by PPUSCROLL/PPUADDR.
+;
+; Inputs:
+;   None.
+;
+; Outputs / side effects:
+;   PPUSTATUS is read; hardware clears its vblank flag as a consequence of that read.
+;
+; Registers:
+;   Processor flags change because BIT is used. A, X, and Y are preserved.
+;
+; Returns:
+;   RTS to the reset routine.
+; =================================================================================================
 
 .PROC ClearVBlankFlag
 
-    bit     _PPUSTATUS
+    bit     _PPUSTATUS              ; The read itself performs the required PPU hardware side effects.
 
-    rts
+    rts                             ; No value from the status register needs to be retained.
 
 .ENDPROC
 
 
-; ================================
-; Subroutine to load palette data.
-; ================================
+; =================================================================================================
+; LoadPaletteData
+;
+; Purpose:
+;   Copy the project's complete 32-byte palette table from PRG ROM into PPU palette RAM beginning at
+;   $3F00. The first 16 bytes are background palettes; the next 16 bytes are sprite palettes.
+;
+; Inputs:
+;   _PALETTE points to at least 32 palette bytes.
+;   Rendering is expected to be disabled during this reset-time transfer.
+;
+; Outputs / side effects:
+;   Writes 32 sequential bytes to PPU VRAM $3F00-$3F1F through PPUDATA.
+;
+; Registers:
+;   A and X are modified. Y is preserved.
+;
+; Returns:
+;   RTS to the reset routine.
+; =================================================================================================
 
 .PROC LoadPaletteData
 
-    lda     _PPUSTATUS              ; Reset the high/low latch to "high"
+    lda     _PPUSTATUS              ; Reset the shared $2005/$2006 write latch to its first-write state.
 
-    lda     #$3F                    ;
-    sta     _PPUADDR                ; Write the high byte of $3F00 address
+    lda     #$3F                    ; High byte of palette RAM base address $3F00.
+    sta     _PPUADDR                ; PPUADDR always receives the high byte first.
 
-    lda     #$00                    ;
-    sta     _PPUADDR                ; Write the low byte of $3F00 address
+    lda     #$00                    ; Low byte of palette RAM base address $3F00.
+    sta     _PPUADDR                ; Second write completes the 14-bit PPU address.
 
-    ldx     #$00                    ; 
-   loadPalettesLoop:                ;
-    lda     _PALETTE, x             ; 
-    sta     _PPUDATA                ; Write to PPU
-    inx                             ;
-    cpx     #32                     ;
-    bne     loadPalettesLoop        ;
+    ldx     #$00                    ; X indexes the 32 source bytes in _PALETTE.
+   loadPalettesLoop:
+    lda     _PALETTE, x             ; Read one palette byte from PRG ROM.
+    sta     _PPUDATA                ; Write it to current PPUADDR; hardware increments address by one.
 
-    rts
+    inx                             ; Advance to the next palette byte.
+    cpx     #32                     ; All NES background + sprite palette entries total 32 bytes.
+    bne     loadPalettesLoop
 
-.ENDPROC 
+    rts                             ; All palette RAM needed by the demo has been initialized.
+
+.ENDPROC
 
 
-; ===============================
-; Subroutine to load sprite data.
-; ===============================
+; =================================================================================================
+; LoadSpriteData
+;
+; Purpose:
+;   Copy the four 4-byte Neon Ranger seed sprite entries from _SPRITES into the CPU-side OAM shadow
+;   page at $0200. The rest of that page was already filled with hidden-sprite values by RAM init.
+;
+; Inputs:
+;   _SPRITES points to exactly 16 bytes describing four hardware sprites.
+;
+; Outputs / side effects:
+;   $0200-$020F receive the initial Y/tile/attribute/X bytes for the four-sprite character.
+;
+; Registers:
+;   A and X are modified. Y is preserved.
+;
+; Returns:
+;   RTS to the reset routine.
+; =================================================================================================
 
 .PROC LoadSpriteData
 
-    ldx     #$00                    ;
-  loadSpritesLoop:                  ;
-    lda     _SPRITES, x             ;
-    sta     $0200, x                ; Write to PPU
-    inx                             ;
-    cpx     #16                     ;
-    bne     loadSpritesLoop         ;
+    ldx     #$00                    ; X indexes the 16 source bytes and their OAM-shadow destinations.
+  loadSpritesLoop:
+    lda     _SPRITES, x             ; Read one byte of initial sprite data from PRG ROM.
+    sta     $0200, x                ; Store it in the CPU-side OAM shadow page.
 
-    rts
+    inx                             ; Advance to the next byte.
+    cpx     #16                     ; Four sprites x four OAM bytes each = 16 bytes total.
+    bne     loadSpritesLoop
 
-.ENDPROC 
+    rts                             ; Initial active sprite entries are now ready for OAM DMA.
+
+.ENDPROC
 
 ; End of lib/shared_code/ppu.s

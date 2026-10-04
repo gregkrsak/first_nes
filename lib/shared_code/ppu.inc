@@ -2,194 +2,141 @@
 ; first_nes
 ; lib/shared_code/ppu.inc
 ;
-; PPU-Related assembler directives for Nintendo Entertainment System assembly language.
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Define the NES Picture Processing Unit (PPU) memory-mapped register addresses and provide
+;          a beginner-friendly quick reference for the video hardware used throughout first_nes.
 ;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-;
-; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
-;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
-; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
-;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
-;   https://emu-docs.org/NES/nestech.txt
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; Assembler: ca65 (cc65 binutils)
-;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
+; Reference: https://www.nesdev.org/wiki/PPU_registers
 ;
 
 
-; The PPU (Picture Processing Unit) generates a composite video signal with 240 lines of pixels.
-; Reference: https://wiki.nesdev.com/w/index.php/PPU
-
-
+; =================================================================================================
+;  PPU QUICK MAP
+;  Think of this as the NES video system's tiny cockpit: pattern data, nametables, palettes, and a
+;  handful of memory-mapped registers that control how the PPU sees all of it.
+; =================================================================================================
 ;
-; PPU MEMORY MAP
+; $0000-$0FFF  Pattern table 0
+; $1000-$1FFF  Pattern table 1
+; $2000-$23FF  Nametable 0 + attribute table
+; $2400-$27FF  Nametable 1 + attribute table
+; $2800-$2BFF  Nametable 2 + attribute table
+; $2C00-$2FFF  Nametable 3 + attribute table
+; $3000-$3EFF  Mirrors of $2000-$2EFF
+; $3F00-$3F1F  Palette RAM
+; $3F20-$3FFF  Mirrors of $3F00-$3F1F
 ;
-; --------------------------------------- $4000
-; Empty
-; --------------------------------------- $3F20
-; Sprite Palette
-; --------------------------------------- $3F10
-; Image Palette
-; --------------------------------------- $3F00
-; Empty
-; --------------------------------------- $3000
-; Attribute Table 3
-; --------------------------------------- $2FC0
-; Name Table 3 (32x30 tiles)
-; --------------------------------------- $2C00
-; Attribute Table 2
-; --------------------------------------- $2BC0
-; Name Table 2 (32x30 tiles)
-; --------------------------------------- $2800
-; Attribute Table 1
-; --------------------------------------- $27C0
-; Name Table 1 (32x30 tiles)
-; --------------------------------------- $2400
-; Attribute Table 0
-; --------------------------------------- $23C0
-; Name Table 0 (32x30 tiles)
-; --------------------------------------- $2000
-; Pattern Table 1 (256x2x8, may be VROM)
-; --------------------------------------- $1000
-; Pattern Table 0 (256x2x8, may be VROM)
-; --------------------------------------- $0000
+; Cartridge mirroring determines which logical nametables share physical VRAM.
 ;
 
 
-; ------+-----+---------------------------------------------------------------
-; $2000 | RW  | PPU Control Register 1
-;       | 0-1 | Name Table Address:
-;       |     |
-;       |     |           +-----------+-----------+
-;       |     |           | 2 ($2800) | 3 ($2C00) |
-;       |     |           +-----------+-----------+
-;       |     |           | 0 ($2000) | 1 ($2400) |
-;       |     |           +-----------+-----------+
-;       |     |
-;       |     | Remember that because of the mirroring there are only 2  
-;       |     | real Name Tables, not 4. Also, PPU will automatically
-;       |     | switch to another Name Table when running off the current
-;       |     | Name Table during scroll (see picture above).
-;       |   2 | Vertical Write, 1 = PPU memory address increments by 32:
-;       |     |
-;       |     |    Name Table, VW=0          Name Table, VW=1
-;       |     |   +----------------+        +----------------+
-;       |     |   |----> write     |        | | write        |
-;       |     |   |                |        | V              |
-;       |     |
-;       |   3 | Sprite Pattern Table Address, 1 = $1000, 0 = $0000.
-;       |   4 | Screen Pattern Table Address, 1 = $1000, 0 = $0000.
-;       |   5 | Sprite Size, 1 = 8x16, 0 = 8x8.
-;       |   6 | PPU Master/Slave Mode, not used in NES.
-;       |   7 | VBlank Enable, 1 = generate interrupts on VBlank.
-; ------+-----+---------------------------------------------------------------
-_PPUCTRL    = $2000           ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUCTRL
-
-; ------+-----+---------------------------------------------------------------
-; $2001 | RW  | PPU Control Register 2
-;       |   0 | Unknown (???)
-;       |   1 | Image Mask, 0 = don't show left 8 columns of the screen.
-;       |   2 | Sprite Mask, 0 = don't show sprites in left 8 columns. 
-;       |   3 | Screen Enable, 1 = show picture, 0 = blank screen.
-;       |   4 | Sprites Enable, 1 = show sprites, 0 = hide sprites.
-;       | 5-7 | Background Color, 0 = black, 1 = blue, 2 = green, 4 = red.
-;       |     | Do not use any other numbers as you may damage PPU hardware.
-; ------+-----+---------------------------------------------------------------
-_PPUMASK    = $2001           ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUMASK
-
-; ------+-----+---------------------------------------------------------------
-; $2002 | R   | PPU Status Register
-;       | 0-5 | Unknown (???)
-;       |   6 | Hit Flag, 1 = Sprite refresh has hit sprite #0.
-;       |     | This flag resets to 0 when screen refresh starts.
-;       |   7 | VBlank Flag, 1 = PPU is in VBlank state.
-;       |     | This flag resets to 0 when VBlank ends or CPU reads $2002.
-; ------+-----+---------------------------------------------------------------
-_PPUSTATUS  = $2002         ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUSTATUS
-
-; ------+-----+---------------------------------------------------------------
-; $2005 | W   | Screen Scroll Offsets
-;       |     | There are two scroll registers, vertical and horizontal, 
-;       |     | which are both written via this port. The first value written
-;       |     | will go into the Vertical Scroll Register (unless it is >239,
-;       |     | then it will be ignored). The second value will appear in the
-;       |     | Horizontal Scroll Register. Name Tables are assumed to be
-;       |     | arranged in the following way:
-;       |     |
-;       |     |           +-----------+-----------+
-;       |     |           | 2 ($2800) | 3 ($2C00) |
-;       |     |           +-----------+-----------+
-;       |     |           | 0 ($2000) | 1 ($2400) |
-;       |     |           +-----------+-----------+
-;       |     |
-;       |     | When scrolled, the picture may span over several Name Tables.
-;       |     | Remember that because of the mirroring there are only 2 real
-;       |     | Name Tables, not 4.
-; ------+-----+---------------------------------------------------------------
-_PPUSCROLL  = $2005         ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUSCROLL
-
-; ------+-----+---------------------------------------------------------------
-; $2006 | W   | PPU Memory Address
-;       |     | Used to set the address of PPU Memory to be accessed via
-;       |     | $2007. The first write to this register will set 8 lower
-;       |     | address bits. The second write will set 6 upper bits. The
-;       |     | address will increment either by 1 or by 32 after each
-;       |     | access to $2007.
-; ------+-----+---------------------------------------------------------------
-_PPUADDR    = $2006           ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUADDR
-
-; ------+-----+---------------------------------------------------------------
-; $2007 | RW  | PPU Memory Data
-;       |     | Used to read/write the PPU Memory. The address is set via
-;       |     | $2006 and increments after each access, either by 1 or by 32.
-; ------+-----+---------------------------------------------------------------
-_PPUDATA    = $2007           ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#PPUDATA
+; =================================================================================================
+;  $2000 - PPUCTRL
+;  Big switches: nametable selection, address increment, pattern tables, sprite size, and NMI.
+; =================================================================================================
+;
+; bit 0-1  Base nametable address
+;          00=$2000, 01=$2400, 10=$2800, 11=$2C00
+; bit 2    VRAM increment after $2007 access: 0=+1, 1=+32
+; bit 3    Sprite pattern table for 8x8 sprites: 0=$0000, 1=$1000
+; bit 4    Background pattern table: 0=$0000, 1=$1000
+; bit 5    Sprite size: 0=8x8, 1=8x16
+; bit 6    PPU master/slave select (normally unused on retail NES software)
+; bit 7    Generate NMI at the start of vertical blank
+;
+_PPUCTRL    = $2000
 
 
-; The OAM (Object Attribute Memory) is internal memory inside the PPU that contains a lookup table 
-; of up to 64 sprites, where each table entry consists of 4 bytes.
+; =================================================================================================
+;  $2001 - PPUMASK
+;  What gets drawn, what gets clipped, and how color is emphasized.
+; =================================================================================================
+;
+; bit 0    Grayscale mode
+; bit 1    Show background in leftmost 8 pixels
+; bit 2    Show sprites in leftmost 8 pixels
+; bit 3    Show background
+; bit 4    Show sprites
+; bit 5    Emphasize red   (NTSC RP2C02)
+; bit 6    Emphasize green (NTSC RP2C02)
+; bit 7    Emphasize blue  (NTSC RP2C02)
+;
+; NOTE: The old "background color" interpretation of bits 5-7 is incorrect. They are emphasis bits.
+;
+_PPUMASK    = $2001
 
 
-; ------+-----+---------------------------------------------------------------
-; $2003 | W   | Sprite Memory Address
-;       |     | Used to set the address of the 256-byte Sprite Memory to be 
-;       |     | accessed via $2004. This address will increment by 1 after
-;       |     | each access to $2004. Sprite Memory contains coordinates,
-;       |     | colors, and other sprite attributes.
-; ------+-----+---------------------------------------------------------------
-_OAMADDR    = $2003           ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMADDR
+; =================================================================================================
+;  $2002 - PPUSTATUS
+;  Read-only status. Reading this register also clears the vblank flag and resets the $2005/$2006
+;  write toggle, which is why many PPU update routines begin with a read from $2002.
+; =================================================================================================
+;
+; bit 5    Sprite overflow flag
+; bit 6    Sprite 0 hit flag
+; bit 7    Vblank flag
+; bits 0-4 Return PPU open-bus data rather than useful status flags
+;
+_PPUSTATUS  = $2002
 
-; ------+-----+---------------------------------------------------------------
-; $2004 | RW  | Sprite Memory Data
-;       |     | Used to read/write the Sprite Memory. The address is set via
-;       |     | $2003 and increments by 1 after each access. Sprite Memory 
-;       |     | contains coordinates, colors, and other sprite attributes
-;       |     | sprites.
-; ------+-----+---------------------------------------------------------------
-_OAMDATA    = $2004           ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMDATA
 
-; ------+-----+---------------------------------------------------------------
-; $4014 | W   | DMA Access to the Sprite Memory
-;       |     | Writing a value N into this port causes an area of CPU memory
-;       |     | at address $100*N to be transferred into the Sprite Memory.
-;       |     | The CPU is suspended while the transfer is taking place.
-; ------+-----+---------------------------------------------------------------
-_OAMDMA     = $4014            ; Reference: https://wiki.nesdev.com/w/index.php/PPU_registers#OAMDMA
+; =================================================================================================
+;  $2003 / $2004 - OAMADDR / OAMDATA
+;  Direct access to the PPU's 256-byte Object Attribute Memory (64 sprites x 4 bytes).
+; =================================================================================================
+;
+_OAMADDR    = $2003
+_OAMDATA    = $2004
 
+
+; =================================================================================================
+;  $2005 - PPUSCROLL
+;  Two-write register: FIRST write is X/horizontal scroll, SECOND write is Y/vertical scroll.
+;  Reading $2002 resets the internal write toggle so the next $2005 write is X again.
+; =================================================================================================
+;
+_PPUSCROLL  = $2005
+
+
+; =================================================================================================
+;  $2006 - PPUADDR
+;  Two-write register used to select a 14-bit PPU address. FIRST write supplies the high byte;
+;  SECOND write supplies the low byte. This is intentionally high-then-low.
+; =================================================================================================
+;
+_PPUADDR    = $2006
+
+
+; =================================================================================================
+;  $2007 - PPUDATA
+;  Data port for the PPU address selected through $2006. The address automatically advances by
+;  either 1 or 32 according to PPUCTRL bit 2. Most reads are delayed by the PPU's internal read
+;  buffer; palette reads ($3F00-$3FFF) are the important exception.
+; =================================================================================================
+;
+_PPUDATA    = $2007
+
+
+; =================================================================================================
+;  $4014 - OAMDMA
+;  Write a page number N here to copy CPU addresses $NN00-$NNFF into PPU OAM. During the transfer
+;  the CPU pauses for 513 or 514 cycles, depending on alignment. first_nes uses page $02.
+; =================================================================================================
+;
+_OAMDMA     = $4014
+
+
+; =================================================================================================
+;  PPU WRITE-LATCH CHEAT SHEET
+; =================================================================================================
+;
+;   bit $2002          ; reset $2005/$2006 write toggle
+;
+;   lda #$3F
+;   sta $2006          ; HIGH byte first
+;   lda #$00
+;   sta $2006          ; LOW byte second -> address $3F00
+;
+;   ; $2005 follows the same two-write rhythm: X first, then Y.
+;
 ; End of lib/shared_code/ppu.inc

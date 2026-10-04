@@ -47,7 +47,7 @@
 ; Video-specific directives
 .INCLUDE "lib/shared_code/ppu.inc"
 
-; Joystick-specific directives
+; Controller-specific directives
 .INCLUDE "lib/shared_code/controllers.inc"
 
 
@@ -71,21 +71,21 @@
 
 ; Sprite data
 .SEGMENT "SPRITES"
-.INCLUDE "data/sprites/small_luigi.inc"
+.INCLUDE "data/sprites/neon_ranger.inc"
 
 
 ; =================================================================================================
 ;  VROM (CHR) Data
 ; =================================================================================================
 
-; Graphics tile data, used by the sprites
+; Original graphics tiles used by the sprite and demo background.
 .SEGMENT "TILES"
-.INCBIN "data/tiles/smb1_chr.bin"
+.INCLUDE "data/tiles/neon_ranger.inc"
 
 
 ; =================================================================================================
-;  ROM Code. Your NES game will be driven by three interrupt service routines, from which you will
-;  call other procedures that are stored in seperate libraries (see the /lib project directory).
+;  ROM Code. Your NES game is coordinated by reset + interrupts, with foreground game logic living
+;  in a frame-synchronized main loop.
 ; =================================================================================================
 
 .SEGMENT "CODE"
@@ -99,23 +99,32 @@
 .INCLUDE "lib/shared_code/cpu.s"
 .INCLUDE "lib/shared_code/apu.s"
 .INCLUDE "lib/shared_code/ppu.s"
+.INCLUDE "lib/shared_code/controllers.s"
 
-; YOUR LIBRARY FILES GET INCLUDED HERE
-; <libraries>
+; Project/game libraries.
+.INCLUDE "lib/game/player.s"
+.INCLUDE "lib/game/physics.s"
+.INCLUDE "lib/game/jump_assist.s"
+.INCLUDE "lib/game/platform_collision.s"
 .INCLUDE "lib/sprite/basic_movement.s"
-; </libraries>
+.INCLUDE "lib/sprite/animation.s"
+.INCLUDE "lib/game/demo_scene.s"
+.INCLUDE "lib/game/main_loop.s"
+
+; Read-only demo scene data lives in PRG ROM alongside the code.
+.INCLUDE "data/background/neon_grid.inc"
 
 
 ; =================================================================================================
-;  Interrupt Vector Table. Each of these three 16 (sixteen) bit addresses points to a procedure
-;  that is called automatically by the NES hardware.
+;  Interrupt Vector Table. Each of these three 16-bit addresses points to a handler entered by the
+;  NES hardware. IRQ and BRK share the final vector on the 6502.
 ; =================================================================================================
 
 .SEGMENT "VECTORS"
 
-; These addresses must be in this order
+; These addresses must be in this order: NMI, RESET, IRQ/BRK.
 .WORD ISR_Vertical_Blank
 .WORD ISR_PowerOn_Reset
-.WORD ISR_Custom
+.WORD ISR_IRQ_BRK
 
 ; End of first_nes.s

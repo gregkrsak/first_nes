@@ -1,39 +1,47 @@
-name: Makefile CI
+name: Build & Validate NES ROM
 
 on:
   push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
+      - staging
   workflow_dispatch:
 
 permissions:
   contents: read
 
+env:
+  CC65_VERSION: V2.19
+
 jobs:
-  makefile-build:
+  build-rom:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Check whether the cc65 directory exists
-        id: check_cc65
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "cc65"
-
-      - name: Install cc65
-        if: steps.check_cc65.outputs.files_exists == 'false'
+      - name: Build pinned cc65 toolchain
         run: |
-          rm -rf cc65
-          git clone https://github.com/cc65/cc65.git
-          cd cc65
-          make
-          make avail
+          git clone --depth 1 --branch "${CC65_VERSION}" https://github.com/cc65/cc65.git .cc65
+          make -C .cc65 -j"$(nproc)"
+          echo "$PWD/.cc65/bin" >> "$GITHUB_PATH"
+
+      - name: Show toolchain versions
+        run: |
+          ca65 --version
+          ld65 --version
 
       - name: Build first_nes ROM
         run: make
+
+      - name: Validate iNES structure
+        run: make validate
+
+      - name: Upload ROM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: first_nes-${{ github.sha }}
+          path: first_nes.nes
+          if-no-files-found: error

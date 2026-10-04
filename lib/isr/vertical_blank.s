@@ -2,81 +2,87 @@
 ; first_nes
 ; lib/isr/vertical_blank.s
 ;
-; After the NES displays a frame of graphics, it stops drawing for a while. This period is known
-; as the vertical blank, or "vblank", and is a good choice for performing graphics updates. Note
-; that this interrupt is non-maskable (NMI).
-;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-;
-; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
-;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
-; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
-;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
-;   https://emu-docs.org/NES/nestech.txt
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; Assembler: ca65 (cc65 binutils)
-;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Handle the once-per-frame PPU vertical-blank NMI by copying the prepared OAM shadow page
+;          into PPU OAM and publishing a new frame number to foreground game logic.
 ;
 
+
+; =================================================================================================
+; ISR_Vertical_Blank
+;
+; Purpose:
+;   Service the PPU's non-maskable interrupt (NMI) at the beginning of vertical blank. The handler is
+;   intentionally short: preserve interrupted CPU registers, perform OAM DMA, increment FrameCounter,
+;   restore the registers, and return to whatever foreground instruction was interrupted.
+;
+; Beginner notes:
+;   NMI can arrive between almost any two foreground instructions. The 6502 automatically pushes the
+;   return address and processor status, but it does NOT automatically save A, X, or Y. This handler
+;   therefore saves those registers manually and restores them in reverse order before RTI.
+;
+; Inputs:
+;   $0200-$02FF contains the CPU-side OAM shadow prepared by foreground code.
+;   FrameCounter contains the frame number most recently published to MainLoop.
+;
+; Outputs / side effects:
+;   Copies all 256 OAM-shadow bytes into PPU OAM through $4014 DMA.
+;   Increments FrameCounter once.
+;
+; Registers:
+;   A, X, and Y are temporarily modified but restored to their interrupted values before RTI.
+;
+; Returns:
+;   RTI restores processor status and the interrupted program counter.
+; =================================================================================================
 
 .PROC ISR_Vertical_Blank
-  
-  ; -------------------------------------------------
-  ; Refresh DRAM-stored sprite data before it decays.
-  ; -------------------------------------------------
 
-    lda     #$00                    ;
-    sta     _OAMADDR                ; Set the low byte (00) of the RAM address
+    ; ---------------------------------------------------------------------------------------------
+    ; Save foreground register state.
+    ;
+    ; PHA can push only A, so X and Y are first transferred through A. The stack is LIFO (last in,
+    ; first out), which is why restoration later happens in the opposite order.
+    ; ---------------------------------------------------------------------------------------------
 
-    lda     #$02                    ;
-    sta     _OAMDMA                 ; Set the high byte (02) of the RAM address and start the
-                                    ; DMA transfer
-  ; ----------------------------
-  ; Freeze the button positions.
-  ; ----------------------------
+    pha                             ; Save the foreground accumulator.
 
-    lda     #$01                    ;
-    sta     _JOY1                   ;
-    lda     #$00                    ;
-    sta     _JOY1                   ; Controllers for first and second player are now latched
-                                    ; and will not change
-  ; --------------
-  ; Read button A.
-  ; --------------
+    txa                             ; Move foreground X into A so it can be pushed.
+    pha                             ; Save foreground X.
 
-    lda     _JOY1                   ; 
-    and     #%00000001              ; Only look at bit 0
-    beq     readButtonAEnd          ; Branch to readButtonAEnd if button A is NOT pressed (0)                                    
-    jsr     MoveLuigiRight          ; Call the procedure that moves the Luigi sprites right
-  readButtonAEnd:                   ;
+    tya                             ; Move foreground Y into A so it can be pushed.
+    pha                             ; Save foreground Y.
 
-  ; ---------------
-  ; Read button B.
-  ; ---------------
- 
-    lda     _JOY1                    
-    and     #%00000001              ; Only look at bit 0
-    beq     readButtonBEnd          ; Branch to readButtonBEnd if button B is NOT pressed (0)                                    
-    jsr     MoveLuigiLeft           ; Call the procedure that moves the Luigi sprites left
-  readButtonBEnd:                   ;
-  
-    rti                             ; Return from interrupt 
+    ; ---------------------------------------------------------------------------------------------
+    ; Copy CPU OAM shadow RAM into the PPU's Object Attribute Memory.
+    ; ---------------------------------------------------------------------------------------------
+
+    lda     #$00                    ; Begin writing hardware OAM at entry/address zero.
+    sta     _OAMADDR
+
+    lda     #$02                    ; DMA source page $02 means CPU addresses $0200-$02FF.
+    sta     _OAMDMA                 ; Writing $02 to $4014 performs the complete 256-byte transfer.
+
+    ; ---------------------------------------------------------------------------------------------
+    ; Publish a new frame to MainLoop.
+    ; MainLoop waits for this byte to differ from LastFrameCounter before running another update.
+    ; ---------------------------------------------------------------------------------------------
+
+    inc     FrameCounter            ; One more display frame has reached vblank.
+
+    ; ---------------------------------------------------------------------------------------------
+    ; Restore foreground register state in reverse order: Y, then X, then A.
+    ; ---------------------------------------------------------------------------------------------
+
+    pla                             ; Recover the saved Y value into A.
+    tay                             ; Restore Y.
+
+    pla                             ; Recover the saved X value into A.
+    tax                             ; Restore X.
+
+    pla                             ; Restore the original accumulator last.
+
+    rti                             ; Resume the interrupted foreground instruction stream.
 
 .ENDPROC
 

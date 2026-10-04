@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 22" width="760" height="440" shape-rendering="crispEdges">
+<rect width="38" height="22" rx="1" fill="#080810"/>
+<text x="2" y="3" fill="#f4f4ff" font-family="monospace" font-size="2">NEON RANGER</text>
+<text x="2" y="20.5" fill="#88ffff" font-family="monospace" font-size="1">original first_nes demo sprite · 2 animation frames</text>
+<g transform="translate(2 4)">
+<path d="M5 0h6v1h-6zM3 1h1v1h-1zM11 1h1v1h-1zM2 2h1v3h-1zM12 2h1v3h-1zM3 5h1v1h-1zM11 5h1v1h-1zM4 6h7v1h-7zM3 7h3v1h-3zM9 7h3v1h-3zM2 8h3v1h-3zM10 8h3v1h-3zM1 9h3v2h-3zM6 9h2v3h-2zM11 9h3v2h-3zM2 11h2v3h-2zM10 11h2v3h-2zM4 13h1v1h-1zM9 13h1v1h-1zM1 14h3v1h-3zM6 14h2v2h-2zM10 14h3v1h-3zM1 15h2v1h-2zM11 15h2v1h-2z" fill="#2850dc"/>
+<path d="M4 1h7v1h-7zM3 2h2v3h-2zM10 2h2v3h-2zM4 5h7v1h-7zM6 7h3v1h-3zM5 8h5v1h-5zM4 9h2v4h-2zM8 9h3v4h-3zM6 12h2v1h-2z" fill="#1ee6e6"/>
+<path d="M5 2h5v1h-5zM4 3h7v1h-7zM5 4h5v1h-5z" fill="#eb32be"/>
+</g>
+<g transform="translate(20 4)">
+<path d="M5 0h6v1h-6zM3 1h1v1h-1zM11 1h1v1h-1zM2 2h1v3h-1zM12 2h1v3h-1zM3 5h1v1h-1zM11 5h1v1h-1zM4 6h7v1h-7zM3 7h3v1h-3zM9 7h3v1h-3zM2 8h3v1h-3zM10 8h3v1h-3zM1 9h3v2h-3zM6 9h2v3h-2zM11 9h3v2h-3zM2 11h2v3h-2zM10 11h2v3h-2zM4 13h1v1h-1zM9 13h1v1h-1zM2 14h2v1h-2zM7 14h2v1h-2zM10 14h3v1h-3zM1 15h3v1h-3zM8 15h2v1h-2z" fill="#2850dc"/>
+<path d="M4 1h7v1h-7zM3 2h2v3h-2zM10 2h2v3h-2zM4 5h7v1h-7zM6 7h3v1h-3zM5 8h5v1h-5zM4 9h2v4h-2zM8 9h3v4h-3zM6 12h2v1h-2z" fill="#1ee6e6"/>
+<path d="M5 2h5v1h-5zM4 3h7v1h-7zM5 4h5v1h-5z" fill="#eb32be"/>
+</g>
+</svg>
