@@ -2,81 +2,87 @@
 ; first_nes
 ; lib/isr/vertical_blank.s
 ;
-; After the NES displays a frame of graphics, it stops drawing for a while. This period is known
-; as the vertical blank, or "vblank", and is a good choice for performing graphics updates. Note
-; that this interrupt is non-maskable (NMI).
-;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-;
-; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
-;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
-; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
-;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
-;   https://emu-docs.org/NES/nestech.txt
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; Assembler: ca65 (cc65 binutils)
-;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Handle the once-per-frame PPU vertical-blank NMI by copying the prepared OAM shadow page
+;          into PPU OAM and publishing a new frame number to foreground game logic.
 ;
 
+
+; =================================================================================================
+; ISR_Vertical_Blank
+;
+; Purpose:
+;   Service the PPU's non-maskable interrupt (NMI) at the beginning of vertical blank. The handler is
+;   intentionally short: preserve interrupted CPU registers, perform OAM DMA, increment FrameCounter,
+;   restore the registers, and return to whatever foreground instruction was interrupted.
+;
+; Beginner notes:
+;   NMI can arrive between almost any two foreground instructions. The 6502 automatically pushes the
+;   return address and processor status, but it does NOT automatically save A, X, or Y. This handler
+;   therefore saves those registers manually and restores them in reverse order before RTI.
+;
+; Inputs:
+;   $0200-$02FF contains the CPU-side OAM shadow prepared by foreground code.
+;   FrameCounter contains the frame number most recently published to MainLoop.
+;
+; Outputs / side effects:
+;   Copies all 256 OAM-shadow bytes into PPU OAM through $4014 DMA.
+;   Increments FrameCounter once.
+;
+; Registers:
+;   A, X, and Y are temporarily modified but restored to their interrupted values before RTI.
+;
+; Returns:
+;   RTI restores processor status and the interrupted program counter.
+; =================================================================================================
 
 .PROC ISR_Vertical_Blank
 
-  ; ---------------------------------------------------------------------------------------------
-  ; NMI can interrupt foreground code between almost any two instructions. Preserve the general
-  ; purpose registers before doing interrupt work, then restore them in reverse order before RTI.
-  ; The processor status and return address are already saved automatically by the 6502.
-  ; ---------------------------------------------------------------------------------------------
+    ; ---------------------------------------------------------------------------------------------
+    ; Save foreground register state.
+    ;
+    ; PHA can push only A, so X and Y are first transferred through A. The stack is LIFO (last in,
+    ; first out), which is why restoration later happens in the opposite order.
+    ; ---------------------------------------------------------------------------------------------
 
-    pha
-    txa
-    pha
-    tya
-    pha
-  
-  ; -------------------------------------------------
-  ; Copy the CPU-side OAM shadow page into PPU OAM.
-  ; -------------------------------------------------
+    pha                             ; Save the foreground accumulator.
 
-    lda     #$00
+    txa                             ; Move foreground X into A so it can be pushed.
+    pha                             ; Save foreground X.
+
+    tya                             ; Move foreground Y into A so it can be pushed.
+    pha                             ; Save foreground Y.
+
+    ; ---------------------------------------------------------------------------------------------
+    ; Copy CPU OAM shadow RAM into the PPU's Object Attribute Memory.
+    ; ---------------------------------------------------------------------------------------------
+
+    lda     #$00                    ; Begin writing hardware OAM at entry/address zero.
     sta     _OAMADDR
 
-    lda     #$02
-    sta     _OAMDMA                 ; DMA $0200-$02FF into PPU OAM
+    lda     #$02                    ; DMA source page $02 means CPU addresses $0200-$02FF.
+    sta     _OAMDMA                 ; Writing $02 to $4014 performs the complete 256-byte transfer.
 
-  ; ---------------------------------------------------------------------------------------------
-  ; Publish one frame tick to the foreground. MainLoop consumes this counter and performs controller
-  ; polling plus game-state updates outside the time-critical NMI window.
-  ; ---------------------------------------------------------------------------------------------
+    ; ---------------------------------------------------------------------------------------------
+    ; Publish a new frame to MainLoop.
+    ; MainLoop waits for this byte to differ from LastFrameCounter before running another update.
+    ; ---------------------------------------------------------------------------------------------
 
-    inc     FrameCounter
+    inc     FrameCounter            ; One more display frame has reached vblank.
 
-  ; ---------------------------
-  ; Restore interrupted context.
-  ; ---------------------------
+    ; ---------------------------------------------------------------------------------------------
+    ; Restore foreground register state in reverse order: Y, then X, then A.
+    ; ---------------------------------------------------------------------------------------------
 
-    pla
-    tay
-    pla
-    tax
-    pla
+    pla                             ; Recover the saved Y value into A.
+    tay                             ; Restore Y.
 
-    rti
+    pla                             ; Recover the saved X value into A.
+    tax                             ; Restore X.
+
+    pla                             ; Restore the original accumulator last.
+
+    rti                             ; Resume the interrupted foreground instruction stream.
 
 .ENDPROC
 
