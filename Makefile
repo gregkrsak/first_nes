@@ -36,45 +36,46 @@
 # Reference: https://www.cs.swarthmore.edu/~newhall/unixhelp/howto_makefiles.html
 
 
-# Makefile variable for the assembler 
 ASSEMBLER = ca65
-
-# Makefile variable for the linker 
 LINKER = ld65
+PYTHON ?= python3
 
-# Makefile variable for assembly flags
 ASMFLAGS = --cpu 6502
-
-# Makefile variable for linker flags
 LINKFLAGS = --config config/ines.cfg
 
-# Simply typing "make" will invoke all suggested targets to build an emulator-ready ROM
+.PHONY: default clean assemble link emulator validate cart universal-pre-clean emulator-post-clean
+
+# Simply typing "make" builds an emulator-ready ROM.
 default: universal-pre-clean assemble link emulator emulator-post-clean
 
-# To start over from scratch, type "make clean"
+# To start over from scratch, type "make clean".
 clean: universal-pre-clean emulator-post-clean
 	
-# This target entry assembles the .s assembly language files into .o object files
+# Assemble the top-level translation unit into a 6502 object file.
 assemble: first_nes.s
 	$(ASSEMBLER) $(ASMFLAGS) first_nes.s
 
-# This target entry links the .o object files into .bin ROM files
+# Link the object file into the header/PRG/CHR binary components described by config/ines.cfg.
 link: first_nes.o
 	$(LINKER) first_nes.o $(LINKFLAGS)
 
-# This target entry concatenates the .bin ROM files into a .nes iNES emulator-compatible ROM file
+# Concatenate the binary components into an emulator-compatible iNES ROM.
 emulator: bin/first_nes_hdr.bin bin/first_nes_prg.bin bin/first_nes_chr.bin
 	cat bin/first_nes_hdr.bin bin/first_nes_prg.bin bin/first_nes_chr.bin > first_nes.nes
 
-# TODO: Implement this target for making physical NES cartridges
+# Validate an already-built ROM. Typical local usage: `make && make validate`.
+validate:
+	$(PYTHON) scripts/validate_rom.py first_nes.nes
+
+# TODO: Implement this target for making physical NES cartridges.
 cart:
 	echo "'cart' target is not currently implemented"
 
-# This target entry removes any build files (.bin, .nes) associated with an NES ROM 
+# Remove build files associated with an NES ROM.
 universal-pre-clean:
 	$(RM) bin/*.bin && $(RM) first_nes.nes && $(RM) first_nes.o
 
-# This target entry removes the files (.o, .out) not required by emulators
+# Remove intermediate files not required by emulators.
 emulator-post-clean:
 	$(RM) first_nes.o && $(RM) a.out
 
