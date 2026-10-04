@@ -2,85 +2,96 @@
 ; first_nes
 ; lib/isr/poweron_reset.s
 ;
-; This Interrupt Service Routine is called when the NES is reset, including when it is turned on.
-;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-;
-; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
-;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
-; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
-;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
-;   https://emu-docs.org/NES/nestech.txt
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; Assembler: ca65 (cc65 binutils)
-;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Initialize CPU, APU, PPU, RAM, background, player state, and rendering after power-on or
+;          reset, then transfer permanent foreground control to MainLoop.
 ;
 
+
+; =================================================================================================
+; ISR_PowerOn_Reset
+;
+; Purpose:
+;   This is the NES RESET interrupt handler. The CPU begins executing here after power-on and after a
+;   reset. It establishes a safe machine state before any normal game logic or rendering begins.
+;
+; Beginner notes:
+;   RESET is not called with JSR, so this routine does not finish with RTS. After initialization it
+;   jumps directly to MainLoop, which becomes the foreground program for the rest of the session.
+;
+;   The PPU needs startup time after reset. first_nes waits for two vertical blanks, with CPU RAM
+;   initialization between them, before loading VRAM and enabling rendering.
+;
+; Inputs:
+;   None. Hardware state immediately after reset should be treated as only partially initialized.
+;
+; Outputs / side effects:
+;   Initializes the stack, disables audio/video IRQ sources, clears CPU RAM and OAM shadow RAM,
+;   loads palette/background/sprite data, initializes player physics, enables rendering/NMI, and
+;   jumps to MainLoop.
+;
+; Registers:
+;   A, X, and Y may all be modified during initialization.
+;
+; Returns:
+;   Does not return. Control leaves this routine with JMP MainLoop.
+; =================================================================================================
 
 .PROC ISR_PowerOn_Reset
 
-  ; ---------------------------------------------------------------------------------------------
-  ; Initialization sequence for the NES. These tasks should generally be performed every time the
-  ; system is reset.
-  ; ---------------------------------------------------------------------------------------------
-  
-    cld                             ; Disable unsupported BCD mode (useful in some debuggers)
+    ; ---------------------------------------------------------------------------------------------
+    ; Establish a predictable CPU/APU/PPU starting state.
+    ; ---------------------------------------------------------------------------------------------
 
-    ldx     #255
-    txs                             ; Initialize stack pointer to $FF
-    jsr     DisableVideoOutput
-    jsr     DisableAudioOutput
+    cld                             ; NES ADC/SBC ignore decimal mode, but clear D for debugger safety.
 
-    jsr     ClearVBlankFlag         ; Clear vblank in case reset happened during vblank
+    ldx     #255                    ; $FF is the conventional reset value for the 6502 stack pointer.
+    txs                             ; Stack now begins at CPU address $01FF and grows downward.
 
-  ; ---------------------------------------------------------------------------------------------
-  ; The PPU is not ready immediately after reset. Waiting for two vblank intervals provides the
-  ; startup time required before normal PPU access.
-  ; ---------------------------------------------------------------------------------------------
+    jsr     DisableVideoOutput      ; Keep the PPU from rendering while VRAM/OAM are being prepared.
+    jsr     DisableAudioOutput      ; Disable APU/DMC interrupt sources before normal game execution.
+
+    jsr     ClearVBlankFlag         ; Acknowledge a possible vblank that was already in progress.
+
+    ; ---------------------------------------------------------------------------------------------
+    ; Wait for the first post-reset vertical blank, then initialize CPU RAM.
+    ;
+    ; __ClearCPUMemory intentionally jumps back to the local __CPUMemoryCleared label when finished.
+    ; That older control-flow shape is preserved here because it is part of the original project.
+    ; ---------------------------------------------------------------------------------------------
 
     jsr     WaitForVBlank
 
-    jmp     __ClearCPUMemory
+    jmp     __ClearCPUMemory        ; Clear internal RAM and initialize unused OAM sprites off-screen.
    __CPUMemoryCleared:
 
+    ; The second wait completes the conservative two-vblank PPU startup delay.
     jsr     WaitForVBlank
 
-  ; ---------------------
-  ; Now the PPU is ready.
-  ; ---------------------
+    ; ---------------------------------------------------------------------------------------------
+    ; The PPU is now ready for normal setup while rendering is still disabled.
+    ; Order matters: load static graphics/state first, render the initial hero into OAM, then enable
+    ; video output and NMI only after the frame is ready to be shown.
+    ; ---------------------------------------------------------------------------------------------
 
-    jsr     LoadPaletteData
-    jsr     LoadDemoBackground
-    jsr     LoadSpriteData
-    jsr     InitializeHeroState
-    jsr     InitializeHeroPhysics
-    jsr     InitializeHeroJumpAssist
-    jsr     RenderHeroToOAM
-    jsr     EnableVideoOutput
+    jsr     LoadPaletteData         ; Copy all 32 palette bytes to PPU palette RAM at $3F00.
+    jsr     LoadDemoBackground      ; Copy the 32x30 room plus attribute table to nametable 0.
+    jsr     LoadSpriteData          ; Seed the first four OAM shadow entries with Neon Ranger data.
 
-  ; ---------------------------------------------------------------------------------------------
-  ; Reset initialization is complete. MainLoop now owns foreground execution; NMI will interrupt it
-  ; once per frame to perform time-critical PPU work and advance FrameCounter.
-  ; ---------------------------------------------------------------------------------------------
+    jsr     InitializeHeroState     ; Initialize logical X/Y position and facing direction.
+    jsr     InitializeHeroPhysics   ; Initialize subpixel Y, vertical velocity, and grounded state.
+    jsr     InitializeHeroJumpAssist; Initialize coyote-time and jump-buffer counters.
 
-    jmp     MainLoop
+    jsr     RenderHeroToOAM         ; Make OAM coordinates agree with the logical spawn position.
+    jsr     EnableVideoOutput       ; Turn on background/sprites and enable NMI at vblank.
 
-.ENDPROC 
+    ; ---------------------------------------------------------------------------------------------
+    ; Initialization is complete. MainLoop owns foreground execution from this point forward. NMI
+    ; will interrupt it once per frame to DMA OAM and increment FrameCounter.
+    ; ---------------------------------------------------------------------------------------------
+
+    jmp     MainLoop                ; RESET never returns; enter the permanent game loop.
+
+.ENDPROC
 
 ; End of lib/isr/poweron_reset.s

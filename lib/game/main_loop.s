@@ -2,48 +2,96 @@
 ; first_nes
 ; lib/game/main_loop.s
 ;
-; Foreground game loop synchronized to NMI with an 8-bit frame counter.
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Run one complete frame of foreground game logic each time the NMI handler publishes a new
+;          frame number.
 ;
-; Why a counter instead of a simple ready flag? NMI is non-maskable, so a flag can be cleared at
-; exactly the wrong moment and lose a frame notification. Comparing counters avoids that race while
-; keeping the pattern easy to understand.
+; The important beginner concept here is separation of responsibilities: the NMI handler performs
+; short, time-critical video work; MainLoop performs controller reading, movement, physics,
+; collision, animation, and OAM preparation in normal foreground time.
 ;
 
 
 .SEGMENT "ZEROPAGE"
 
-FrameCounter:      .res 1            ; incremented by NMI
-LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
+FrameCounter:      .res 1            ; NMI increments this once per displayed frame.
+LastFrameCounter:  .res 1            ; MainLoop remembers the most recent frame it consumed.
 
 
 .SEGMENT "CODE"
 
 
+; =================================================================================================
+; MainLoop
+;
+; Purpose:
+;   Wait for a new video frame, then run exactly one pass of the platformer's foreground game logic.
+;   This procedure never returns during normal gameplay; after finishing one frame it jumps back to
+;   wait for the next NMI-produced frame number.
+;
+; Why a counter instead of a simple "ready" flag?
+;   NMI can occur between almost any two foreground instructions. A single flag can be cleared at an
+;   unlucky moment and lose a notification. Comparing an NMI-owned counter with the last counter
+;   consumed by MainLoop avoids that race while staying easy to inspect in a debugger.
+;
+; Inputs:
+;   FrameCounter is incremented by ISR_Vertical_Blank.
+;   Controller and player state variables contain the previous frame's state.
+;
+; Outputs / side effects:
+;   Updates controller state, HeroX/HeroY, jump/physics state, collision state, animation state,
+;   and the CPU-side OAM shadow used by the next NMI.
+;
+; Registers:
+;   A is modified repeatedly. Called routines may also modify X and Y. No register preservation is
+;   required because this is the top-level foreground loop rather than a conventional subroutine.
+;
+; Returns:
+;   It does not normally RTS. The procedure loops forever by jumping back to waitForNextFrame.
+; =================================================================================================
+
 .PROC MainLoop
 
   waitForNextFrame:
-    lda     FrameCounter
-    cmp     LastFrameCounter
-    beq     waitForNextFrame
-    sta     LastFrameCounter
+    lda     FrameCounter            ; Read the frame number most recently published by NMI.
+    cmp     LastFrameCounter        ; Is it different from the frame we already processed?
+    beq     waitForNextFrame        ; No: wait here until the next vertical blank occurs.
+    sta     LastFrameCounter        ; Yes: claim this frame before doing any game work.
 
-    ; Controller polling and game-state changes happen in foreground time, not inside NMI.
-    jsr     ReadController1
+    ; ---------------------
+    ; Read player controls.
+    ; ---------------------
 
-    lda     Controller1Current
-    and     #BUTTON_RIGHT
-    beq     mainRightDone
-    jsr     MoveHeroRight
+    jsr     ReadController1         ; Build current, previous, and newly-pressed button masks.
+
+    ; --------------------------------
+    ; Apply held horizontal movement.
+    ; --------------------------------
+
+    lda     Controller1Current      ; Test the current frame's held-button byte.
+    and     #BUTTON_RIGHT           ; Keep only the Right button bit.
+    beq     mainRightDone           ; Skip movement when Right is not held.
+    jsr     MoveHeroRight           ; Move one pixel and face right.
   mainRightDone:
 
-    lda     Controller1Current
-    and     #BUTTON_LEFT
-    beq     mainLeftDone
-    jsr     MoveHeroLeft
+    lda     Controller1Current      ; Re-read the held-button byte for the independent Left test.
+    and     #BUTTON_LEFT            ; Keep only the Left button bit.
+    beq     mainLeftDone            ; Skip movement when Left is not held.
+    jsr     MoveHeroLeft            ; Move one pixel and face left.
   mainLeftDone:
 
-    ; Horizontal motion may carry a grounded hero beyond an edge. Capture jump input before testing
-    ; the grace window so a press on the edge frame can still launch cleanly.
+    ; ---------------------------------------------------------------------------------------------
+    ; Run the vertical platformer pipeline in a deliberate order.
+    ;
+    ; 1. Check whether horizontal movement walked a grounded hero beyond a platform edge.
+    ; 2. Remember a new A-button press for jump buffering.
+    ; 3. Start a jump if grounded or still inside the coyote-time window.
+    ; 4. Shorten an upward jump when A has been released.
+    ; 5. Integrate vertical position and gravity.
+    ; 6. Resolve any platform surface crossed while falling.
+    ; 7. Age the coyote-time and jump-buffer counters.
+    ; ---------------------------------------------------------------------------------------------
+
     jsr     CheckHeroGroundSupport
     jsr     CaptureHeroJumpInput
     jsr     TryStartHeroJump
@@ -52,10 +100,14 @@ LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
     jsr     ResolveHeroPlatformLanding
     jsr     TickHeroJumpAssist
 
-    jsr     UpdateHeroAnimation
-    jsr     RenderHeroToOAM
+    ; -------------------------------------------------------------
+    ; Choose graphics, then project logical position into OAM RAM.
+    ; -------------------------------------------------------------
 
-    jmp     waitForNextFrame
+    jsr     UpdateHeroAnimation     ; Select idle/run/jump/fall tiles and facing attributes.
+    jsr     RenderHeroToOAM         ; Write the final X/Y coordinates for all four sprites.
+
+    jmp     waitForNextFrame        ; Begin waiting for the next NMI-published frame.
 
 .ENDPROC
 

@@ -2,14 +2,16 @@
 ; first_nes
 ; data/tiles/neon_ranger.inc
 ;
-; Original CHR tile data for the first_nes demo.
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Define the original CHR tile graphics for Neon Ranger, the platformer chamber, and the
+;          character's standing, stepping, jumping, and falling poses.
 ;
 ; "Neon Ranger" was created for this project in 2026. The design and tile data are original and may
-; be used under the same license as first_nes. Character animation and the industrial platformer
-; chamber are all represented directly as readable NES CHR source below.
+; be used under the same license as first_nes.
 ;
-; NES CHR tiles are 8x8 pixels, 2 bits per pixel: 8 bytes of low bit-plane data followed by 8 bytes
-; of high bit-plane data.
+; Beginner note: every NES CHR tile is 8x8 pixels at 2 bits per pixel. Each tile therefore uses 16
+; bytes: eight bytes for bit-plane 0 followed by eight bytes for bit-plane 1. Together the two bits
+; select one of four palette entries for every pixel.
 ;
 
 
