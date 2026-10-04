@@ -42,8 +42,10 @@ LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
     jsr     MoveHeroLeft
   mainLeftDone:
 
-    ; Vertical motion is intentionally no longer driven directly by Up/Down. The next platformer
-    ; step gives HeroY to gravity/jump physics instead.
+    ; A starts a jump only from grounded state. Vertical position then belongs entirely to physics.
+    jsr     TryStartHeroJump
+    jsr     UpdateHeroVerticalPhysics
+
     jsr     UpdateHeroAnimation
     jsr     RenderHeroToOAM
 
