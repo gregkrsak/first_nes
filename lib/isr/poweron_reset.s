@@ -69,6 +69,7 @@
     jsr     LoadDemoBackground
     jsr     LoadSpriteData
     jsr     InitializeHeroState
+    jsr     InitializeHeroPhysics
     jsr     RenderHeroToOAM
     jsr     EnableVideoOutput
 
