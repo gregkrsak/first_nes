@@ -2,9 +2,9 @@
 ; first_nes
 ; lib/isr/custom.s
 ;
-; This Interrupt Service Routine is called when a BRK instruction is executed. This is a good
-; location to place custom code, which will then trigger with every BRK instruction. Note that
-; this interrupt is maskable (IRQ).
+; IRQ/BRK interrupt service routine. On the 6502, maskable hardware IRQs and the BRK instruction
+; share the same vector at $FFFE-$FFFF. The starter project does not currently use a mapper IRQ or
+; APU IRQ, but this handler is kept safe and ready for future expansion.
 ;
 ; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
 ;
@@ -35,11 +35,24 @@
 ;
 
 
-.PROC ISR_Custom
+.PROC ISR_IRQ_BRK
 
-    nop                             ; Do nothing
+    pha
+    txa
+    pha
+    tya
+    pha
 
-    rti                             ; Return from interrupt
+    ; No IRQ/BRK-specific work is required yet.
+    nop
+
+    pla
+    tay
+    pla
+    tax
+    pla
+
+    rti
     
 .ENDPROC
 

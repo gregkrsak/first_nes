@@ -84,8 +84,8 @@
 
 
 ; =================================================================================================
-;  ROM Code. Your NES game will be driven by three interrupt service routines, from which you will
-;  call other procedures that are stored in seperate libraries (see the /lib project directory).
+;  ROM Code. Your NES game is coordinated by the reset, NMI, and IRQ/BRK interrupt handlers, which
+;  call reusable procedures stored in the /lib project directory.
 ; =================================================================================================
 
 .SEGMENT "CODE"
@@ -107,15 +107,15 @@
 
 
 ; =================================================================================================
-;  Interrupt Vector Table. Each of these three 16 (sixteen) bit addresses points to a procedure
-;  that is called automatically by the NES hardware.
+;  Interrupt Vector Table. Each of these three 16-bit addresses points to a handler entered by the
+;  NES hardware. IRQ and BRK share the final vector on the 6502.
 ; =================================================================================================
 
 .SEGMENT "VECTORS"
 
-; These addresses must be in this order
+; These addresses must be in this order: NMI, RESET, IRQ/BRK.
 .WORD ISR_Vertical_Blank
 .WORD ISR_PowerOn_Reset
-.WORD ISR_Custom
+.WORD ISR_IRQ_BRK
 
 ; End of first_nes.s
