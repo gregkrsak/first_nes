@@ -10,7 +10,7 @@
 
 <img src="neon_ranger.svg" alt="Two pixel-art animation frames of the original Neon Ranger demo character" width="620">
 
-**Build a ROM. Move a four-sprite character. Read every byte that makes it happen.**
+**Build a ROM. Explore a neon grid. Read every byte that makes it happen.**
 
 </div>
 
@@ -20,11 +20,19 @@
 
 `first_nes` is a deliberately small Nintendo Entertainment System project for learning how a real NES ROM fits together. It uses the **ca65/ld65** toolchain and targets a simple mapper-0 / NROM-style cartridge layout.
 
-The goal is not to hide the hardware behind an engine. The goal is to make the hardware understandable: reset, PPU startup, palettes, CHR tiles, OAM DMA, controller polling, interrupts, linker layout, and a frame-synchronized foreground loop are all visible in the source.
+The goal is not to hide the hardware behind an engine. The goal is to make the hardware understandable: reset, PPU startup, palettes, CHR tiles, nametables, OAM DMA, controller polling, interrupts, linker layout, and a frame-synchronized foreground loop are all visible in the source.
 
-The demo character is **Neon Ranger**, an original 16×16 sprite built from four NES hardware sprites. Its blue/cyan/magenta CHR art lives in readable assembly source, including a second walking frame and a few tiny sci-fi background tiles for future demo expansion.
+The demo character is **Neon Ranger**, an original 16×16 sprite built from four NES hardware sprites. Neon Ranger now moves in all four directions across an original blue/cyan/magenta sci-fi scene, stays inside intentional play-area bounds, and switches between standing and stepping frames while moving.
 
-> **Current demo:** build `first_nes.nes`, launch it in an NES emulator, and move Neon Ranger horizontally with the A/B controls. The controller layer already captures all eight standard NES buttons for later game logic.
+### 🕹️ Demo controls
+
+| Control | Action |
+| --- | --- |
+| D-pad ↑ ↓ ← → | Move Neon Ranger |
+| Diagonal D-pad combinations | Move diagonally |
+| Release D-pad | Return to standing pose |
+
+The full eight-button controller state is still captured every frame, so A, B, Select, and Start are ready for whatever you add next.
 
 ## 🧠 What you can learn here
 
@@ -32,9 +40,11 @@ The demo character is **Neon Ranger**, an original 16×16 sprite built from four
 - how the 6502 reset, NMI, and IRQ/BRK vectors are wired;
 - why the PPU needs startup time before normal access;
 - how palette data and 2-bit CHR tiles reach the screen;
+- how a 32×30 nametable plus attribute data becomes a full background scene;
 - how a 256-byte CPU OAM shadow page becomes 64 hardware sprites through DMA;
 - how the NES controller's serial A/B/Select/Start/D-pad report becomes one reusable state byte;
 - how foreground game logic can synchronize safely to NMI without living inside the interrupt handler;
+- how simple bounds and animation state can be layered onto raw OAM coordinates;
 - how ca65 source and an ld65 linker configuration cooperate to place bytes at the exact addresses the NES expects.
 
 ## 🚀 Quick start
@@ -78,28 +88,29 @@ The build creates:
 first_nes.nes
 ```
 
-Load that file in your emulator.
+Load that file in your emulator and use the D-pad.
 
 ## 🗺️ Project map
 
 ```text
 first_nes.s                 composition root: assets, libraries, vectors
 config/ines.cfg             ld65 memory map and ROM layout
+data/background/            original 32x30 Neon Grid nametable + attributes
 data/header/                iNES metadata
 data/palette/               NES palette bytes
 data/sprites/               initial OAM shadow data
 data/tiles/                 original CHR tile source
 lib/isr/                    reset, NMI, IRQ/BRK handlers
 lib/shared_code/            CPU/APU/PPU/controller primitives
-lib/game/                   frame-synchronized foreground logic
-lib/sprite/                 demo sprite movement routines
+lib/game/                   scene loading + frame-synchronized foreground logic
+lib/sprite/                 bounded movement + two-frame animation
 ```
 
 ## 🎨 Original demo art
 
-The **Neon Ranger** character, its second animation frame, and the small sci-fi background tiles in `data/tiles/neon_ranger.inc` were created specifically for `first_nes` in 2026. They are distributed under the same project license.
+The **Neon Ranger** character, its animation frame, and the sci-fi scene tiles in `data/tiles/neon_ranger.inc` were created specifically for `first_nes` in 2026. The full-screen **Neon Grid** scene in `data/background/neon_grid.inc` is original as well. They are distributed under the same project license.
 
-Keeping the CHR graphics as assembly source is intentional: a learner can open the file, see the two NES bit planes, and trace those bytes all the way to the four on-screen sprites.
+Keeping the CHR graphics and nametable as assembly source is intentional: a learner can open the files, see the bytes, and trace them all the way to what appears on screen.
 
 ## 🧩 Build pipeline
 
@@ -148,6 +159,6 @@ For current low-level NES reference material, start with [NESdev](https://www.ne
 
 <div align="center">
 
-**Small ROM. Real hardware concepts. Lots of room to experiment.** 👾
+**Small ROM. Real hardware concepts. Neon pixels. Lots of room to experiment.** 👾
 
 </div>
