@@ -59,31 +59,24 @@
     lda     #$02
     sta     _OAMDMA                 ; DMA $0200-$02FF into PPU OAM
 
-  ; ----------------------------
-  ; Freeze the button positions.
-  ; ----------------------------
+  ; ---------------------------------------------------------------------------------------------
+  ; Capture the complete eight-button state once. Game code can now inspect a stable byte instead
+  ; of performing additional serial reads from $4016.
+  ; ---------------------------------------------------------------------------------------------
 
-    lda     #$01
-    sta     _JOY1
-    lda     #$00
-    sta     _JOY1                   ; Controller 1 is now latched for serial reading
+    jsr     ReadController1
 
-  ; --------------
-  ; Read button A.
-  ; --------------
+  ; Preserve the original starter-demo behavior for now: A moves right, B moves left. A later
+  ; gameplay pass can consume the same state byte with D-pad masks instead.
 
-    lda     _JOY1
-    and     #%00000001
+    lda     Controller1Current
+    and     #BUTTON_A
     beq     readButtonAEnd
     jsr     MoveLuigiRight
   readButtonAEnd:
 
-  ; ---------------
-  ; Read button B.
-  ; ---------------
- 
-    lda     _JOY1
-    and     #%00000001
+    lda     Controller1Current
+    and     #BUTTON_B
     beq     readButtonBEnd
     jsr     MoveLuigiLeft
   readButtonBEnd:
