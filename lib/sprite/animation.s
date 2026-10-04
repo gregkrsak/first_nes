@@ -5,7 +5,7 @@
 ; Tiny two-frame walking animation for Neon Ranger.
 ;
 ; Standing uses tiles $36-$39. The step pose uses $3A-$3D. While any D-pad direction is held, bit 3
-; of FrameCounter selects the pose, producing a relaxed ~7.5 Hz animation at NTSC frame rate.
+; of FrameCounter selects the pose, changing pose every 8 frames (about 7.5 changes/second on NTSC).
 ;
 
 
