@@ -4,7 +4,7 @@
 ;
 ; Common CPU-related routines.
 ;
-; Written by Greg M. Krsak <gregkrsak@gmail.com>, 2018
+; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
 ;
 ; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
 ;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
