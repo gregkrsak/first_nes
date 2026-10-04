@@ -6,7 +6,7 @@
 ;
 ; "Neon Ranger" was created for this project in 2026. The design and tile data are original and may
 ; be used under the same license as first_nes. Two 16x16 character frames are provided, followed by
-; a handful of tiny sci-fi background tiles for the demo scene.
+; original sci-fi environment tiles for the platformer test chamber.
 ;
 ; NES CHR tiles are 8x8 pixels, 2 bits per pixel: 8 bytes of low bit-plane data followed by 8 bytes
 ; of high bit-plane data.
@@ -92,28 +92,49 @@
 
 
 ; =================================================================================================
-;  ORIGINAL BACKGROUND TILES ($40-$44)
+;  NEON INDUSTRIAL PLATFORMER TILES ($40-$49)
+;  Background palette 1 maps pixel values 1/2/3 to blue/cyan/magenta.
 ; =================================================================================================
 
-; $40 - tiny star
-.BYTE $00, $10, $10, $7C, $10, $10, $00, $00
-.BYTE $00, $00, $00, $00, $00, $00, $00, $00
+; $40 - glowing platform/floor surface
+.BYTE $00, $FF, $FF, $81, $BD, $99, $A5, $FF
+.BYTE $FF, $FF, $00, $00, $00, $00, $00, $00
 
-; $41 - circuit trace
-.BYTE $00, $20, $38, $08, $0E, $02, $00, $00
-.BYTE $00, $00, $00, $00, $00, $00, $00, $00
+; $41 - vertical structural support with magenta couplers
+.BYTE $24, $24, $3C, $24, $24, $3C, $24, $24
+.BYTE $18, $18, $18, $18, $18, $18, $18, $18
 
-; $42 - neon floor stripe
-.BYTE $FF, $00, $FF, $00, $FF, $00, $FF, $00
-.BYTE $00, $FF, $00, $00, $00, $FF, $00, $00
+; $42 - framed wall panel
+.BYTE $FF, $81, $81, $99, $99, $81, $81, $FF
+.BYTE $00, $7E, $42, $5A, $5A, $42, $7E, $00
 
-; $43 - pillar / wall rib
-.BYTE $C3, $C3, $C3, $C3, $C3, $C3, $C3, $C3
-.BYTE $00, $00, $00, $00, $00, $00, $00, $00
+; $43 - cyan/magenta energy lamp
+.BYTE $00, $24, $5A, $BD, $BD, $5A, $24, $00
+.BYTE $00, $18, $3C, $7E, $7E, $3C, $18, $00
 
-; $44 - sparkle / portal glint
-.BYTE $00, $81, $42, $24, $18, $24, $42, $81
-.BYTE $00, $00, $00, $00, $00, $00, $00, $00
+; $44 - horizontal conduit / pipe
+.BYTE $00, $FF, $00, $18, $00, $FF, $00, $00
+.BYTE $00, $00, $FF, $18, $FF, $00, $00, $00
+
+; $45 - diamond-shaped technology panel
+.BYTE $81, $42, $24, $18, $18, $24, $42, $81
+.BYTE $00, $00, $18, $18, $18, $18, $00, $00
+
+; $46 - heavy floor plating
+.BYTE $FF, $99, $81, $BD, $81, $99, $FF, $00
+.BYTE $00, $00, $3C, $3C, $3C, $00, $00, $00
+
+; $47 - magenta hazard chevrons
+.BYTE $88, $44, $22, $11, $88, $44, $22, $11
+.BYTE $88, $44, $22, $11, $88, $44, $22, $11
+
+; $48 - cyan vent/grille inset
+.BYTE $FF, $81, $81, $81, $81, $81, $FF, $00
+.BYTE $00, $24, $24, $24, $24, $24, $00, $00
+
+; $49 - reinforced ceiling/bottom beam
+.BYTE $FF, $00, $81, $FF, $81, $00, $FF, $00
+.BYTE $00, $FF, $00, $7E, $00, $FF, $00, $00
 
 ; Remaining CHR space is filled with $00 by the linker configuration.
 ;

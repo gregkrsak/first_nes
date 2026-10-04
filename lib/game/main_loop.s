@@ -42,9 +42,12 @@ LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
     jsr     MoveHeroLeft
   mainLeftDone:
 
-    ; A starts a jump only from grounded state. Vertical position then belongs entirely to physics.
+    ; Horizontal motion may carry a grounded hero beyond an edge. Check support before accepting a
+    ; new jump, then integrate vertical physics and resolve any downward platform crossing.
+    jsr     CheckHeroGroundSupport
     jsr     TryStartHeroJump
     jsr     UpdateHeroVerticalPhysics
+    jsr     ResolveHeroPlatformLanding
 
     jsr     UpdateHeroAnimation
     jsr     RenderHeroToOAM
