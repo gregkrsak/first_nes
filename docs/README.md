@@ -5,8 +5,8 @@
 ### A tiny, readable NES assembly starter kit
 
 [![Assembly](https://img.shields.io/badge/language-6502%20assembly-5b5bd6)](../first_nes.s)
-[![Toolchain](https://img.shields.io/badge/toolchain-ca65%20%2B%20ld65-22c7c7)](https://github.com/cc65/cc65)
-[![Makefile CI](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml/badge.svg)](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml)
+[![Toolchain](https://img.shields.io/badge/CI%20toolchain-cc65%20V2.19-22c7c7)](https://github.com/cc65/cc65/releases/tag/V2.19)
+[![Build & Validate ROM](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml/badge.svg)](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml)
 
 <img src="neon_ranger.svg" alt="Two pixel-art animation frames of the original Neon Ranger demo character" width="620">
 
@@ -49,7 +49,7 @@ The full eight-button controller state is still captured every frame, so A, B, S
 
 ## 🚀 Quick start
 
-You need **Git**, **GNU Make**, the **cc65** toolchain, and an NES emulator such as Nestopia UE, Mesen, or another emulator that supports mapper 0 ROMs.
+You need **Git**, **GNU Make**, the **cc65** toolchain, and an NES emulator such as Nestopia UE, Mesen, or another emulator that supports mapper 0 ROMs. Python 3 is optional for building, but is used by the ROM validator.
 
 ### Linux / BSD
 
@@ -59,6 +59,7 @@ Install or build cc65 so `ca65` and `ld65` are on your `PATH`, then:
 git clone https://github.com/gregkrsak/first_nes.git
 cd first_nes
 make
+make validate
 ```
 
 ### macOS
@@ -70,6 +71,7 @@ brew install cc65
 git clone https://github.com/gregkrsak/first_nes.git
 cd first_nes
 make
+make validate
 ```
 
 ### Windows
@@ -80,6 +82,7 @@ Install a cc65 distribution plus a `make` implementation, or use a Unix-like dev
 git clone https://github.com/gregkrsak/first_nes.git
 cd first_nes
 make
+make validate
 ```
 
 The build creates:
@@ -104,6 +107,7 @@ lib/isr/                    reset, NMI, IRQ/BRK handlers
 lib/shared_code/            CPU/APU/PPU/controller primitives
 lib/game/                   scene loading + frame-synchronized foreground logic
 lib/sprite/                 bounded movement + two-frame animation
+scripts/validate_rom.py     structural iNES sanity checker
 ```
 
 ## 🎨 Original demo art
@@ -134,9 +138,27 @@ first_nes.o
             │
             ▼
        first_nes.nes
+            │
+            ▼
+   scripts/validate_rom.py
 ```
 
 No game engine. No mystery ROM packer. Just the pieces the machine actually needs.
+
+## ✅ Reproducible CI
+
+GitHub Actions builds every pushed branch and every pull request targeting `staging` or `master`. CI deliberately pins **cc65 V2.19** rather than cloning an arbitrary future `master` revision.
+
+After building, `make validate` checks the generated ROM for the invariants this starter promises:
+
+- `NES` + `$1A` iNES magic;
+- exactly one 16 KiB PRG bank and one 8 KiB CHR bank;
+- mapper 0 / NROM;
+- vertical mirroring;
+- no trainer and no accidental NES 2.0 marker;
+- a file length matching the header-described ROM layout.
+
+A successful run uploads `first_nes.nes` as a workflow artifact, so a PR can be inspected without rebuilding it locally.
 
 ## 🤝 Contributing
 
@@ -159,6 +181,6 @@ For current low-level NES reference material, start with [NESdev](https://www.ne
 
 <div align="center">
 
-**Small ROM. Real hardware concepts. Neon pixels. Lots of room to experiment.** 👾
+**Small ROM. Real hardware concepts. Neon pixels. Reproducible builds.** 👾
 
 </div>
