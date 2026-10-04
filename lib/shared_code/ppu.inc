@@ -2,14 +2,9 @@
 ; first_nes
 ; lib/shared_code/ppu.inc
 ;
-; PPU-related assembler directives for Nintendo Entertainment System assembly language.
-;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-; Modernized against current NESdev documentation, 2026.
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; PPU: Ricoh RP2C02 (NTSC)
-; Assembler: ca65 (cc65 binutils)
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Define the NES Picture Processing Unit (PPU) memory-mapped register addresses and provide
+;          a beginner-friendly quick reference for the video hardware used throughout first_nes.
 ;
 ; Reference: https://www.nesdev.org/wiki/PPU_registers
 ;
