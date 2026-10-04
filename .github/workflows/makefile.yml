@@ -37,7 +37,7 @@ jobs:
         run: make
 
       - name: Validate iNES structure
-        run: python3 scripts/validate_rom.py first_nes.nes
+        run: make validate
 
       - name: Upload ROM artifact
         uses: actions/upload-artifact@v4
