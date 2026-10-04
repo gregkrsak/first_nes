@@ -40,22 +40,18 @@
   ; system is reset.
   ; ---------------------------------------------------------------------------------------------
   
-    cld                             ; Disable unsupported BCD mode (in case someone is using a 6502
-                                    ; debugger)
+    cld                             ; Disable unsupported BCD mode (useful in some debuggers)
 
-    ldx     #255                    ; 
-    txs                             ; Set the value of the stack pointer to 255 (two hundred and 
-                                    ; fifty-five)
+    ldx     #255
+    txs                             ; Initialize stack pointer to $FF
     jsr     DisableVideoOutput
     jsr     DisableAudioOutput
 
-    jsr     ClearVBlankFlag         ; Clear the vblank flag in case the NES was reset during vblank
-                                    ; (the vblank flag won't be used much after this)
+    jsr     ClearVBlankFlag         ; Clear vblank in case reset happened during vblank
 
   ; ---------------------------------------------------------------------------------------------
-  ; Note: When the system is first turned on or reset, the PPU may not be in a usable state right
-  ; away. You should wait at least 30,000 (thirty thousand) CPU cycles for the PPU to initialize, 
-  ; which may be accomplished by waiting for 2 (two) vertical blank intervals.
+  ; The PPU is not ready immediately after reset. Waiting for two vblank intervals provides the
+  ; startup time required before normal PPU access.
   ; ---------------------------------------------------------------------------------------------
 
     jsr     WaitForVBlank
@@ -70,16 +66,15 @@
   ; ---------------------
 
     jsr     LoadPaletteData
-    jsr     LoadSpriteData                                
+    jsr     LoadSpriteData
     jsr     EnableVideoOutput
 
-  ; -------------
-  ; ENDLESS LOOP.
-  ; -------------
+  ; ---------------------------------------------------------------------------------------------
+  ; Reset initialization is complete. MainLoop now owns foreground execution; NMI will interrupt it
+  ; once per frame to perform time-critical PPU work and advance FrameCounter.
+  ; ---------------------------------------------------------------------------------------------
 
-    jsr     EndlessLoop
-
-    rti                             ; This should never be called
+    jmp     MainLoop
 
 .ENDPROC 
 

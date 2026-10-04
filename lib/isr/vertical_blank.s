@@ -60,26 +60,11 @@
     sta     _OAMDMA                 ; DMA $0200-$02FF into PPU OAM
 
   ; ---------------------------------------------------------------------------------------------
-  ; Capture the complete eight-button state once. Game code can now inspect a stable byte instead
-  ; of performing additional serial reads from $4016.
+  ; Publish one frame tick to the foreground. MainLoop consumes this counter and performs controller
+  ; polling plus game-state updates outside the time-critical NMI window.
   ; ---------------------------------------------------------------------------------------------
 
-    jsr     ReadController1
-
-  ; Preserve the original starter-demo behavior for now: A moves right, B moves left. A later
-  ; gameplay pass can consume the same state byte with D-pad masks instead.
-
-    lda     Controller1Current
-    and     #BUTTON_A
-    beq     readButtonAEnd
-    jsr     MoveLuigiRight
-  readButtonAEnd:
-
-    lda     Controller1Current
-    and     #BUTTON_B
-    beq     readButtonBEnd
-    jsr     MoveLuigiLeft
-  readButtonBEnd:
+    inc     FrameCounter
 
   ; ---------------------------
   ; Restore interrupted context.
