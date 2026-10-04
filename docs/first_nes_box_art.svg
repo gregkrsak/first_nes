@@ -1,96 +1,125 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" shape-rendering="crispEdges">
-  <rect width="600" height="800" fill="#09090d"/>
-  <rect x="14" y="14" width="572" height="772" fill="none" stroke="#d8cfb7" stroke-width="5"/>
-  <rect x="24" y="24" width="552" height="752" fill="none" stroke="#24242c" stroke-width="2"/>
+  <rect width="600" height="800" fill="#060609"/>
+  <rect x="12" y="12" width="576" height="776" fill="none" stroke="#d6c9aa" stroke-width="5"/>
+  <rect x="21" y="21" width="558" height="758" fill="none" stroke="#3a352d" stroke-width="2"/>
 
-  <!-- simple worn-print accents -->
-  <path d="M17 70h18M18 124h10M20 711h22M568 91h14M563 652h19M86 18v13M518 770v11" stroke="#807968" stroke-width="3"/>
+  <!-- light faux wear -->
+  <g stroke="#8a806d" stroke-width="2" opacity="0.65">
+    <path d="M17 72h23M15 122h11M18 694h29M558 92h21M565 625h13M83 16v15M523 771v10M32 35l18 7M548 742l22-8"/>
+  </g>
+
+  <!-- gameplay panel -->
+  <rect x="48" y="50" width="504" height="388" fill="#020208" stroke="#2cc7ee" stroke-width="4"/>
+  <rect x="56" y="58" width="488" height="372" fill="#020208" stroke="#173a74" stroke-width="2"/>
+
+  <!-- room framing -->
+  <g fill="#153071">
+    <rect x="68" y="72" width="10" height="344"/>
+    <rect x="522" y="72" width="10" height="344"/>
+  </g>
+  <g fill="#2cc7ee">
+    <rect x="70" y="86" width="6" height="12"/><rect x="70" y="112" width="6" height="12"/><rect x="70" y="138" width="6" height="12"/>
+    <rect x="70" y="164" width="6" height="12"/><rect x="70" y="190" width="6" height="12"/><rect x="70" y="216" width="6" height="12"/>
+    <rect x="524" y="86" width="6" height="12"/><rect x="524" y="112" width="6" height="12"/><rect x="524" y="138" width="6" height="12"/>
+    <rect x="524" y="164" width="6" height="12"/><rect x="524" y="190" width="6" height="12"/><rect x="524" y="216" width="6" height="12"/>
+  </g>
+
+  <!-- lights and decorations -->
+  <g fill="#2cc7ee" stroke="#173a74" stroke-width="3">
+    <rect x="133" y="76" width="26" height="13"/>
+    <rect x="441" y="76" width="26" height="13"/>
+    <rect x="133" y="156" width="20" height="26"/>
+    <rect x="447" y="156" width="20" height="26"/>
+  </g>
+  <g fill="#f33fa5">
+    <rect x="142" y="79" width="8" height="7"/><rect x="450" y="79" width="8" height="7"/>
+    <rect x="139" y="163" width="8" height="8"/><rect x="453" y="163" width="8" height="8"/>
+  </g>
+
+  <!-- central decorative rail -->
+  <rect x="212" y="184" width="176" height="10" fill="#2cc7ee"/>
+  <rect x="220" y="188" width="160" height="4" fill="#173a74"/>
+  <circle cx="292" cy="189" r="7" fill="#f33fa5"/><circle cx="308" cy="189" r="7" fill="#f33fa5"/>
+
+  <!-- playable platforms -->
+  <g>
+    <rect x="88" y="300" width="128" height="12" fill="#2cc7ee"/>
+    <rect x="98" y="312" width="10" height="72" fill="#2cc7ee"/>
+    <rect x="196" y="312" width="10" height="72" fill="#2cc7ee"/>
+    <rect x="236" y="254" width="128" height="12" fill="#2cc7ee"/>
+    <rect x="246" y="266" width="10" height="70" fill="#2cc7ee"/>
+    <rect x="344" y="266" width="10" height="70" fill="#2cc7ee"/>
+    <rect x="384" y="300" width="128" height="12" fill="#2cc7ee"/>
+    <rect x="394" y="312" width="10" height="72" fill="#2cc7ee"/>
+    <rect x="492" y="312" width="10" height="72" fill="#2cc7ee"/>
+  </g>
+  <g fill="#f33fa5">
+    <rect x="98" y="318" width="6" height="6"/><rect x="98" y="336" width="6" height="6"/><rect x="196" y="318" width="6" height="6"/><rect x="196" y="336" width="6" height="6"/>
+    <rect x="246" y="272" width="6" height="6"/><rect x="246" y="290" width="6" height="6"/><rect x="344" y="272" width="6" height="6"/><rect x="344" y="290" width="6" height="6"/>
+    <rect x="394" y="318" width="6" height="6"/><rect x="394" y="336" width="6" height="6"/><rect x="492" y="318" width="6" height="6"/><rect x="492" y="336" width="6" height="6"/>
+  </g>
+
+  <!-- floor -->
+  <rect x="64" y="384" width="472" height="12" fill="#2cc7ee"/>
+  <rect x="64" y="396" width="472" height="28" fill="#173a74"/>
+  <g fill="#2cc7ee">
+    <rect x="72" y="402" width="20" height="8"/><rect x="104" y="402" width="20" height="8"/><rect x="136" y="402" width="20" height="8"/>
+    <rect x="168" y="402" width="20" height="8"/><rect x="200" y="402" width="20" height="8"/><rect x="232" y="402" width="20" height="8"/>
+    <rect x="264" y="402" width="20" height="8"/><rect x="296" y="402" width="20" height="8"/><rect x="328" y="402" width="20" height="8"/>
+    <rect x="360" y="402" width="20" height="8"/><rect x="392" y="402" width="20" height="8"/><rect x="424" y="402" width="20" height="8"/>
+    <rect x="456" y="402" width="20" height="8"/><rect x="488" y="402" width="20" height="8"/>
+  </g>
+  <g fill="#f33fa5">
+    <rect x="72" y="414" width="18" height="4"/><rect x="104" y="414" width="18" height="4"/><rect x="136" y="414" width="18" height="4"/>
+    <rect x="168" y="414" width="18" height="4"/><rect x="200" y="414" width="18" height="4"/><rect x="232" y="414" width="18" height="4"/>
+    <rect x="264" y="414" width="18" height="4"/><rect x="296" y="414" width="18" height="4"/><rect x="328" y="414" width="18" height="4"/>
+    <rect x="360" y="414" width="18" height="4"/><rect x="392" y="414" width="18" height="4"/><rect x="424" y="414" width="18" height="4"/>
+    <rect x="456" y="414" width="18" height="4"/><rect x="488" y="414" width="18" height="4"/>
+  </g>
+
+  <!-- Neon Ranger, deliberately small like the actual game -->
+  <g transform="translate(282 338) scale(2)">
+    <rect x="5" y="0" width="6" height="1" fill="#2850dc"/>
+    <rect x="4" y="1" width="8" height="1" fill="#1ee6e6"/>
+    <rect x="3" y="2" width="10" height="4" fill="#1ee6e6"/>
+    <rect x="5" y="2" width="6" height="3" fill="#f33fa5"/>
+    <rect x="4" y="6" width="8" height="2" fill="#2850dc"/>
+    <rect x="5" y="8" width="6" height="4" fill="#1ee6e6"/>
+    <rect x="3" y="9" width="2" height="3" fill="#2850dc"/>
+    <rect x="11" y="9" width="2" height="3" fill="#2850dc"/>
+    <rect x="4" y="12" width="3" height="3" fill="#2850dc"/>
+    <rect x="9" y="12" width="3" height="3" fill="#2850dc"/>
+  </g>
 
   <!-- title -->
-  <text x="48" y="105" fill="#24dbe0" font-family="monospace" font-size="68" font-weight="700">first_</text>
-  <text x="326" y="105" fill="#ef3b9d" font-family="monospace" font-size="68" font-weight="700">nes</text>
-  <rect x="48" y="125" width="504" height="4" fill="#24dbe0"/>
-  <rect x="330" y="125" width="222" height="4" fill="#ef3b9d"/>
-  <text x="300" y="155" text-anchor="middle" fill="#e9e4d6" font-family="monospace" font-size="17">A TINY PLATFORMER IN 6502 ASSEMBLY</text>
-
-  <!-- faux game-art window -->
-  <rect x="48" y="184" width="504" height="430" fill="#050510" stroke="#24dbe0" stroke-width="4"/>
-  <rect x="56" y="192" width="488" height="414" fill="#070715" stroke="#342b75" stroke-width="2"/>
-
-  <!-- industrial background -->
-  <g fill="#11153d">
-    <rect x="70" y="205" width="18" height="386"/>
-    <rect x="512" y="205" width="18" height="386"/>
-    <rect x="112" y="220" width="10" height="150"/>
-    <rect x="475" y="238" width="10" height="132"/>
-    <rect x="238" y="218" width="14" height="112"/>
-    <rect x="350" y="218" width="14" height="112"/>
-    <rect x="280" y="225" width="40" height="98"/>
+  <g transform="translate(115 0) skewX(-8)">
+    <text x="0" y="548" fill="#f33fa5" font-family="monospace" font-size="70" font-weight="900">first_nes</text>
+    <text x="-6" y="540" fill="#31c8f4" font-family="monospace" font-size="70" font-weight="900">first_nes</text>
   </g>
-  <g stroke="#203070" stroke-width="5" fill="none">
-    <path d="M88 246h90v-28h55M368 218h65v34h79"/>
-    <path d="M120 286h82M397 286h78"/>
-    <path d="M90 334h52v-24h44M414 310h40v24h58"/>
+  <text x="530" y="495" fill="#f33fa5" font-family="monospace" font-size="12">TM</text>
+
+  <!-- faux system banner -->
+  <g transform="rotate(-5 300 590)">
+    <rect x="88" y="566" width="424" height="54" rx="24" fill="none" stroke="#ef262f" stroke-width="5"/>
+    <text x="300" y="601" text-anchor="middle" fill="#ef262f" font-family="monospace" font-size="22" font-weight="700">8-BIT ENTERTAINMENT SYSTEM</text>
   </g>
 
-  <!-- lamps -->
-  <g>
-    <rect x="143" y="222" width="34" height="6" fill="#e9e4d6"/>
-    <rect x="148" y="228" width="24" height="7" fill="#24dbe0"/>
-    <path d="M148 235h24l20 48h-64z" fill="#16345d" opacity="0.75"/>
-    <rect x="421" y="222" width="34" height="6" fill="#e9e4d6"/>
-    <rect x="426" y="228" width="24" height="7" fill="#24dbe0"/>
-    <path d="M426 235h24l20 48h-64z" fill="#16345d" opacity="0.75"/>
+  <!-- controller / player badge -->
+  <g transform="translate(58 648)">
+    <path d="M0 0h168l-18 98H0z" fill="#ef3d3d"/>
+    <rect x="18" y="18" width="112" height="48" fill="#111" stroke="#d6c9aa" stroke-width="4"/>
+    <rect x="35" y="34" width="28" height="10" fill="#a9a9a9"/>
+    <rect x="44" y="25" width="10" height="28" fill="#a9a9a9"/>
+    <circle cx="100" cy="42" r="8" fill="#ef262f"/><circle cx="120" cy="42" r="8" fill="#ef262f"/>
+    <text x="84" y="88" text-anchor="middle" fill="#080808" font-family="monospace" font-size="20" font-weight="700">1 PLAYER</text>
   </g>
 
-  <!-- platforms -->
-  <g>
-    <rect x="64" y="526" width="472" height="13" fill="#24dbe0"/>
-    <rect x="64" y="539" width="472" height="20" fill="#2850dc"/>
-    <rect x="91" y="452" width="132" height="12" fill="#24dbe0"/>
-    <rect x="91" y="464" width="132" height="14" fill="#2850dc"/>
-    <rect x="377" y="452" width="132" height="12" fill="#24dbe0"/>
-    <rect x="377" y="464" width="132" height="14" fill="#2850dc"/>
-    <rect x="236" y="374" width="128" height="12" fill="#24dbe0"/>
-    <rect x="236" y="386" width="128" height="14" fill="#2850dc"/>
+  <!-- spoof seal -->
+  <g transform="translate(462 690)">
+    <circle r="62" fill="#d8a83a"/>
+    <circle r="48" fill="#090909" stroke="#e6c36e" stroke-width="3"/>
+    <text x="0" y="-18" text-anchor="middle" fill="#e6c36e" font-family="monospace" font-size="12" font-weight="700">SEAL OF</text>
+    <text x="0" y="6" text-anchor="middle" fill="#e6c36e" font-family="monospace" font-size="25" font-weight="900">PIXEL</text>
+    <text x="0" y="28" text-anchor="middle" fill="#e6c36e" font-family="monospace" font-size="12" font-weight="700">QUALITY</text>
   </g>
-
-  <!-- support columns -->
-  <g fill="#2850dc">
-    <rect x="104" y="478" width="12" height="48"/>
-    <rect x="196" y="478" width="12" height="48"/>
-    <rect x="390" y="478" width="12" height="48"/>
-    <rect x="482" y="478" width="12" height="48"/>
-    <rect x="248" y="400" width="12" height="52"/>
-    <rect x="340" y="400" width="12" height="52"/>
-  </g>
-  <g fill="#ef3b9d">
-    <rect x="107" y="488" width="6" height="5"/>
-    <rect x="199" y="505" width="6" height="5"/>
-    <rect x="393" y="491" width="6" height="5"/>
-    <rect x="485" y="509" width="6" height="5"/>
-    <rect x="251" y="412" width="6" height="5"/>
-    <rect x="343" y="430" width="6" height="5"/>
-  </g>
-
-  <!-- Neon Ranger: actual project sprite geometry, enlarged -->
-  <g transform="translate(262 433) scale(5)">
-    <path d="M5 0h6v1h-6zM3 1h1v1h-1zM11 1h1v1h-1zM2 2h1v3h-1zM12 2h1v3h-1zM3 5h1v1h-1zM11 5h1v1h-1zM4 6h7v1h-7zM3 7h3v1h-3zM9 7h3v1h-3zM2 8h3v1h-3zM10 8h3v1h-3zM1 9h3v2h-3zM6 9h2v3h-2zM11 9h3v2h-3zM2 11h2v3h-2zM10 11h2v3h-2zM4 13h1v1h-1zM9 13h1v1h-1zM2 14h2v1h-2zM7 14h2v1h-2zM10 14h3v1h-3zM1 15h3v1h-3zM8 15h2v1h-2z" fill="#2850dc"/>
-    <path d="M4 1h7v1h-7zM3 2h2v3h-2zM10 2h2v3h-2zM4 5h7v1h-7zM6 7h3v1h-3zM5 8h5v1h-5zM4 9h2v4h-2zM8 9h3v4h-3zM6 12h2v1h-2z" fill="#24dbe0"/>
-    <path d="M5 2h5v1h-5zM4 3h7v1h-7zM5 4h5v1h-5z" fill="#ef3b9d"/>
-  </g>
-
-  <!-- small box-copy area -->
-  <text x="58" y="652" fill="#e9e4d6" font-family="monospace" font-size="19">SINGLE-SCREEN PLATFORMER</text>
-  <text x="58" y="682" fill="#e9e4d6" font-family="monospace" font-size="19">ORIGINAL DEMO ROM</text>
-  <rect x="44" y="639" width="7" height="7" fill="#ef3b9d"/>
-  <rect x="44" y="669" width="7" height="7" fill="#ef3b9d"/>
-
-  <path d="M392 786h194V640z" fill="#ef3b9d"/>
-  <g transform="translate(464 674) scale(4)">
-    <path d="M5 0h6v1h-6zM3 1h1v1h-1zM11 1h1v1h-1zM2 2h1v3h-1zM12 2h1v3h-1zM3 5h1v1h-1zM11 5h1v1h-1zM4 6h7v1h-7z" fill="#2850dc"/>
-    <path d="M4 1h7v1h-7zM3 2h2v3h-2zM10 2h2v3h-2zM4 5h7v1h-7z" fill="#24dbe0"/>
-    <path d="M5 2h5v1h-5zM4 3h7v1h-7zM5 4h5v1h-5z" fill="#09090d"/>
-  </g>
-  <text x="500" y="753" text-anchor="middle" fill="#09090d" font-family="monospace" font-size="13" font-weight="700">NEON RANGER</text>
 </svg>
