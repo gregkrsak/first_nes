@@ -2,48 +2,44 @@
 ; first_nes
 ; lib/shared_code/apu.s
 ;
-; Common Audio-related routines.
-;
-; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
-;
-; Based on the NintendoAge "Nerdy Nights" tutorials, by bunnyboy:
-;   http://nintendoage.com/forum/messageview.cfm?catid=22&threadid=7155
-; Based on "Nintendo Entertainment System Architecture", by Marat Fayzullin:
-;   http://fms.komkon.org/EMUL8/NES.html
-; Based on "Nintendo Entertainment System Documentation", by Jeremy Chadwick:
-;   https://emu-docs.org/NES/nestech.txt
-;
-; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
-; Assembler: ca65 (cc65 binutils)
-;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
+; Author: Greg M. Krsak <greg.krsak@gmail.com>
+; Purpose: Provide small reusable Audio Processing Unit (APU) helper routines for NES startup and
+;          future sound work.
 ;
 
 
-; ===================================
-; Subroutine to disable audio output.
-; ===================================
+; =================================================================================================
+; DisableAudioOutput
+;
+; Purpose:
+;   Disable the APU frame IRQ and DMC IRQ sources during reset so the starter program cannot receive
+;   unexpected maskable audio interrupts before it has installed real audio logic.
+;
+; Inputs:
+;   None.
+;
+; Outputs / side effects:
+;   Writes %01000000 to the APU frame-counter register at $4017.
+;   Writes the same value to the DMC control/frequency register at $4010.
+;
+; Beginner note:
+;   This routine's name is historical: the important job performed here is disabling interrupt
+;   sources. first_nes does not yet implement music or sound-effect channel setup.
+;
+; Registers:
+;   A is modified. X and Y are preserved.
+;
+; Returns:
+;   RTS to the reset routine.
+; =================================================================================================
 
 .PROC DisableAudioOutput
 
-    lda     #%01000000
-    sta     _FR_COUNTER             ; Disable APU frame IRQ
-    sta     _DMC_FREQ               ; Disable digital sound IRQs
+    lda     #%01000000              ; Bit 6 disables the APU frame interrupt in the frame counter.
+    sta     _FR_COUNTER             ; $4017: disable APU frame IRQ generation.
+    sta     _DMC_FREQ               ; $4010: bit 7 remains clear, disabling DMC IRQ generation.
 
-    rts
+    rts                             ; Return with audio interrupt sources safely disabled.
 
 .ENDPROC
 
