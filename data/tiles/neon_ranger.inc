@@ -5,8 +5,8 @@
 ; Original CHR tile data for the first_nes demo.
 ;
 ; "Neon Ranger" was created for this project in 2026. The design and tile data are original and may
-; be used under the same license as first_nes. Two 16x16 character frames are provided, followed by
-; original sci-fi environment tiles for the platformer test chamber.
+; be used under the same license as first_nes. Character animation and the industrial platformer
+; chamber are all represented directly as readable NES CHR source below.
 ;
 ; NES CHR tiles are 8x8 pixels, 2 bits per pixel: 8 bytes of low bit-plane data followed by 8 bytes
 ; of high bit-plane data.
@@ -135,6 +135,48 @@
 ; $49 - reinforced ceiling/bottom beam
 .BYTE $FF, $00, $81, $FF, $81, $00, $FF, $00
 .BYTE $00, $FF, $00, $7E, $00, $FF, $00, $00
+
+
+; =================================================================================================
+;  NEON RANGER - airborne lower-body poses ($4A-$4D)
+;  The upper half reuses standing tiles $36/$37. Only the legs change, saving four CHR tiles.
+; =================================================================================================
+
+; Jump/tuck lower half:
+;  ..BBBCCCCCCBBB..
+;  .BBBCCBBBBCCBBB.
+;  .BBBCCBBBBCCBBB.
+;  ..BBCCCCCCCCBB..
+;  ...BBBBBBBB.....
+;  ....BB..BB......
+;  ...BBB..BBB.....
+;  ....BBBBBB......
+;
+; $4A - jump lower-left
+.BYTE $38, $73, $73, $30, $1F, $0C, $1C, $0F
+.BYTE $07, $0C, $0C, $0F, $00, $00, $00, $00
+
+; $4B - jump lower-right
+.BYTE $1C, $CE, $CE, $0C, $E0, $C0, $E0, $C0
+.BYTE $E0, $30, $30, $F0, $00, $00, $00, $00
+
+; Falling/spread lower half:
+;  ..BBBCCCCCCBBB..
+;  .BBBCCBBBBCCBBB.
+;  .BBBCCBBBBCCBBB.
+;  ..BBCCCCCCCCBB..
+;  ..BBCCCCCCBB....
+;  ..BBB....BBB....
+;  .BBB......BBB...
+;  BBB........BBB..
+;
+; $4C - fall lower-left
+.BYTE $38, $73, $73, $30, $30, $38, $70, $E0
+.BYTE $07, $0C, $0C, $0F, $0F, $00, $00, $00
+
+; $4D - fall lower-right
+.BYTE $1C, $CE, $CE, $0C, $30, $70, $38, $1C
+.BYTE $E0, $30, $30, $F0, $C0, $00, $00, $00
 
 ; Remaining CHR space is filled with $00 by the linker configuration.
 ;
