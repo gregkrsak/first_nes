@@ -30,17 +30,17 @@ LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
     ; Controller polling and game-state changes happen in foreground time, not inside NMI.
     jsr     ReadController1
 
-    ; Preserve the original demo controls until the dedicated gameplay-modernization pass.
+    ; Preserve the original starter controls until the gameplay-modernization pass switches to D-pad.
     lda     Controller1Current
     and     #BUTTON_A
     beq     mainButtonAEnd
-    jsr     MoveLuigiRight
+    jsr     MoveHeroRight
   mainButtonAEnd:
 
     lda     Controller1Current
     and     #BUTTON_B
     beq     mainButtonBEnd
-    jsr     MoveLuigiLeft
+    jsr     MoveHeroLeft
   mainButtonBEnd:
 
     jmp     waitForNextFrame
