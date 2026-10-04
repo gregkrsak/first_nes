@@ -9,9 +9,8 @@
 ;
 
 
+HERO_WIDTH           = $10
 HERO_HEIGHT          = $10
-FLOOR_Y              = $C0          ; visible floor begins at screen Y = 192
-HERO_FLOOR_Y         = FLOOR_Y-HERO_HEIGHT
 
 GRAVITY_LO           = $40          ; +0.25 px/frame^2
 GRAVITY_HI           = $00
@@ -82,7 +81,7 @@ HeroPreviousY:     .res 1
     lda     HeroY
     sta     HeroPreviousY
 
-    ; A grounded hero is resting on the floor. General platform support checks arrive in #86.
+    ; A grounded hero is stationary vertically until a jump or loss of support makes them airborne.
     lda     HeroGrounded
     bne     updateHeroVerticalDone
 
@@ -96,26 +95,6 @@ HeroPreviousY:     .res 1
     adc     HeroVelocityYHi
     sta     HeroY
 
-    ; Only a non-negative velocity can land. While rising, bit 7 of the signed high byte is set.
-    lda     HeroVelocityYHi
-    bmi     applyHeroGravity
-
-    lda     HeroY
-    cmp     #HERO_FLOOR_Y
-    bcc     applyHeroGravity
-
-    ; Snap exactly onto the floor so the 16x16 sprite never sinks into the background geometry.
-    lda     #HERO_FLOOR_Y
-    sta     HeroY
-    lda     #$00
-    sta     HeroYSubpixel
-    sta     HeroVelocityYLo
-    sta     HeroVelocityYHi
-    lda     #HERO_GROUNDED
-    sta     HeroGrounded
-    rts
-
-  applyHeroGravity:
     ; Velocity += +0.25 px/frame^2.
     clc
     lda     HeroVelocityYLo
