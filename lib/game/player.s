@@ -9,7 +9,7 @@
 ;
 
 
-HERO_START_X      = $80
+HERO_START_X      = $78             ; 120: centers a 16px hero on the 256px-wide screen
 HERO_START_Y      = $B0             ; 176: 16px hero stands on the floor beginning at Y=192
 HERO_FACING_RIGHT = $00
 HERO_FACING_LEFT  = $01
