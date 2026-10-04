@@ -7,6 +7,8 @@
 ; Position uses 8.8 fixed point: HeroY is the visible whole-pixel byte and HeroYSubpixel stores the
 ; fractional byte. Vertical velocity is a signed 8.8 value split into high/low bytes.
 ;
+; Core tuning constants live together here; jump-assist timing lives in lib/game/jump_assist.s.
+;
 
 
 HERO_WIDTH           = $10
@@ -55,15 +57,24 @@ HeroPreviousY:     .res 1
 
 .PROC TryStartHeroJump
 
-    lda     Controller1Pressed
-    and     #BUTTON_A
+    ; A press is buffered separately so a slightly-early press can survive until landing.
+    lda     HeroJumpBufferFrames
     beq     tryStartHeroJumpDone
 
+    ; A grounded hero may jump immediately. An airborne hero may still jump while coyote time lasts.
     lda     HeroGrounded
+    bne     startHeroJump
+
+    lda     HeroCoyoteFrames
     beq     tryStartHeroJumpDone
 
+  startHeroJump:
     lda     #HERO_AIRBORNE
     sta     HeroGrounded
+
+    lda     #$00
+    sta     HeroCoyoteFrames
+    sta     HeroJumpBufferFrames
 
     lda     #JUMP_SPEED_LO
     sta     HeroVelocityYLo

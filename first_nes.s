@@ -104,6 +104,7 @@
 ; Project/game libraries.
 .INCLUDE "lib/game/player.s"
 .INCLUDE "lib/game/physics.s"
+.INCLUDE "lib/game/jump_assist.s"
 .INCLUDE "lib/game/platform_collision.s"
 .INCLUDE "lib/sprite/basic_movement.s"
 .INCLUDE "lib/sprite/animation.s"

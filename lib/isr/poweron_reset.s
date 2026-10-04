@@ -70,6 +70,7 @@
     jsr     LoadSpriteData
     jsr     InitializeHeroState
     jsr     InitializeHeroPhysics
+    jsr     InitializeHeroJumpAssist
     jsr     RenderHeroToOAM
     jsr     EnableVideoOutput
 
