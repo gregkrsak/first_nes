@@ -4,6 +4,9 @@
 ;
 ; Bounded movement routines for the four-sprite 16x16 Neon Ranger demo character.
 ;
+; Written by Greg M. Krsak <greg.krsak@gmail.com>, 2018
+; Expanded with four-direction bounds for the Neon Ranger demo, 2026.
+;
 ; The character stays inside an 8-pixel horizontal margin and above the lowest neon-floor rows.
 ;
 
