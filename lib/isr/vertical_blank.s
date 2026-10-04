@@ -18,21 +18,6 @@
 ; Processor: 8-bit, Ricoh RP2A03 (6502), 1.789773 MHz (NTSC)
 ; Assembler: ca65 (cc65 binutils)
 ;
-; Tested with:
-;  make
-;  nestopia first_nes.nes
-;
-; Tested on:
-;  - Linux with Nestopia UE 1.47
-;  - Windows with Nestopia UE 1.48
-;
-; For more information about NES programming in general, try these references:
-; https://en.wikibooks.org/wiki/NES_Programming
-;
-; For more information on the ca65 assembler, try these references:
-; https://github.com/cc65/cc65
-; http://cc65.github.io/doc/ca65.html
-;
 
 
 .PROC ISR_Vertical_Blank
@@ -60,26 +45,11 @@
     sta     _OAMDMA                 ; DMA $0200-$02FF into PPU OAM
 
   ; ---------------------------------------------------------------------------------------------
-  ; Capture the complete eight-button state once. Game code can now inspect a stable byte instead
-  ; of performing additional serial reads from $4016.
+  ; Publish one frame tick to the foreground. MainLoop consumes this counter and performs controller
+  ; polling plus game-state updates outside the time-critical NMI window.
   ; ---------------------------------------------------------------------------------------------
 
-    jsr     ReadController1
-
-  ; Preserve the original starter-demo behavior for now: A moves right, B moves left. A later
-  ; gameplay pass can consume the same state byte with D-pad masks instead.
-
-    lda     Controller1Current
-    and     #BUTTON_A
-    beq     readButtonAEnd
-    jsr     MoveLuigiRight
-  readButtonAEnd:
-
-    lda     Controller1Current
-    and     #BUTTON_B
-    beq     readButtonBEnd
-    jsr     MoveLuigiLeft
-  readButtonBEnd:
+    inc     FrameCounter
 
   ; ---------------------------
   ; Restore interrupted context.
