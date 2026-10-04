@@ -12,7 +12,7 @@
 .PROC UpdateHeroAnimation
 
     lda     Controller1Current
-    and     #(BUTTON_LEFT | BUTTON_RIGHT)
+    and     #%11000000              ; Left or Right held?
     beq     heroStandingFrame
 
     lda     FrameCounter
