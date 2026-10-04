@@ -64,7 +64,10 @@
 ;
 
 
-_RAM_CLEAR_PATTERN_1	= $00
-_RAM_CLEAR_PATTERN_2	= $FE
+; Reset-time RAM values. Most CPU RAM is cleared to zero. The OAM shadow
+; page is initialized with an off-screen Y coordinate so unused sprite
+; entries stay hidden when the full page is copied to PPU OAM via DMA.
+_RAM_CLEAR_VALUE = $00
+_OAM_HIDDEN_Y     = $FE
 
 ; End of lib/shared_code/cpu.inc

@@ -54,16 +54,21 @@
 __ClearCPUMemory:
     ldx     #$00
    __clearMemoryLoop:
-    lda     _RAM_CLEAR_PATTERN_1
+    lda     #_RAM_CLEAR_VALUE
     sta     $0000, x
     sta     $0100, x
-    sta     $0200, x
+    sta     $0300, x
     sta     $0400, x
     sta     $0500, x
     sta     $0600, x
     sta     $0700, x
-    lda     _RAM_CLEAR_PATTERN_2
-    sta     $0300, x
+
+    ; $0200-$02FF is the CPU-side OAM shadow page. OAM DMA always copies
+    ; the complete 256-byte page, so initialize every unused sprite with
+    ; an off-screen Y position before active sprite entries are loaded.
+    lda     #_OAM_HIDDEN_Y
+    sta     $0200, x
+
     inx
     bne     __clearMemoryLoop
     jmp     ISR_PowerOn_Reset::__CPUMemoryCleared
