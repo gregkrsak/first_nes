@@ -1,235 +1,386 @@
-<div align="center">
+# first_nes
 
-# 🎮 first_nes
+`first_nes` is a small Nintendo Entertainment System project written in 6502 assembly language. I started it in 2018 as a way to learn how an NES program fits together, and the project is still intended to be read, changed, rebuilt, and experimented with.
 
-### A tiny NES platformer you can understand all the way down to the bytes
+You do **not** need prior NES-development or assembly-language experience to look through the project. If GitHub is new to you too, that is fine; the first sections below start from there.
 
-[![Assembly](https://img.shields.io/badge/language-6502%20assembly-5b5bd6)](../first_nes.s)
-[![Toolchain](https://img.shields.io/badge/CI%20toolchain-cc65%20V2.19-22c7c7)](https://github.com/cc65/cc65/releases/tag/V2.19)
 [![Build & Validate ROM](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml/badge.svg)](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml)
+[![Assembly](https://img.shields.io/badge/language-6502%20assembly-5b5bd6)](../first_nes.s)
+[![Toolchain](https://img.shields.io/badge/cc65-V2.19-22c7c7)](https://github.com/cc65/cc65/releases/tag/V2.19)
 
-<img src="neon_ranger.svg" alt="Pixel-art frames of the original Neon Ranger character" width="620">
+<p align="center">
+  <img src="neon_ranger.svg" alt="Pixel-art frames of the original Neon Ranger character" width="360">
+</p>
 
-**Run. Jump. Land. Read the 6502 code that made every pixel move.** ⚡
+The included demo is a single-screen platformer. You can walk left and right, make short or full jumps, land on platforms, and inspect the assembly code responsible for the movement, graphics, controller input, and physics.
 
-</div>
+## Start here
 
----
+If you only want to build the project and see it run, this is the shortest path.
 
-## ✨ What is this?
+You will need:
 
-`first_nes` is a deliberately small Nintendo Entertainment System project for learning how a real NES ROM fits together. It uses the **ca65/ld65** toolchain and targets a simple mapper-0 / NROM cartridge layout.
+- **Git** to copy the repository to your computer. If you do not want to use Git yet, GitHub's **Code → Download ZIP** option also works.
+- **GNU Make** to run the build instructions in the `Makefile`.
+- **cc65**, which provides the `ca65` assembler and `ld65` linker used by this project.
+- **An NES emulator**, such as Nestopia UE or Mesen, to run the resulting ROM.
+- **Python 3** if you want to run `make validate` after the build.
 
-The project does not hide the machine behind a game engine. Reset, PPU startup, palettes, CHR tiles, nametables, OAM DMA, controller polling, interrupts, fixed-point physics, platform collision, animation, linker layout, and the frame-synchronized foreground loop are all visible in the source.
+### 1. Copy the repository to your computer
 
-The playable character is **Neon Ranger**, an original 16×16 sprite built from four NES hardware sprites. The current demo is a compact single-screen platformer chamber with a floor, elevated ledges, gravity, jumping, landing, walking animation, dedicated rising/falling poses, and hardware-assisted left/right sprite flipping.
+A GitHub **repository** is simply a project folder whose history is tracked with Git. Making your own local copy with Git is called **cloning**.
 
-## 🕹️ Controls
-
-| Control | Action |
-| --- | --- |
-| D-pad ← / → | Move Neon Ranger |
-| A | Jump |
-| Tap A | Short hop |
-| Hold A | Full jump |
-| Walk off a ledge | Gravity takes over |
-
-Up, Down, B, Select, and Start are intentionally available for future gameplay rather than being spent on free-flight movement.
-
-## ⚡ Why the jump feels nicer than a literal first implementation
-
-The physics remain small enough to study, but the controls include three tiny quality-of-life techniques used by modern platformers:
-
-- **8.8 fixed-point motion** — whole pixels plus a fractional byte produce a smooth accelerating arc;
-- **4-frame coyote time** — A can still jump for a moment after stepping off a ledge;
-- **4-frame jump buffer** — an A press just before landing is remembered briefly;
-- **variable jump height** — releasing A while rising cuts upward speed, turning a full leap into a short hop.
-
-Core tuning starts at **−4.5 px/frame jump velocity**, **+0.25 px/frame² gravity**, and a **+4.0 px/frame terminal fall speed**. The values are deliberately named and grouped in `lib/game/physics.s` and `lib/game/jump_assist.s` so experimentation does not require hunting through the program.
-
-```text
-Controller
-    │
-    ▼
-Horizontal movement ──► support check
-                            │
-                            ▼
-                    jump buffer / coyote
-                            │
-                            ▼
-                     fixed-point gravity
-                            │
-                            ▼
-                      platform landing
-                            │
-                            ▼
-                 idle / run / jump / fall
-                            │
-                            ▼
-                    RenderHeroToOAM
-                            │
-                            ▼
-                         NMI DMA
-```
-
-That boundary is intentional: **game state owns the player position; OAM only renders it.**
-
-## 🧠 What you can learn here
-
-- how a 16-byte iNES header, PRG ROM, and CHR ROM become one `.nes` file;
-- how the 6502 reset, NMI, and IRQ/BRK vectors are wired;
-- why the PPU needs startup time before normal access;
-- how palette data and 2-bit CHR tiles reach the screen;
-- how a 32×30 nametable plus attribute data becomes a full background scene;
-- how a 256-byte CPU OAM shadow page becomes 64 hardware sprites through DMA;
-- how the NES controller's serial A/B/Select/Start/D-pad report becomes reusable current/previous/pressed state;
-- how foreground game logic can synchronize safely to NMI without living inside the interrupt handler;
-- how signed 8.8 fixed-point velocity implements gravity without floating-point hardware;
-- how downward-crossing tests and horizontal overlap produce simple one-way platform surfaces;
-- how coyote time, input buffering, and jump cutting improve responsiveness with only a few bytes of state;
-- how one 16×16 character can face both directions by swapping tiles and using the OAM horizontal-flip bit;
-- how ca65 source and an ld65 linker configuration cooperate to place bytes exactly where the NES expects them.
-
-## 🚀 Quick start
-
-You need **Git**, **GNU Make**, the **cc65** toolchain, and an NES emulator such as Nestopia UE, Mesen, or another mapper-0-compatible emulator. Python 3 is optional for building, but is used by the ROM validator.
-
-### Linux / BSD
-
-Install or build cc65 so `ca65` and `ld65` are on your `PATH`, then:
+On the repository page, click the green **Code** button and copy the HTTPS address. Then open a terminal and run:
 
 ```bash
 git clone https://github.com/gregkrsak/first_nes.git
 cd first_nes
-make
-make validate
 ```
 
-### macOS
+If you are viewing a development branch on GitHub rather than the default branch, you can switch branches after cloning. For example:
 
-With Homebrew:
+```bash
+git switch staging
+```
+
+You can always see your current branch with:
+
+```bash
+git branch --show-current
+```
+
+### 2. Make sure the assembler is installed
+
+The project uses **cc65**. The two commands the build actually needs are `ca65` and `ld65`.
+
+You can check whether they are available with:
+
+```bash
+ca65 --version
+ld65 --version
+```
+
+On macOS with Homebrew:
 
 ```bash
 brew install cc65
-git clone https://github.com/gregkrsak/first_nes.git
-cd first_nes
-make
-make validate
 ```
 
-### Windows
+On Linux or BSD, cc65 may be available through your package manager, or you can build it from the [cc65 project](https://github.com/cc65/cc65). On Windows, cc65 can be used from a development environment such as MSYS2 or another shell that provides `make`.
 
-Install a cc65 distribution plus a `make` implementation, or use a Unix-like development shell such as MSYS2. Once `ca65`, `ld65`, and `make` are on your `PATH`:
+### 3. Build the ROM
+
+From inside the `first_nes` directory:
 
 ```bash
-git clone https://github.com/gregkrsak/first_nes.git
-cd first_nes
 make
-make validate
 ```
 
-The build creates:
+A successful build creates:
 
 ```text
 first_nes.nes
 ```
 
-Load it in your emulator, use **← / →**, and press **A** to jump.
+That `.nes` file is the game ROM you open in an emulator.
 
-## 🗺️ Project map
+You can also run the included structural check:
 
-```text
-first_nes.s                    composition root: assets, libraries, vectors
-config/ines.cfg                ld65 memory map and ROM layout
-data/background/               32x30 Neon industrial chamber + attributes
-data/header/                   iNES metadata
-data/palette/                  NES palette bytes
-data/sprites/                  initial OAM shadow data
-data/tiles/                    original character + environment CHR source
-lib/isr/                       reset, NMI, IRQ/BRK handlers
-lib/shared_code/               CPU/APU/PPU/controller primitives
-lib/game/player.s              authoritative player position/facing
-lib/game/physics.s             signed 8.8 jump + gravity integration
-lib/game/jump_assist.s         coyote time, input buffer, variable jump height
-lib/game/platform_collision.s  visible platform/support/landing geometry
-lib/game/main_loop.s           frame-synchronized gameplay pipeline
-lib/sprite/                    horizontal movement + animation/OAM facing
-scripts/validate_rom.py        structural iNES sanity checker
+```bash
+make validate
 ```
 
-## 🎨 Original art, readable as source
+A successful validation currently reports a 16 KiB PRG ROM, an 8 KiB CHR ROM, mapper 0 (NROM), and vertical mirroring.
 
-The **Neon Ranger**, standing/running/jump/fall poses, and the neon industrial chamber were created specifically for `first_nes` in 2026 and are distributed under the same project license.
+### 4. Run it
 
-The room is built from original glowing platform surfaces, structural supports, wall panels, conduits, lamps, vents, hazard chevrons, and reinforced beams. The visible ledges intentionally match the collision table, so a learner can compare what the nametable draws with what the physics code considers solid.
+Open `first_nes.nes` in your NES emulator.
 
-CHR graphics and nametable data remain assembly source on purpose. Open the files, inspect the bit planes, change a byte, rebuild, and see exactly what the NES does with it.
+| Control | Action |
+| --- | --- |
+| D-pad Left / Right | Walk |
+| A | Jump |
+| Tap A | Short jump |
+| Hold A | Full jump |
 
-## 🧩 Build pipeline
+B, Up, Down, Select, and Start are currently unused by the demo.
 
-The ROM build stays transparent:
+## If GitHub is new to you
+
+You do not need to learn all of Git before reading this project. These are the terms you are most likely to see:
+
+| Term | Meaning here |
+| --- | --- |
+| Repository (repo) | The project and its tracked history |
+| Clone | Make a local copy of the repository |
+| Branch | A separate line of work, such as `staging` or a feature branch |
+| Commit | A saved set of changes in Git history |
+| Issue | A GitHub page used to describe a bug, task, or idea |
+| Pull request (PR) | A request to review and merge one branch into another |
+
+A useful command when you are unsure what Git thinks is happening is:
+
+```bash
+git status
+```
+
+It shows your current branch and whether you have changed any files locally.
+
+## If NES development is new to you
+
+An NES program is small enough that you can still see most of the important pieces directly. This project intentionally keeps those pieces visible.
+
+Here are the main terms used throughout the source:
+
+| Term | Plain-language meaning |
+| --- | --- |
+| CPU | The Ricoh 2A03 processor that runs the game's 6502 machine code |
+| PPU | The Picture Processing Unit that draws backgrounds and sprites |
+| APU | The Audio Processing Unit that produces sound |
+| ROM | The cartridge data loaded by the emulator or console |
+| PRG ROM | Program bytes: the executable code and other CPU-visible ROM data |
+| CHR ROM | Graphics tile data used by the PPU |
+| NROM / mapper 0 | The simplest common NES cartridge layout; no bank switching |
+| Nametable | A 32×30 map of background tile numbers for one screen |
+| Palette | The small table of NES color selections used by backgrounds and sprites |
+| Sprite | A movable hardware graphic; the NES supports 64 entries in OAM |
+| OAM | Object Attribute Memory, where sprite position, tile, and attribute data live |
+| Vblank | The short period between displayed frames when PPU updates are normally performed |
+| NMI | The interrupt the PPU can generate at the start of vblank |
+| Emulator | Software that behaves like an NES so the ROM can run on a modern computer |
+
+The current cartridge layout is intentionally simple: **one 16 KiB PRG bank, one 8 KiB CHR bank, mapper 0, vertical mirroring**.
+
+## If assembly language is new to you
+
+Assembly is much more literal than most modern programming languages. Most source lines correspond closely to one CPU instruction or one piece of data.
+
+A few conventions will make the files much easier to read:
+
+| Syntax | Meaning |
+| --- | --- |
+| `$20` | A hexadecimal number (`$20` is decimal 32) |
+| `%10000000` | A binary number, useful when individual bits matter |
+| `#value` | Use the value itself rather than treating it as a memory address |
+| `; comment` | Everything after the semicolon is a comment |
+| `Label:` | A named location that code can jump to or data can refer to |
+| A | The accumulator, the 6502's main arithmetic/data register |
+| X / Y | The two 6502 index registers |
+
+Some common instructions in this project are:
+
+| Instruction | What it does |
+| --- | --- |
+| `LDA` | Load a value into the A register |
+| `STA` | Store A into memory |
+| `LDX` / `LDY` | Load X or Y |
+| `INC` / `DEC` | Increase or decrease a memory value |
+| `CMP` | Compare A with another value and set CPU flags |
+| `BEQ` / `BNE` | Branch if the previous result was equal / not equal |
+| `BCC` / `BCS` | Branch based on the CPU carry flag |
+| `JMP` | Jump to another location |
+| `JSR` | Call a subroutine |
+| `RTS` | Return from a subroutine |
+| `PHA` / `PLA` | Push A onto the stack / pull it back |
+
+You will also see **ca65 assembler directives**. These are instructions to the assembler rather than instructions executed by the NES CPU:
+
+| Directive | Purpose |
+| --- | --- |
+| `.BYTE` | Put literal byte values into the ROM |
+| `.PROC` / `.ENDPROC` | Mark the start and end of a named procedure |
+| `.INCLUDE` | Insert another assembly source file here |
+| `.SEGMENT` | Select a linker-defined region such as code, palette data, or CHR data |
+| `.RES` | Reserve bytes of RAM |
+
+For example, the horizontal movement code is intentionally straightforward: it loads the player's X position, checks the screen boundary, changes the position by one pixel, and remembers which direction the character is facing. The comments in the source are deliberately verbose so you can follow those steps instruction by instruction.
+
+## Where should I start reading?
+
+If you are new to this kind of project, do not start by reading every file from top to bottom. A more useful order is:
+
+1. **`first_nes.s`** — shows how the pieces are assembled into one ROM.
+2. **`lib/isr/poweron_reset.s`** — shows what happens when the NES starts.
+3. **`lib/game/main_loop.s`** — shows what happens once per game frame.
+4. **`lib/shared_code/controllers.s`** — shows how controller buttons are read.
+5. **`lib/sprite/basic_movement.s`** — small, approachable movement routines.
+6. **`lib/game/physics.s`** — jump velocity and gravity.
+7. **`lib/game/platform_collision.s`** — platform support and landing checks.
+8. **`lib/sprite/animation.s`** — chooses sprite frames and left/right facing.
+
+Then use the data files under `data/` to see how palettes, sprites, backgrounds, and CHR graphics are represented as bytes.
+
+## How one frame works
+
+The program keeps interrupt-time work short and performs ordinary game logic in the foreground loop.
+
+```text
+PPU begins vertical blank
+        |
+        v
+NMI copies the $0200 OAM shadow page to PPU OAM
+        |
+        v
+NMI increments FrameCounter and returns
+        |
+        v
+MainLoop sees a new frame
+        |
+        +--> read controller
+        +--> move left/right
+        +--> check support and jump input
+        +--> apply gravity
+        +--> resolve platform landing
+        +--> choose animation frame
+        +--> write the next sprite state into the OAM shadow page
+```
+
+The distinction is important: the game keeps a logical player position in RAM, and the OAM shadow page is used to draw that state. The sprite hardware is not being used as the game's authoritative physics state.
+
+## Platformer physics
+
+The demo uses a few small techniques that make the controls more forgiving without making the code difficult to inspect:
+
+- Vertical position and velocity use **8.8 fixed-point values**. One byte represents whole pixels and another represents fractional motion.
+- Gravity starts at **+0.25 pixels per frame squared**.
+- A full jump begins at **-4.5 pixels per frame**.
+- Falling is capped at **+4.0 pixels per frame**.
+- **Coyote time** allows a jump for four frames after walking off a ledge.
+- **Jump buffering** remembers a slightly early A press for four frames.
+- Releasing A while the player is still rising reduces upward velocity, which produces a short jump.
+
+The tuning constants are grouped near the top of `lib/game/physics.s` and `lib/game/jump_assist.s` so they are easy to find while experimenting.
+
+## Project layout
+
+| Path | What you will find there |
+| --- | --- |
+| `first_nes.s` | Main assembly file that includes the project's code and data and defines the interrupt vectors |
+| `config/ines.cfg` | ld65 memory map and ROM layout |
+| `data/background/` | 32×30 background nametable and attribute data |
+| `data/header/` | iNES header bytes |
+| `data/palette/` | NES palette bytes |
+| `data/sprites/` | Initial sprite/OAM data |
+| `data/tiles/` | Original Neon Ranger and environment CHR graphics |
+| `lib/isr/` | Reset, NMI, and IRQ/BRK handlers |
+| `lib/shared_code/` | CPU, APU, PPU, and controller support routines/register definitions |
+| `lib/game/` | Player state, frame loop, physics, jump assists, and platform collision |
+| `lib/sprite/` | Horizontal movement and animation |
+| `scripts/validate_rom.py` | Checks the finished ROM's iNES structure |
+
+## Graphics and Neon Ranger
+
+Neon Ranger and the industrial room graphics were created specifically for this project and are distributed under the same license as the rest of `first_nes`.
+
+The character is 16×16 pixels but is built from four 8×8 NES hardware sprites. The animation code reuses and rearranges tiles where practical, and the left-facing character uses the OAM horizontal-flip attribute instead of storing a second full copy of the artwork.
+
+The CHR graphics are kept as readable assembly data in `data/tiles/neon_ranger.inc`. Each NES 8×8 tile uses 16 bytes: eight bytes for the low bit plane followed by eight bytes for the high bit plane. Changing those bytes changes the pixels the PPU draws.
+
+The visible platform locations in `data/background/neon_grid.inc` correspond to the collision surfaces in `lib/game/platform_collision.s`, making it possible to compare the picture on screen directly with the game's collision data.
+
+## How the ROM is built
+
+The build process is intentionally ordinary and visible:
 
 ```text
 first_nes.s
-    │
-    ▼
-   ca65
-    │
-    ▼
+    |
+    v
+  ca65
+    |
+    v
 first_nes.o
-    │
-    ▼
-   ld65 + config/ines.cfg
-    │
-    ├── iNES header
-    ├── 16 KiB PRG ROM
-    └── 8 KiB CHR ROM
-            │
-            ▼
-       first_nes.nes
-            │
-            ▼
-   scripts/validate_rom.py
+    |
+    v
+  ld65 + config/ines.cfg
+    |
+    +--> iNES header
+    +--> 16 KiB PRG ROM
+    +--> 8 KiB CHR ROM
+              |
+              v
+        first_nes.nes
 ```
 
-No game engine. No mystery ROM packer. **Just 6502 code, NES hardware, and enough structure to make both fun to learn.**
+`ca65` turns assembly source into an object file. `ld65` places the resulting code and data into the memory layout described by `config/ines.cfg`. The Makefile then combines the header, PRG, and CHR output into the final `.nes` file.
 
-## ✅ Reproducible CI
+## ROM validation and GitHub Actions
 
-GitHub Actions builds every pushed branch and every pull request targeting `staging` or `master`. CI deliberately pins **cc65 V2.19** rather than cloning an arbitrary future `master` revision.
+The repository contains a GitHub Actions workflow that performs the same basic build on GitHub's servers. It uses a pinned **cc65 V2.19** toolchain so the build does not silently change when cc65 development moves forward.
 
-After building, `make validate` checks the generated ROM for the invariants this starter promises:
+`make validate` checks that the generated ROM has the structure this project expects:
 
-- `NES` + `$1A` iNES magic;
-- exactly one 16 KiB PRG bank and one 8 KiB CHR bank;
+- the `NES` + `$1A` iNES signature;
+- one 16 KiB PRG bank;
+- one 8 KiB CHR bank;
 - mapper 0 / NROM;
 - vertical mirroring;
-- no trainer and no accidental NES 2.0 marker;
-- a file length matching the header-described ROM layout.
+- no trainer;
+- no accidental NES 2.0 marker;
+- a file length consistent with the header.
 
-A successful run uploads `first_nes.nes` as a workflow artifact, so a PR can be inspected without rebuilding it locally.
+Successful GitHub Actions runs also upload the generated `first_nes.nes` file as a build artifact.
 
-## 🤝 Contributing
+## A few safe experiments
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request so expectations stay synchronized.
+Once you have built and run the unmodified ROM, make one small change and rebuild it. That is often the easiest way to learn.
 
-## 🕹️ History & acknowledgements
+Some places to try:
 
-`first_nes` was written by **Greg M. Krsak** in 2018 and grew out of hands-on study of classic NES development material, including:
+- Change `COYOTE_FRAMES` in `lib/game/jump_assist.s` from `$04` to `$08` and see how long you can wait after leaving a platform before jumping.
+- Change one of the Neon Ranger palette bytes in `data/palette/example.inc`, rebuild, and watch the sprite colors change.
+- Change `JUMP_SPEED_HI` / `JUMP_SPEED_LO` only after reading the fixed-point comments in `lib/game/physics.s`; those two bytes form one signed 8.8 value.
+- Change a background tile number in `data/background/neon_grid.inc` and see which 8×8 tile appears at that screen position.
+
+If an experiment goes wrong, `git status` will show which files changed. Git is useful here because you can compare your experiment with the version you started from.
+
+## Troubleshooting
+
+### `ca65: command not found` or `ld65: command not found`
+
+cc65 is either not installed or its `bin` directory is not on your `PATH`. Run `ca65 --version` and `ld65 --version` before trying `make` again.
+
+### `make` succeeds, but my emulator still shows the old version
+
+Make sure the emulator is opening the `first_nes.nes` file from the same directory where you just ran `make`. Close and reopen the ROM if the emulator does not automatically reload changed files.
+
+### My files do not match what I see on GitHub
+
+Check your branch and local status:
+
+```bash
+git branch --show-current
+git status
+git pull --ff-only
+```
+
+Different branches can intentionally contain different versions of the project.
+
+### I changed something and want to see what changed
+
+```bash
+git diff
+```
+
+This shows your uncommitted changes without modifying anything.
+
+## Contributing
+
+If you find a bug or have an idea, opening a GitHub **issue** is enough; you do not need to prepare code first.
+
+If you do want to contribute code, read [CONTRIBUTING.md](CONTRIBUTING.md). The normal GitHub workflow is to make changes on a branch, commit them, and open a pull request so the changes can be reviewed before they are merged.
+
+## History and acknowledgements
+
+I originally wrote `first_nes` in 2018 while studying classic NES-development material. The project has been updated over time, but its purpose remains educational: keep the hardware visible and keep the code approachable.
+
+Important references and influences include:
 
 - the NintendoAge **Nerdy Nights** tutorials by bunnyboy;
 - Marat Fayzullin's *Nintendo Entertainment System Architecture*;
 - Jeremy Chadwick's *Nintendo Entertainment System Documentation*;
-- the NESdev community and its evolving hardware documentation.
+- the [NESdev](https://www.nesdev.org/) community and its current hardware documentation.
 
-Additional thanks to earlier contributors and testers, including **@elennick**, **@hxlnt**, **@ericandrewlewis**, **@nortti**, and community members who reported setup/documentation issues over the project's history.
+Thanks also to earlier contributors and testers, including **@elennick**, **@hxlnt**, **@ericandrewlewis**, **@nortti**, and community members who reported setup and documentation problems over the project's history.
 
-For current low-level NES reference material, start with [NESdev](https://www.nesdev.org/).
-
----
-
-<div align="center">
-
-**Small ROM. Real physics. Neon pixels. No mystery.** 👾⚡
-
-</div>
+The project license is available in [LICENSE](../LICENSE).
