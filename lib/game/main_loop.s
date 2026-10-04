@@ -30,7 +30,6 @@ LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
     ; Controller polling and game-state changes happen in foreground time, not inside NMI.
     jsr     ReadController1
 
-    ; Independent D-pad tests intentionally permit diagonal movement.
     lda     Controller1Current
     and     #BUTTON_RIGHT
     beq     mainRightDone
@@ -43,19 +42,10 @@ LastFrameCounter:  .res 1            ; most recent frame consumed by MainLoop
     jsr     MoveHeroLeft
   mainLeftDone:
 
-    lda     Controller1Current
-    and     #BUTTON_UP
-    beq     mainUpDone
-    jsr     MoveHeroUp
-  mainUpDone:
-
-    lda     Controller1Current
-    and     #BUTTON_DOWN
-    beq     mainDownDone
-    jsr     MoveHeroDown
-  mainDownDone:
-
+    ; Vertical motion is intentionally no longer driven directly by Up/Down. The next platformer
+    ; step gives HeroY to gravity/jump physics instead.
     jsr     UpdateHeroAnimation
+    jsr     RenderHeroToOAM
 
     jmp     waitForNextFrame
 
