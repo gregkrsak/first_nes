@@ -2,58 +2,30 @@
 
 `first_nes` is a small Nintendo Entertainment System project written in 6502 assembly language. I started it in 2018 as a way to learn how an NES program fits together, and the project is still intended to be read, changed, rebuilt, and experimented with.
 
-You do **not** need prior NES-development or assembly-language experience to look through the project. If GitHub is new to you too, that is fine; the first sections below start from there.
+You do **not** need prior NES-development or assembly-language experience to work through it. The code and documentation are deliberately verbose so that the hardware does not have to feel like a black box.
 
 [![Build & Validate ROM](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml/badge.svg)](https://github.com/gregkrsak/first_nes/actions/workflows/makefile.yml)
 [![Assembly](https://img.shields.io/badge/language-6502%20assembly-5b5bd6)](../first_nes.s)
 [![Toolchain](https://img.shields.io/badge/cc65-V2.19-22c7c7)](https://github.com/cc65/cc65/releases/tag/V2.19)
 
 <p align="center">
-  <img src="neon_ranger.svg" alt="Pixel-art frames of the original Neon Ranger character" width="360">
+  <img src="first_nes_box_art.svg" alt="Retro game-box artwork for first_nes featuring Neon Ranger" width="360">
 </p>
 
-The included demo is a single-screen platformer. You can walk left and right, make short or full jumps, land on platforms, and inspect the assembly code responsible for the movement, graphics, controller input, and physics.
+The included demo is a single-screen platformer. You can walk left and right, make short or full jumps, land on platforms, and inspect the assembly code responsible for the movement, graphics, controller input, collision, and physics.
 
-## Start here
-
-If you only want to build the project and see it run, this is the shortest path.
+## Build and run
 
 You will need:
 
-- **Git** to copy the repository to your computer. If you do not want to use Git yet, GitHub's **Code → Download ZIP** option also works.
 - **GNU Make** to run the build instructions in the `Makefile`.
 - **cc65**, which provides the `ca65` assembler and `ld65` linker used by this project.
 - **An NES emulator**, such as Nestopia UE or Mesen, to run the resulting ROM.
-- **Python 3** if you want to run `make validate` after the build.
+- **Python 3** if you want to run the included ROM validator.
 
-### 1. Copy the repository to your computer
+### 1. Make sure cc65 is installed
 
-A GitHub **repository** is simply a project folder whose history is tracked with Git. Making your own local copy with Git is called **cloning**.
-
-On the repository page, click the green **Code** button and copy the HTTPS address. Then open a terminal and run:
-
-```bash
-git clone https://github.com/gregkrsak/first_nes.git
-cd first_nes
-```
-
-If you are viewing a development branch on GitHub rather than the default branch, you can switch branches after cloning. For example:
-
-```bash
-git switch staging
-```
-
-You can always see your current branch with:
-
-```bash
-git branch --show-current
-```
-
-### 2. Make sure the assembler is installed
-
-The project uses **cc65**. The two commands the build actually needs are `ca65` and `ld65`.
-
-You can check whether they are available with:
+The two commands the build actually needs are `ca65` and `ld65`.
 
 ```bash
 ca65 --version
@@ -68,9 +40,9 @@ brew install cc65
 
 On Linux or BSD, cc65 may be available through your package manager, or you can build it from the [cc65 project](https://github.com/cc65/cc65). On Windows, cc65 can be used from a development environment such as MSYS2 or another shell that provides `make`.
 
-### 3. Build the ROM
+### 2. Build the ROM
 
-From inside the `first_nes` directory:
+From the repository directory:
 
 ```bash
 make
@@ -84,7 +56,7 @@ first_nes.nes
 
 That `.nes` file is the game ROM you open in an emulator.
 
-You can also run the included structural check:
+You can also run the structural check:
 
 ```bash
 make validate
@@ -92,7 +64,7 @@ make validate
 
 A successful validation currently reports a 16 KiB PRG ROM, an 8 KiB CHR ROM, mapper 0 (NROM), and vertical mirroring.
 
-### 4. Run it
+### 3. Run it
 
 Open `first_nes.nes` in your NES emulator.
 
@@ -104,27 +76,6 @@ Open `first_nes.nes` in your NES emulator.
 | Hold A | Full jump |
 
 B, Up, Down, Select, and Start are currently unused by the demo.
-
-## If GitHub is new to you
-
-You do not need to learn all of Git before reading this project. These are the terms you are most likely to see:
-
-| Term | Meaning here |
-| --- | --- |
-| Repository (repo) | The project and its tracked history |
-| Clone | Make a local copy of the repository |
-| Branch | A separate line of work, such as `staging` or a feature branch |
-| Commit | A saved set of changes in Git history |
-| Issue | A GitHub page used to describe a bug, task, or idea |
-| Pull request (PR) | A request to review and merge one branch into another |
-
-A useful command when you are unsure what Git thinks is happening is:
-
-```bash
-git status
-```
-
-It shows your current branch and whether you have changed any files locally.
 
 ## If NES development is new to you
 
@@ -138,7 +89,7 @@ Here are the main terms used throughout the source:
 | PPU | The Picture Processing Unit that draws backgrounds and sprites |
 | APU | The Audio Processing Unit that produces sound |
 | ROM | The cartridge data loaded by the emulator or console |
-| PRG ROM | Program bytes: the executable code and other CPU-visible ROM data |
+| PRG ROM | Program bytes: executable code and other CPU-visible ROM data |
 | CHR ROM | Graphics tile data used by the PPU |
 | NROM / mapper 0 | The simplest common NES cartridge layout; no bank switching |
 | Nametable | A 32×30 map of background tile numbers for one screen |
@@ -278,6 +229,8 @@ The CHR graphics are kept as readable assembly data in `data/tiles/neon_ranger.i
 
 The visible platform locations in `data/background/neon_grid.inc` correspond to the collision surfaces in `lib/game/platform_collision.s`, making it possible to compare the picture on screen directly with the game's collision data.
 
+The box artwork at the top of this README is only presentation art. The sprite geometry inside it is based on the actual Neon Ranger design used by the ROM; it is not additional in-game artwork.
+
 ## How the ROM is built
 
 The build process is intentionally ordinary and visible:
@@ -332,8 +285,6 @@ Some places to try:
 - Change `JUMP_SPEED_HI` / `JUMP_SPEED_LO` only after reading the fixed-point comments in `lib/game/physics.s`; those two bytes form one signed 8.8 value.
 - Change a background tile number in `data/background/neon_grid.inc` and see which 8×8 tile appears at that screen position.
 
-If an experiment goes wrong, `git status` will show which files changed. Git is useful here because you can compare your experiment with the version you started from.
-
 ## Troubleshooting
 
 ### `ca65: command not found` or `ld65: command not found`
@@ -344,31 +295,20 @@ cc65 is either not installed or its `bin` directory is not on your `PATH`. Run `
 
 Make sure the emulator is opening the `first_nes.nes` file from the same directory where you just ran `make`. Close and reopen the ROM if the emulator does not automatically reload changed files.
 
-### My files do not match what I see on GitHub
+### The ROM builds but does not behave as expected
 
-Check your branch and local status:
-
-```bash
-git branch --show-current
-git status
-git pull --ff-only
-```
-
-Different branches can intentionally contain different versions of the project.
-
-### I changed something and want to see what changed
+Start from a clean build and validate the generated file:
 
 ```bash
-git diff
+make
+make validate
 ```
 
-This shows your uncommitted changes without modifying anything.
+If validation passes, the ROM's basic iNES structure is correct and the next place to look is usually the specific code or data you changed.
 
 ## Contributing
 
-If you find a bug or have an idea, opening a GitHub **issue** is enough; you do not need to prepare code first.
-
-If you do want to contribute code, read [CONTRIBUTING.md](CONTRIBUTING.md). The normal GitHub workflow is to make changes on a branch, commit them, and open a pull request so the changes can be reviewed before they are merged.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the project's contribution guidelines.
 
 ## History and acknowledgements
 
