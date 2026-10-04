@@ -36,47 +36,69 @@
 
 
 .PROC ISR_Vertical_Blank
+
+  ; ---------------------------------------------------------------------------------------------
+  ; NMI can interrupt foreground code between almost any two instructions. Preserve the general
+  ; purpose registers before doing interrupt work, then restore them in reverse order before RTI.
+  ; The processor status and return address are already saved automatically by the 6502.
+  ; ---------------------------------------------------------------------------------------------
+
+    pha
+    txa
+    pha
+    tya
+    pha
   
   ; -------------------------------------------------
-  ; Refresh DRAM-stored sprite data before it decays.
+  ; Copy the CPU-side OAM shadow page into PPU OAM.
   ; -------------------------------------------------
 
-    lda     #$00                    ;
-    sta     _OAMADDR                ; Set the low byte (00) of the RAM address
+    lda     #$00
+    sta     _OAMADDR
 
-    lda     #$02                    ;
-    sta     _OAMDMA                 ; Set the high byte (02) of the RAM address and start the
-                                    ; DMA transfer
+    lda     #$02
+    sta     _OAMDMA                 ; DMA $0200-$02FF into PPU OAM
+
   ; ----------------------------
   ; Freeze the button positions.
   ; ----------------------------
 
-    lda     #$01                    ;
-    sta     _JOY1                   ;
-    lda     #$00                    ;
-    sta     _JOY1                   ; Controllers for first and second player are now latched
-                                    ; and will not change
+    lda     #$01
+    sta     _JOY1
+    lda     #$00
+    sta     _JOY1                   ; Controller 1 is now latched for serial reading
+
   ; --------------
   ; Read button A.
   ; --------------
 
-    lda     _JOY1                   ; 
-    and     #%00000001              ; Only look at bit 0
-    beq     readButtonAEnd          ; Branch to readButtonAEnd if button A is NOT pressed (0)                                    
-    jsr     MoveLuigiRight          ; Call the procedure that moves the Luigi sprites right
-  readButtonAEnd:                   ;
+    lda     _JOY1
+    and     #%00000001
+    beq     readButtonAEnd
+    jsr     MoveLuigiRight
+  readButtonAEnd:
 
   ; ---------------
   ; Read button B.
   ; ---------------
  
-    lda     _JOY1                    
-    and     #%00000001              ; Only look at bit 0
-    beq     readButtonBEnd          ; Branch to readButtonBEnd if button B is NOT pressed (0)                                    
-    jsr     MoveLuigiLeft           ; Call the procedure that moves the Luigi sprites left
-  readButtonBEnd:                   ;
-  
-    rti                             ; Return from interrupt 
+    lda     _JOY1
+    and     #%00000001
+    beq     readButtonBEnd
+    jsr     MoveLuigiLeft
+  readButtonBEnd:
+
+  ; ---------------------------
+  ; Restore interrupted context.
+  ; ---------------------------
+
+    pla
+    tay
+    pla
+    tax
+    pla
+
+    rti
 
 .ENDPROC
 
