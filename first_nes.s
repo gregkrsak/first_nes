@@ -47,7 +47,7 @@
 ; Video-specific directives
 .INCLUDE "lib/shared_code/ppu.inc"
 
-; Joystick-specific directives
+; Controller-specific directives
 .INCLUDE "lib/shared_code/controllers.inc"
 
 
@@ -99,6 +99,7 @@
 .INCLUDE "lib/shared_code/cpu.s"
 .INCLUDE "lib/shared_code/apu.s"
 .INCLUDE "lib/shared_code/ppu.s"
+.INCLUDE "lib/shared_code/controllers.s"
 
 ; YOUR LIBRARY FILES GET INCLUDED HERE
 ; <libraries>
