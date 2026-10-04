@@ -102,6 +102,7 @@
 .INCLUDE "lib/shared_code/controllers.s"
 
 ; Project/game libraries.
+.INCLUDE "lib/game/player.s"
 .INCLUDE "lib/sprite/basic_movement.s"
 .INCLUDE "lib/sprite/animation.s"
 .INCLUDE "lib/game/demo_scene.s"

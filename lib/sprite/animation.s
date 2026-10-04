@@ -4,15 +4,15 @@
 ;
 ; Tiny two-frame walking animation for Neon Ranger.
 ;
-; Standing uses tiles $36-$39. The step pose uses $3A-$3D. While any D-pad direction is held, bit 3
-; of FrameCounter selects the pose, changing pose every 8 frames (about 7.5 changes/second on NTSC).
+; Standing uses tiles $36-$39. The step pose uses $3A-$3D. While Left or Right is held, bit 3 of
+; FrameCounter selects the pose, changing pose every 8 frames (about 7.5 changes/second on NTSC).
 ;
 
 
 .PROC UpdateHeroAnimation
 
     lda     Controller1Current
-    and     #%11110000              ; any D-pad direction held?
+    and     #%11000000              ; Left or Right held?
     beq     heroStandingFrame
 
     lda     FrameCounter
